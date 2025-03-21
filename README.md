@@ -62,3 +62,9 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Project Installation
+1. Run command "docker-compose up -d"
+2. Run command "composer install"
+3. Create .env file with same content as .env.example and then edit the database part same as in docker-compose.yml
+4. Run command "php artisan migrate"
