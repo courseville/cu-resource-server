@@ -17,6 +17,11 @@ const mainNavItems: NavItem[] = [
 
 const footerNavItems: NavItem[] = [
     {
+        title: 'Admin',
+        href: '/admin',
+        icon: LayoutGrid,
+    },
+    {
         title: 'Repository',
         href: 'https://github.com/laravel/react-starter-kit',
         icon: Folder,
