@@ -23,6 +23,13 @@ class AppServiceProvider extends ServiceProvider
         Passport::tokensCan([
             'student' => 'View user profile',
             'admin' => 'Edit user profile',
+            'machine' => 'View global resource'
+        ]);
+
+        Passport::setDefaultScope([
+            'student',
+            'admin',
+            'machine',
         ]);
     }
 }

@@ -12,3 +12,7 @@ Route::get('/user', function (Request $request) {
 Route::get('/test-mock', function (Request $request) {
     return Client::get();
 })->middleware('auth:api');
+
+Route::get('/user-withscope', function (Request $request) {
+    return $request->user();
+})->middleware(['auth:api','scope:student']);
