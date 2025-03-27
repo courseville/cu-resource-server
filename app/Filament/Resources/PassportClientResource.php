@@ -64,12 +64,5 @@ class PassportClientResource extends Resource
             'edit' => Pages\EditPassportClient::route('/{record}/edit'),
         ];
     }
-
-    public static function afterCreate(Client $client): void
-    {
-        // Generate a secret for the client
-        $client->secret = Str::random(40);
-        $client->save();
-    }
 }
 
