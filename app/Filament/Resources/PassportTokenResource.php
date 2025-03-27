@@ -35,5 +35,10 @@ class PassportTokenResource extends Resource
             'index' => Pages\ListPassportTokens::route('/'),
         ];
     }
+
+    public static function canCreate(): bool
+    {
+        return false; // Disable the Create button
+    }
 }
 
