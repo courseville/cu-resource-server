@@ -12,6 +12,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
+use Illuminate\Support\Str;
 
 class PassportClientResource extends Resource
 {
@@ -39,7 +40,6 @@ class PassportClientResource extends Resource
                 ->badge()
                 ->color(fn($state) => $state ? 'success' : 'danger')
                 ->formatStateUsing(fn($state) => $state ? 'Yes' : 'No'),
-
             TextColumn::make('password_client')
                 ->badge()
                 ->color(fn($state) => $state ? 'success' : 'danger')
@@ -49,6 +49,8 @@ class PassportClientResource extends Resource
                 ->badge()
                 ->color(fn($state) => $state ? 'danger' : 'success')
                 ->formatStateUsing(fn($state) => $state ? 'Revoked' : 'Active'),
+
+            TextColumn::make('secret')->limit(40)->label('Client Secret'),
         ])
             ->filters([])
             ->actions([EditAction::make(), DeleteAction::make()]);
@@ -61,6 +63,13 @@ class PassportClientResource extends Resource
             'create' => Pages\CreatePassportClient::route('/create'),
             'edit' => Pages\EditPassportClient::route('/{record}/edit'),
         ];
+    }
+
+    public static function afterCreate(Client $client): void
+    {
+        // Generate a secret for the client
+        $client->secret = Str::random(40);
+        $client->save();
     }
 }
 
