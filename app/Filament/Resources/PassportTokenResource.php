@@ -19,7 +19,7 @@ class PassportTokenResource extends Resource
         return $table->columns([
             TextColumn::make('id')->sortable(),
             TextColumn::make('client.name')->label('Client'),
-            TextColumn::make('user_id')->label('User ID'),
+            TextColumn::make('client_id')->label('Client ID'),
             TextColumn::make('revoked')
                 ->badge()
                 ->color(fn($state) => $state ? 'danger' : 'success')
