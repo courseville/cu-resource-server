@@ -94,7 +94,7 @@ Route::get('/transformer/source1', function (Request $request) {
     ];
 
 
-    $formattedData1 = DataTransformer::transformFromSource('source1', $source1Data);
+    $formattedData1 = DataTransformer::transformFromSource('source3', $source1Data);
 
     return $formattedData1;
 })->middleware('client:machine');
@@ -144,6 +144,40 @@ Route::get('/transformer/source2', function (Request $request) {
     ];
 
     $formattedData1 = DataTransformer::transformFromSource('source2', $source2Data);
+
+    return $formattedData1;
+})->middleware('client:machine');
+
+Route::get('/transformer/source3', function (Request $request) {
+    $source2Data = [
+        [
+            'id' => '1',
+            'username' => 'Jane Smith',
+            'contact_email' => 'jane.smith@example.com',
+        ],
+        [
+            'id' => '2',
+            'username' => 'Michael Taylor',
+            'contact_email' => 'michael.taylor@example.com',
+        ],
+        [
+            'id' => '3',
+            'username' => 'Sophia Davis',
+            'contact_email' => 'sophia.davis@example.com',
+        ],
+        [
+            'id' => '4',
+            'username' => 'Ethan Wilson',
+            'contact_email' => 'ethan.wilson@example.com',
+        ],
+        [
+            'id' => '5',
+            'username' => 'Olivia Martinez',
+            'contact_email' => 'olivia.martinez@example.com',
+        ],
+    ];
+
+    $formattedData1 = DataTransformer::transformFromSource('source3', $source2Data);
 
     return $formattedData1;
 })->middleware('client:machine');

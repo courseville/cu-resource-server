@@ -98,6 +98,13 @@ class MappingsTableSeeder extends Seeder
                 'mapping' => 'id',
                 'formatting' => json_encode([]), // No formatting needed
             ],
+            [
+                'source' => 'source3',
+                'model' => 'App\Models\Profile',
+                'field' => 'user_id',
+                'mapping' => 'id',
+                'formatting' => json_encode([]), // No formatting needed
+            ],
         ]);
     }
 }
