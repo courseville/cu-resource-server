@@ -3,40 +3,92 @@
 namespace App\Transformers;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class DataTransformer
 {
     /**
-     * Transform an array of fetched data into the given model format with custom mappings.
+     * Fetch mappings from the database based on the source.
      *
-     * @param array $dataArray
-     * @param Model $model
+     * @param string $source
      * @return array
      */
-    public static function transformArray(array $dataArray, Model $model): array
+    public static function getMappings(string $source): array
     {
-        return array_map(fn($data) => self::transform($data, $model), $dataArray);
+        $rows = DB::table('transformer_mappings')->where('source', $source)->get();
+
+        $mappings = [];
+        foreach ($rows as $row) {
+            $mappings[$row->model][$row->field] = [
+                'mapping' => $row->mapping,
+                'formatting' => $row->formatting,
+            ];
+        }
+
+        return $mappings;
     }
 
     /**
-     * Transform a single fetched data item into the given model format with custom mappings.
+     * Transform an array of fetched data into multiple model formats using mappings from the database.
+     *
+     * @param string $source
+     * @param array $dataArray
+     * @return array
+     */
+    public static function transformFromSource(string $source, array $dataArray): array
+    {
+        $mappings = self::getMappings($source);
+        $transformedData = [];
+
+        foreach ($mappings as $modelClass => $mapping) {
+            $modelInstance = new $modelClass();
+            $transformedData[$modelClass] = self::transformArray($dataArray, $modelInstance, $mapping);
+        }
+
+        return $transformedData;
+    }
+
+    /**
+     * Transform an array of fetched data into the given model format with a provided mapping.
+     *
+     * @param array $dataArray
+     * @param Model $model
+     * @param array $mapping
+     * @return array
+     */
+    public static function transformArray(array $dataArray, Model $model, array $mapping): array
+    {
+        return array_map(fn($data) => self::transform($data, $model, $mapping), $dataArray);
+    }
+
+    /**
+     * Transform a single fetched data item into the given model format with a provided mapping.
      *
      * @param array $data
      * @param Model $model
+     * @param array $mapping
      * @return array
      */
-    public static function transform(array $data, Model $model): array
+    public static function transform(array $data, Model $model, array $mapping): array
     {
-        $mapping = method_exists($model, 'getMapping') ? $model->getMapping() : [];
         $transformed = [];
 
         foreach ($model->getFillable() as $field) {
-            if (isset($mapping[$field])) {
-                $transformed[$field] = self::applyTransformation($data, $mapping[$field]);
-            } else {
-                $transformed[$field] = $data[$field] ?? null;
+            if (!in_array($field, $model->getHidden())) {
+                if (isset($mapping[$field])) {
+                    $transformed[$field] = self::applyTransformation($data, $mapping[$field]['mapping']);
+
+                    $transformed[$field] = self::applyFormatting(
+                        $transformed[$field],
+                        $field,
+                        $mapping[$field]['formatting']
+                    );
+                } else {
+                    $transformed[$field] = $data[$field] ?? null;
+                }
             }
         }
+
 
         return $transformed;
     }
@@ -55,5 +107,41 @@ class DataTransformer
         }
 
         return $data[$mapping] ?? null;
+    }
+
+    /**
+     * Apply formatting to a transformed field based on the formatting logic stored in the database.
+     *
+     * @param mixed $value
+     * @param string $field
+     * @param string|null $formatting
+     * @return mixed
+     */
+    private static function applyFormatting($value, string $field, ?string $formatting)
+    {
+        if (is_null($formatting)) {
+            return $value;
+        }
+
+        $formattingRules = json_decode($formatting, true);
+
+        foreach ($formattingRules as $rule) {
+            switch ($rule) {
+                case 'trim':
+                    $value = trim($value);
+                    break;
+                case 'lowercase':
+                    $value = strtolower($value);
+                    break;
+                case 'uppercase':
+                    $value = strtoupper($value);
+                    break;
+                case 'date_format':
+                    $value = \Carbon\Carbon::parse($value)->toDateTimeString();
+                    break;
+            }
+        }
+
+        return $value;
     }
 }
