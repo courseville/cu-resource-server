@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
+use App\Transformers\DataTransformer;
 use Laravel\Passport\Client;
 use Laravel\Passport\Passport;
 
@@ -35,15 +36,35 @@ Route::middleware('auth:api')->get('/resources/{entity}', function (Request $req
         abort(404, "Table not found");
     }
 
-    $scopes = [
-        'users' => 'admin',
-    ];
+    // $scopes = [
+    //     'users' => 'admin',
+    // ];
 
-    if (isset($scopes[$entity]) && !$request->user()->tokenCan($scopes[$entity])) {
-        abort(403, "Unauthorized: Missing scope {$scopes[$entity]}");
-    }
+    // if (isset($scopes[$entity]) && !$request->user()->tokenCan($scopes[$entity])) {
+    //     abort(403, "Unauthorized: Missing scope {$scopes[$entity]}");
+    // }
 
     $model = (new DynamicModel())->setTableName($entity);
     return response()->json($model->get());
 });
+
+Route::get('/transformer', function (Request $request) {
+    $fetchedDataArray = [
+        [
+            'full_name' => 'John Doe',
+            'email_address' => 'JOHN@EXAMPLE.COM',
+            'registration_date' => '2025-03-31T12:00:00Z'
+        ],
+        [
+            'full_name' => 'Jane Smith',
+            'email_address' => 'JANE@EXAMPLE.COM',
+            'registration_date' => '2025-03-30T15:30:00Z'
+        ]
+    ];
+
+    $formattedData = DataTransformer::transformArray($fetchedDataArray, new User());
+    return $formattedData;
+})->middleware('client:machine');
+
+
 

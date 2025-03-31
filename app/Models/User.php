@@ -46,4 +46,13 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function getMapping(): array
+    {
+        return [
+            'name' => 'full_name',
+            'email' => fn($data) => strtolower($data['email_address'] ?? ''),
+            'created_at' => fn($data) => date('Y-m-d H:i:s', strtotime($data['registration_date'] ?? now())),
+        ];
+    }
 }
