@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\DynamicModel;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,32 +31,35 @@ Route::get('/scopes', function (Request $request) {
 })->middleware('client:machine');
 
 Route::middleware('auth:api')->get('/resources/{entity}', function (Request $request, $entity) {
+    // Check if the table exists
     if (!Schema::hasTable($entity)) {
         abort(404, "Table not found");
     }
 
-    // $scopes = [
-    //     'users' => 'admin',
-    // ];
+    $modelClass = 'App\\Models\\' . Str::studly(Str::singular($entity));
 
-    // if (isset($scopes[$entity]) && !$request->user()->tokenCan($scopes[$entity])) {
-    //     abort(403, "Unauthorized: Missing scope {$scopes[$entity]}");
-    // }
+    Log::info($modelClass);
+    if (!class_exists($modelClass)) {
+        abort(404, "Model not found");
+    }
 
-    $model = (new DynamicModel())->setTableName($entity);
-    return response()->json($model->get());
+    $data = $modelClass::get();
+
+    return response()->json($data);
 });
 
 Route::get('/transformer', function (Request $request) {
     $fetchedDataArray = [
         [
             'full_name' => 'John Doe',
-            'email_address' => 'JOHN@EXAMPLE.COM',
+            'email_address' => 'JOhN@EXAMPLE.COM',
+            'password' => 'hidden',
             'registration_date' => '2025-03-31T12:00:00Z'
         ],
         [
             'full_name' => 'Jane Smith',
             'email_address' => 'JANE@EXAMPLE.COM',
+            'password' => 'hidden',
             'registration_date' => '2025-03-30T15:30:00Z'
         ]
     ];
