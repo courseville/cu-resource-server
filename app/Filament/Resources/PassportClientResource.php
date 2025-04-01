@@ -53,7 +53,8 @@ class PassportClientResource extends Resource
             TextColumn::make('secret')->limit(40)->label('Client Secret'),
         ])
             ->filters([])
-            ->actions([EditAction::make(), DeleteAction::make()]);
+            ->actions([EditAction::make(), DeleteAction::make()])
+            ->recordUrl(null);
     }
 
     public static function getPages(): array
