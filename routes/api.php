@@ -94,7 +94,7 @@ Route::get('/transformer/source1', function (Request $request) {
     ];
 
 
-    $formattedData1 = DataTransformer::transformFromSource('source3', $source1Data);
+    $formattedData1 = DataTransformer::transformFromSource('source1', $source1Data);
 
     return $formattedData1;
 })->middleware('client:machine');
