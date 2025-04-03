@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('permissions', function (Blueprint $table) {
+        Schema::create('courses', function (Blueprint $table) {
             $table->id();
-            $table->string('name');  // e.g., "view_user_email"
-            $table->string('model'); // e.g., 'App\Models\User', 'App\Models\Post'
-            $table->json('columns'); // Store an array of columns as JSON
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->string('code')->unique(); // e.g., CSE101, MTH102
+            $table->integer('credits')->default(3); // Number of credits
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('permissions');
+        Schema::dropIfExists('courses');
     }
 };
