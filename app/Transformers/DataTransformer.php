@@ -15,7 +15,7 @@ class DataTransformer
      */
     public static function getMappings(string $source): array
     {
-        $rows = DB::table('transformer_mappings')->where('source_id', $source)->get();
+        $rows = DB::table('transformer_mappings')->where('data_source_id', $source)->get();
 
         $mappings = [];
         foreach ($rows as $row) {
@@ -74,18 +74,16 @@ class DataTransformer
         $transformed = [];
 
         foreach ($model->getFillable() as $field) {
-            if (!in_array($field, $model->getHidden())) {
-                if (isset($mapping[$field])) {
-                    $transformed[$field] = self::applyTransformation($data, $mapping[$field]['mapping']);
+            if (isset($mapping[$field])) {
+                $transformed[$field] = self::applyTransformation($data, $mapping[$field]['mapping']);
 
-                    $transformed[$field] = self::applyFormatting(
-                        $transformed[$field],
-                        $field,
-                        $mapping[$field]['formatting']
-                    );
-                } else {
-                    $transformed[$field] = $data[$field] ?? null;
-                }
+                $transformed[$field] = self::applyFormatting(
+                    $transformed[$field],
+                    $field,
+                    $mapping[$field]['formatting']
+                );
+            } else {
+                $transformed[$field] = $data[$field] ?? null;
             }
         }
 

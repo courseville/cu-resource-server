@@ -18,6 +18,6 @@ class DataSource extends Model
 
     public function transformerMappings()
     {
-        return $this->hasMany(TransformerMapping::class, 'source_id');
+        return $this->hasMany(TransformerMapping::class, 'data_source_id');
     }
 }

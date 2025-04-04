@@ -64,6 +64,15 @@ class MappingsTableSeeder extends Seeder
             ],
             [
                 'data_source_id' => $source1Id,
+                'model' => 'App\Models\User',
+                'field' => 'password',
+                'mapping' => 'password',
+                'formatting' => json_encode([]),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'data_source_id' => $source1Id,
                 'model' => 'App\Models\Profile',
                 'field' => 'user_id',
                 'mapping' => 'id',
