@@ -56,4 +56,11 @@ class User extends Authenticatable
             'created_at' => fn($data) => date('Y-m-d H:i:s', strtotime($data['registration_date'] ?? now())),
         ];
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'user_roles');
+    }
+    
+
 }

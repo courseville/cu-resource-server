@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\CheckAnyRole;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Foundation\Application;
@@ -9,6 +10,9 @@ use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 use Laravel\Passport\Http\Middleware\CheckForAnyScope;
 use Laravel\Passport\Http\Middleware\CheckScopes;
 use Laravel\Passport\Http\Middleware\CheckClientCredentials;
+use Laravel\Passport\Http\Middleware\CheckClientCredentialsForAnyScope;
+use App\Http\Middleware\CheckRoles;
+use App\Http\Middleware\CheckForAnyRole;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -29,7 +33,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'scopes' => CheckScopes::class,
             'scope' => CheckForAnyScope::class,
-            'client' => CheckClientCredentials::class,
+            'clients' => CheckClientCredentials::class,
+            'client' => CheckClientCredentialsForAnyScope::class,
+            'roles' => CheckRoles::class,
+            'role'=> CheckForAnyRole::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

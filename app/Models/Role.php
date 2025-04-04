@@ -43,7 +43,7 @@ class Role extends Model
 
     public function clients()
     {
-        return $this->belongsToMany(\Laravel\Passport\Client::class, 'oauth_client_role'); 
+        return $this->belongsToMany(Client::class, 'oauth_client_roles'); 
     }
 
     public function permissions()

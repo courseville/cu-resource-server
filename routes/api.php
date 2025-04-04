@@ -24,11 +24,40 @@ Route::get('/user-withscope', function (Request $request) {
     return $request->user();
 })->middleware(['auth:api', 'scope:student']);
 
-Route::get('/scopes', function (Request $request) {
+Route::get('/scopes-nomid', function (Request $request) {
     $scopes = Passport::scopes();
 
     return response()->json($scopes);
-})->middleware('client:machine');
+});
+
+// Route for internal API access
+Route::middleware(['auth:api'])->prefix('internal')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+});
+
+// Route for client autho code access 
+Route::middleware(['auth:api','scopes:user.read'])->prefix('external')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    })->middleware('roles:admin');
+});
+
+// Route for client no user data access
+Route::middleware('client:general.read,machine')->group(function () {
+    Route::get('/scopes', function (Request $request) {
+        $scopes = Passport::scopes();
+        return response()->json($scopes);
+    });
+});
+
+// Route for client user data access
+Route::middleware(['client:admin.read','roles:client_full_access'])->prefix('client')->group(function () {
+    Route::get('/users', function (Request $request) {
+        return User::get();
+    });
+});
 
 Route::middleware('auth:api')->get('/resources/{entity}', function (Request $request, $entity) {
     // Check if the table exists

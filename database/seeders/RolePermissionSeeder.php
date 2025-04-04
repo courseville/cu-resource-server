@@ -56,7 +56,7 @@ class RolePermissionSeeder extends Seeder
             'faculty' => ['view_users','view_courses', 'edit_courses'],
             'student' => ['view_courses'],
             'client_readonly' => ['view_courses'],
-            'client_full_access' => ['view_courses', 'edit_courses'],
+            'client_full_access' => ['view_courses', 'view_users'],
         ];
 
         // Assign permissions to roles
