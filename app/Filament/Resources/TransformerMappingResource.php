@@ -7,6 +7,8 @@ use App\Models\TransformerMapping;
 use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
@@ -49,7 +51,7 @@ class TransformerMappingResource extends Resource
                 TextColumn::make('created_at')->dateTime()->sortable(),
             ])
             ->filters([])
-            ->actions([])
+            ->actions([EditAction::make(), DeleteAction::make()])
             ->bulkActions([]);
     }
 
