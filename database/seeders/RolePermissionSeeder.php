@@ -32,17 +32,19 @@ class RolePermissionSeeder extends Seeder
 
         // Preset permissions for User-related actions
         $permissions = [
-            ['name' => 'view_users', 'model' => 'App\Models\User', 'columns' => ['id', 'name', 'email']],
-            ['name' => 'edit_users', 'model' => 'App\Models\User', 'columns' => ['name', 'email']],
-            ['name' => 'delete_users', 'model' => 'App\Models\User', 'columns' => ['id']],
-            ['name' => 'view_courses', 'model' => 'App\Models\Course', 'columns' => ['id', 'name']],
-            ['name' => 'edit_courses', 'model' => 'App\Models\Course', 'columns' => ['name']],
+            ['name' => 'view_users', 'action' => 'view', 'model' => 'App\Models\User', 'columns' => json_encode(['id', 'name', 'email'])],
+            ['name' => 'view_user_name', 'action' => 'view', 'model' => 'App\Models\User', 'columns' => json_encode(['name'])],
+            ['name' => 'edit_users', 'action' => 'edit', 'model' => 'App\Models\User', 'columns' => json_encode(['name', 'email'])],
+            ['name' => 'delete_users', 'action' => 'delete', 'model' => 'App\Models\User', 'columns' => json_encode(['id'])],
+            ['name' => 'view_courses', 'action' => 'view', 'model' => 'App\Models\Course', 'columns' => json_encode(['id', 'name'])],
+            ['name' => 'edit_courses', 'action' => 'edit', 'model' => 'App\Models\Course', 'columns' => json_encode(['name'])],
         ];
 
         // Insert permissions
         foreach ($permissions as $perm) {
             DB::table('permissions')->insert([
                 'name' => $perm['name'],
+                'action' => $perm['action'],
                 'model' => $perm['model'],
                 'columns' => json_encode($perm['columns']),
                 'created_at' => Carbon::now(),
@@ -54,7 +56,7 @@ class RolePermissionSeeder extends Seeder
         $rolePermissions = [
             'admin' => ['view_users', 'edit_users', 'delete_users','view_courses', 'edit_courses'],
             'faculty' => ['view_users','view_courses', 'edit_courses'],
-            'student' => ['view_courses'],
+            'student' => ['view_courses','view_user_name'],
             'client_readonly' => ['view_courses'],
             'client_full_access' => ['view_courses', 'view_users'],
         ];
@@ -76,9 +78,9 @@ class RolePermissionSeeder extends Seeder
 
         // Assign roles to example users
         DB::table('user_roles')->insert([
-            ['user_id' => 1, 'role_id' => DB::table('roles')->where('name', 'admin')->value('id')],
-            ['user_id' => 2, 'role_id' => DB::table('roles')->where('name', 'faculty')->value('id')],
-            ['user_id' => 3, 'role_id' => DB::table('roles')->where('name', 'student')->value('id')],
+            ['user_id' => 2, 'role_id' => DB::table('roles')->where('name', 'admin')->value('id')],
+            ['user_id' => 3, 'role_id' => DB::table('roles')->where('name', 'faculty')->value('id')],
+            ['user_id' => 4, 'role_id' => DB::table('roles')->where('name', 'student')->value('id')],
         ]);
 
         // Optionally, assign roles to the OAuth clients (if needed)

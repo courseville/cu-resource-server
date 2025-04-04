@@ -40,8 +40,34 @@ Route::middleware(['auth:api'])->prefix('internal')->group(function () {
 // Route for client autho code access 
 Route::middleware(['auth:api','scopes:user.read'])->prefix('external')->group(function () {
     Route::get('/user', function (Request $request) {
-        return $request->user();
-    })->middleware('roles:admin');
+        $user = $request->user();
+        $roles =  $user->roles;
+        $permissions = $roles->flatMap(function ($role) {
+            return $role->permissions;
+        });
+        \Log::info($permissions);
+        // Filter permissions where the model is 'User' and the action is 'view'
+        $filteredPermissions = $permissions->filter(function ($permission) {
+            // Dynamically resolve the model instance
+            $modelInstance = $permission->modelInstance();
+
+            // Check if the model is 'User' and the action is 'view'
+            return $modelInstance instanceof App\Models\User && $permission->action === 'view';
+        });
+        \Log::info($filteredPermissions);
+        // Get unique viewable columns from the filtered permissions
+        $viewableColumns = $filteredPermissions->pluck('columns')->flatten()->map(function ($column) {
+            return json_decode($column, true); // Decode JSON into an array
+        })->flatten()->unique()->toArray();
+
+        // If no columns are specified, return all columns
+        if (empty($viewableColumns)) {
+            $viewableColumns = ['*'];
+        }
+        \Log::info($viewableColumns);
+        $userData = User::select($viewableColumns)->where('id', $user->id)->first();
+        return $userData;
+    })->middleware('role:admin,student');
 });
 
 // Route for client no user data access
