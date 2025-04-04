@@ -15,7 +15,7 @@ class DataTransformer
      */
     public static function getMappings(string $source): array
     {
-        $rows = DB::table('transformer_mappings')->where('source', $source)->get();
+        $rows = DB::table('transformer_mappings')->where('source_id', $source)->get();
 
         $mappings = [];
         foreach ($rows as $row) {

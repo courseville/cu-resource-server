@@ -12,7 +12,6 @@ class TransformerMapping extends Model
     protected $table = 'transformer_mappings';
 
     protected $fillable = [
-        'source',
         'model',
         'field',
         'mapping',

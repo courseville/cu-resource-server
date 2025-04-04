@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\DataSource;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -38,10 +39,10 @@ Route::middleware(['auth:api'])->prefix('internal')->group(function () {
 });
 
 // Route for client autho code access 
-Route::middleware(['auth:api','scopes:user.read'])->prefix('external')->group(function () {
+Route::middleware(['auth:api', 'scopes:user.read'])->prefix('external')->group(function () {
     Route::get('/user', function (Request $request) {
         $user = $request->user();
-        $roles =  $user->roles;
+        $roles = $user->roles;
         $permissions = $roles->flatMap(function ($role) {
             return $role->permissions;
         });
@@ -79,7 +80,7 @@ Route::middleware('client:general.read,machine')->group(function () {
 });
 
 // Route for client user data access
-Route::middleware(['client:admin.read','roles:client_full_access'])->prefix('client')->group(function () {
+Route::middleware(['client:admin.read', 'roles:client_full_access'])->prefix('client')->group(function () {
     Route::get('/users', function (Request $request) {
         return User::get();
     });
@@ -148,8 +149,9 @@ Route::get('/transformer/source1', function (Request $request) {
         ],
     ];
 
+    $source1Id = DataSource::where("name", "=", "source1")->value('id');
 
-    $formattedData1 = DataTransformer::transformFromSource('source1', $source1Data);
+    $formattedData1 = DataTransformer::transformFromSource($source1Id, $source1Data);
 
     return $formattedData1;
 })->middleware('client:machine');
@@ -198,13 +200,15 @@ Route::get('/transformer/source2', function (Request $request) {
         ],
     ];
 
-    $formattedData1 = DataTransformer::transformFromSource('source2', $source2Data);
+    $source2Id = DataSource::where("name", "=", "source2")->value('id');
+
+    $formattedData1 = DataTransformer::transformFromSource($source2Id, $source2Data);
 
     return $formattedData1;
 })->middleware('client:machine');
 
 Route::get('/transformer/source3', function (Request $request) {
-    $source2Data = [
+    $source3Data = [
         [
             'id' => '1',
             'username' => 'Jane Smith',
@@ -232,7 +236,9 @@ Route::get('/transformer/source3', function (Request $request) {
         ],
     ];
 
-    $formattedData1 = DataTransformer::transformFromSource('source3', $source2Data);
+    $source3Id = DataSource::where("name", "=", "source3")->value('id');
+
+    $formattedData1 = DataTransformer::transformFromSource($source3Id, $source3Data);
 
     return $formattedData1;
 })->middleware('client:machine');

@@ -13,18 +13,39 @@ class MappingsTableSeeder extends Seeder
      */
     public function run(): void
     {
+        $source1Id = DB::table('data_sources')->insertGetId([
+            'name' => 'source1',
+            'url' => 'https://source1.com',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+
+        $source2Id = DB::table('data_sources')->insertGetId([
+            'name' => 'source2',
+            'url' => 'https://source2.com',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+
+        $source3Id = DB::table('data_sources')->insertGetId([
+            'name' => 'source3',
+            'url' => 'https://source3.com',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+
         DB::table('transformer_mappings')->insert([
             [
-                'source' => 'source1',
+                'data_source_id' => $source1Id,
                 'model' => 'App\Models\User',
                 'field' => 'name',
                 'mapping' => 'full_name',
-                'formatting' => json_encode(['trim', 'uppercase']), // Apply trim and uppercase formatting
+                'formatting' => json_encode(['trim', 'uppercase']),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
-                'source' => 'source1',
+                'data_source_id' => $source1Id,
                 'model' => 'App\Models\User',
                 'field' => 'email',
                 'mapping' => 'email_address',
@@ -33,7 +54,7 @@ class MappingsTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'source' => 'source1',
+                'data_source_id' => $source1Id,
                 'model' => 'App\Models\User',
                 'field' => 'created_at',
                 'mapping' => 'registration_date',
@@ -42,7 +63,7 @@ class MappingsTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'source' => 'source1',
+                'data_source_id' => $source1Id,
                 'model' => 'App\Models\Profile',
                 'field' => 'user_id',
                 'mapping' => 'id',
@@ -51,7 +72,7 @@ class MappingsTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'source' => 'source1',
+                'data_source_id' => $source1Id,
                 'model' => 'App\Models\Profile',
                 'field' => 'bio',
                 'mapping' => 'about_me',
@@ -60,7 +81,7 @@ class MappingsTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'source' => 'source1',
+                'data_source_id' => $source1Id,
                 'model' => 'App\Models\Profile',
                 'field' => 'avatar',
                 'mapping' => 'profile_picture',
@@ -70,7 +91,7 @@ class MappingsTableSeeder extends Seeder
             ],
 
             [
-                'source' => 'source2',
+                'data_source_id' => $source2Id,
                 'model' => 'App\Models\User',
                 'field' => 'name',
                 'mapping' => 'username',
@@ -79,7 +100,7 @@ class MappingsTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'source' => 'source2',
+                'data_source_id' => $source2Id,
                 'model' => 'App\Models\User',
                 'field' => 'email',
                 'mapping' => 'contact_email',
@@ -88,7 +109,7 @@ class MappingsTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'source' => 'source2',
+                'data_source_id' => $source2Id,
                 'model' => 'App\Models\User',
                 'field' => 'created_at',
                 'mapping' => 'signup_date',
@@ -97,7 +118,7 @@ class MappingsTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'source' => 'source2',
+                'data_source_id' => $source2Id,
                 'model' => 'App\Models\Profile',
                 'field' => 'bio',
                 'mapping' => 'bio_info',
@@ -106,7 +127,7 @@ class MappingsTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'source' => 'source2',
+                'data_source_id' => $source2Id,
                 'model' => 'App\Models\Profile',
                 'field' => 'avatar',
                 'mapping' => 'image_url',
@@ -115,7 +136,7 @@ class MappingsTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'source' => 'source2',
+                'data_source_id' => $source2Id,
                 'model' => 'App\Models\Profile',
                 'field' => 'user_id',
                 'mapping' => 'id',
@@ -124,7 +145,7 @@ class MappingsTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'source' => 'source3',
+                'data_source_id' => $source3Id,
                 'model' => 'App\Models\Profile',
                 'field' => 'user_id',
                 'mapping' => 'id',
