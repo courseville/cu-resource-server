@@ -62,7 +62,7 @@ Route::middleware(['auth:api','scopes:user.read'])->prefix('external')->group(fu
 
         // If no columns are specified, return all columns
         if (empty($viewableColumns)) {
-            $viewableColumns = ['*'];
+            return response()->json(['error' => 'No permission to view any columns.'], 403);
         }
         \Log::info($viewableColumns);
         $userData = User::select($viewableColumns)->where('id', $user->id)->first();
