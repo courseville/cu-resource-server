@@ -67,7 +67,7 @@ class RolePermissionSeeder extends Seeder
 
             foreach ($perms as $perm) {
                 $permId = DB::table('permissions')->where('name', $perm)->value('id');
-                DB::table('role_permissions')->insert([
+                DB::table('permission_role')->insert([
                     'role_id' => $roleId,
                     'permission_id' => $permId,
                     'created_at' => Carbon::now(),
@@ -77,14 +77,14 @@ class RolePermissionSeeder extends Seeder
         }
 
         // Assign roles to example users
-        DB::table('user_roles')->insert([
+        DB::table('role_user')->insert([
             ['user_id' => DB::table('users')->where('name', '2')->value('id'), 'role_id' => DB::table('roles')->where('name', 'admin')->value('id')],
             ['user_id' => DB::table('users')->where('name', '3')->value('id'), 'role_id' => DB::table('roles')->where('name', 'faculty')->value('id')],
             ['user_id' => DB::table('users')->where('name', '4')->value('id'), 'role_id' => DB::table('roles')->where('name', 'student')->value('id')],
         ]);
 
         // Optionally, assign roles to the OAuth clients (if needed)
-        DB::table('oauth_client_roles')->insert([
+        DB::table('oauth_client_role')->insert([
             ['oauth_client_id' => DB::table('oauth_clients')->where('name', 'Client with User Data')->value('id'), 'role_id' => DB::table('roles')->where('name', 'client_full_access')->value('id')],
         ]);
     }
