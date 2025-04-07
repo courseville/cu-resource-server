@@ -15,17 +15,17 @@ class RolePermissionSeeder extends Seeder
     {
         // Preset roles
         $roles = [
-            ['name' => 'admin', 'entity_type' => 'user'],
-            ['name' => 'faculty', 'entity_type' => 'user'],
-            ['name' => 'student', 'entity_type' => 'user'],
-            ['name' => 'client_readonly', 'entity_type' => 'client'],
-            ['name' => 'client_full_access', 'entity_type' => 'client'],
+            ['name' => 'admin', 'description' => 'Administrator with full access to the system'],
+            ['name' => 'faculty', 'description' => 'Faculty member with access to course management'],
+            ['name' => 'student', 'description' => 'Student with access to view courses and limited user data'],
+            ['name' => 'client_readonly', 'description' => 'Client with read-only access to resources'],
+            ['name' => 'client_full_access', 'description' => 'Client with full access to resources'],
         ];
 
         // Insert roles
         DB::table('roles')->insert(array_map(fn($role) => [
             'name' => $role['name'],
-            'entity_type' => $role['entity_type'],
+            'description' => $role['description'],
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ], $roles));
