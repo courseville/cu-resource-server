@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Transformers\DataTransformer;
 use Laravel\Passport\Client;
 use Laravel\Passport\Passport;
+use App\Services\PermissionService;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -42,30 +43,12 @@ Route::middleware(['auth:api'])->prefix('internal')->group(function () {
 Route::middleware(['auth:api', 'scopes:user.read'])->prefix('external')->group(function () {
     Route::get('/user', function (Request $request) {
         $user = $request->user();
-        $roles = $user->roles;
-        $permissions = $roles->flatMap(function ($role) {
-            return $role->permissions;
-        });
-        \Log::info($permissions);
-        // Filter permissions where the model is 'User' and the action is 'view'
-        $filteredPermissions = $permissions->filter(function ($permission) {
-            // Dynamically resolve the model instance
-            $modelInstance = $permission->modelInstance();
-
-            // Check if the model is 'User' and the action is 'view'
-            return $modelInstance instanceof App\Models\User && $permission->action === 'view';
-        });
-        \Log::info($filteredPermissions);
-        // Get unique viewable columns from the filtered permissions
-        $viewableColumns = $filteredPermissions->pluck('columns')->flatten()->map(function ($column) {
-            return json_decode($column, true); // Decode JSON into an array
-        })->flatten()->unique()->toArray();
-
-        // If no columns are specified, return all columns
+        $permissionService = new PermissionService();
+        $viewableColumns = $permissionService->allowedColumns($user, 'view', User::class);
         if (empty($viewableColumns)) {
             return response()->json(['error' => 'No permission to view any columns.'], 403);
+        
         }
-        \Log::info($viewableColumns);
         $userData = User::select($viewableColumns)->where('id', $user->id)->first();
         return $userData;
     })->middleware('role:admin,student');
@@ -82,7 +65,15 @@ Route::middleware('client:general.read,machine')->group(function () {
 // Route for client user data access
 Route::middleware(['client:admin.read', 'roles:client_full_access'])->prefix('client')->group(function () {
     Route::get('/users', function (Request $request) {
-        return User::get();
+        $client = auth('api')->client();
+        $permissionService = new PermissionService();
+        $viewableColumns = $permissionService->allowedColumns($client, 'view', User::class);
+        if (empty($viewableColumns)) {
+            return response()->json(['error' => 'No permission to view any columns.'], 403);
+        
+        }
+        $userData = User::select($viewableColumns)->get();
+        return $userData;
     });
 });
 
