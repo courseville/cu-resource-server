@@ -47,7 +47,7 @@ Route::middleware(['auth:api', 'scopes:user.read'])->prefix('external')->group(f
         $viewableColumns = $permissionService->allowedColumns($user, 'view', User::class);
         if (empty($viewableColumns)) {
             return response()->json(['error' => 'No permission to view any columns.'], 403);
-        
+
         }
         $userData = User::select($viewableColumns)->where('id', $user->id)->first();
         return $userData;
@@ -70,7 +70,7 @@ Route::middleware(['client:admin.read', 'roles:client_full_access'])->prefix('cl
         $viewableColumns = $permissionService->allowedColumns($client, 'view', User::class);
         if (empty($viewableColumns)) {
             return response()->json(['error' => 'No permission to view any columns.'], 403);
-        
+
         }
         $userData = User::select($viewableColumns)->get();
         return $userData;
@@ -103,7 +103,7 @@ Route::get('/transformer/source1', function (Request $request) {
             'full_name' => 'John Doe',
             'email_address' => 'john.doe@example.com',
             'password' => '123456',
-            'registration_date' => '2025-01-01 12:00:00',
+            'registration_date' => '2025-04-07T14:30:00Z',
             'about_me' => 'A short about_me about John.',
             'profile_picture' => 'john_profile_picture.jpg',
         ],
@@ -112,7 +112,7 @@ Route::get('/transformer/source1', function (Request $request) {
             'full_name' => 'Alice Johnson',
             'email_address' => 'alice.johnson@example.com',
             'password' => '123456',
-            'registration_date' => '2025-02-10 15:30:00',
+            'registration_date' => '2025-04-07T14:30:00Z',
             'about_me' => 'Passionate about tech and programming.',
             'profile_picture' => 'alice_profile_picture.jpg',
         ],
@@ -121,7 +121,7 @@ Route::get('/transformer/source1', function (Request $request) {
             'full_name' => 'Bob Smith',
             'email_address' => 'bob.smith@example.com',
             'password' => '123456',
-            'registration_date' => '2025-03-25 09:00:00',
+            'registration_date' => '2025-04-07T14:30:00Z',
             'about_me' => 'Loves hiking and outdoor adventures.',
             'profile_picture' => 'bob_profile_picture.jpg',
         ],
@@ -130,7 +130,7 @@ Route::get('/transformer/source1', function (Request $request) {
             'full_name' => 'Charlie Brown',
             'email_address' => 'charlie.brown@example.com',
             'password' => '123456',
-            'registration_date' => '2025-04-05 18:45:00',
+            'registration_date' => '2025-04-07T14:30:00Z',
             'about_me' => 'Musician and graphic designer.',
             'profile_picture' => 'charlie_profile_picture.jpg',
         ],
@@ -139,7 +139,7 @@ Route::get('/transformer/source1', function (Request $request) {
             'full_name' => 'David Green',
             'email_address' => 'david.green@example.com',
             'password' => '123456',
-            'registration_date' => '2025-05-15 13:30:00',
+            'registration_date' => '2025-04-07T14:30:00Z',
             'about_me' => 'Tech enthusiast and web developer.',
             'profile_picture' => 'david_profile_picture.jpg',
         ],
@@ -158,7 +158,7 @@ Route::get('/transformer/source2', function (Request $request) {
             'id' => '1',
             'username' => 'Jane Smith',
             'contact_email' => 'jane.smith@example.com',
-            'signup_date' => '2025-01-02 12:00:00',
+            'signup_date' => '1712490600',
             'bio_info' => 'A short bio_info about Jane.',
             'image_url' => 'jane_image_url.jpg',
         ],
@@ -166,7 +166,7 @@ Route::get('/transformer/source2', function (Request $request) {
             'id' => '2',
             'username' => 'Michael Taylor',
             'contact_email' => 'michael.taylor@example.com',
-            'signup_date' => '2025-02-12 16:30:00',
+            'signup_date' => '1712490600',
             'bio_info' => 'Software engineer with a love for gaming.',
             'image_url' => 'michael_image_url.jpg',
         ],
@@ -174,7 +174,7 @@ Route::get('/transformer/source2', function (Request $request) {
             'id' => '3',
             'username' => 'Sophia Davis',
             'contact_email' => 'sophia.davis@example.com',
-            'signup_date' => '2025-03-20 14:15:00',
+            'signup_date' => '1712490600',
             'bio_info' => 'Designs websites and UX interfaces.',
             'image_url' => 'sophia_image_url.jpg',
         ],
@@ -182,7 +182,7 @@ Route::get('/transformer/source2', function (Request $request) {
             'id' => '4',
             'username' => 'Ethan Wilson',
             'contact_email' => 'ethan.wilson@example.com',
-            'signup_date' => '2025-04-10 11:00:00',
+            'signup_date' => '1712490600',
             'bio_info' => 'Photographer and nature lover.',
             'image_url' => 'ethan_image_url.jpg',
         ],
@@ -190,7 +190,7 @@ Route::get('/transformer/source2', function (Request $request) {
             'id' => '5',
             'username' => 'Olivia Martinez',
             'contact_email' => 'olivia.martinez@example.com',
-            'signup_date' => '2025-05-25 17:45:00',
+            'signup_date' => '1712490600',
             'bio_info' => 'Creative writer and content strategist.',
             'image_url' => 'olivia_image_url.jpg',
         ],

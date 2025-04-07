@@ -4,6 +4,9 @@ namespace App\Transformers;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class DataTransformer
 {
@@ -72,8 +75,8 @@ class DataTransformer
     public static function transform(array $data, Model $model, array $mapping): array
     {
         $transformed = [];
-
         foreach ($model->getFillable() as $field) {
+
             if (isset($mapping[$field])) {
                 $transformed[$field] = self::applyTransformation($data, $mapping[$field]['mapping']);
 
@@ -115,6 +118,7 @@ class DataTransformer
      * @param string|null $formatting
      * @return mixed
      */
+
     private static function applyFormatting($value, string $field, ?string $formatting)
     {
         if (is_null($formatting)) {
@@ -123,23 +127,24 @@ class DataTransformer
 
         $formattingRules = json_decode($formatting, true);
 
+        $str = Str::of($value);
+
         foreach ($formattingRules as $rule) {
-            switch ($rule) {
-                case 'trim':
-                    $value = trim($value);
-                    break;
-                case 'lowercase':
-                    $value = strtolower($value);
-                    break;
-                case 'uppercase':
-                    $value = strtoupper($value);
-                    break;
-                case 'date_format':
-                    $value = \Carbon\Carbon::parse($value)->toDateTimeString();
-                    break;
+            if (str_starts_with($rule, 'date_format')) {
+                $value = Carbon::parse($value)->toDateTimeString();
+                $str = Str::of($value);
+                continue;
+            }
+
+            [$method, $args] = array_pad(explode(':', $rule, 2), 2, null);
+            $args = $args ? explode(',', $args) : [];
+
+            if (method_exists($str, $method)) {
+                $str = call_user_func_array([$str, $method], $args);
             }
         }
 
-        return $value;
+        Log::info($str->toString());
+        return $str->toString();
     }
 }

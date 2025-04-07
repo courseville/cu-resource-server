@@ -12,7 +12,10 @@ return new class extends Migration {
     {
         Schema::create('transformer_mappings', function (Blueprint $table) {
             $table->id();
-            $table->string('source');
+            $table->foreignId('data_source_id')
+                ->constrained('data_sources')
+                ->onDelete('cascade')
+                ->after('id');
             $table->string('model');
             $table->string('field');
             $table->string('mapping');

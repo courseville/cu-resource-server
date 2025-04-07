@@ -113,7 +113,7 @@ class MappingsTableSeeder extends Seeder
                 'model' => 'App\Models\User',
                 'field' => 'email',
                 'mapping' => 'contact_email',
-                'formatting' => json_encode(['trim', 'lowercase']),
+                'formatting' => json_encode(['trim', 'lowercase', 'replace:example.com,mydomain.com']),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],

@@ -19,12 +19,12 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
-        // $this->call([
-        //     UserSeeder::class,
-        //     OauthClientSeeder::class,
-        //     CourseSeeder::class,
-        //     MappingsTableSeeder::class,
-        //     RolePermissionSeeder::class,
-        // ]);
+        $this->call([
+            UserSeeder::class,
+            OauthClientSeeder::class,
+            CourseSeeder::class,
+            MappingsTableSeeder::class,
+            RolePermissionSeeder::class,
+        ]);
     }
 }
