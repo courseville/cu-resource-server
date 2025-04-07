@@ -3,17 +3,15 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class UserResource extends Resource
 {
@@ -41,6 +39,12 @@ class UserResource extends Resource
                     ->required()
                     ->minLength(8)
                     ->dehydrateStateUsing(fn($state) => bcrypt($state)),
+
+                Select::make('roles')
+                    ->label('Roles')
+                    ->relationship('roles', 'name') // Define the relationship and display field
+                    ->multiple() // Allow multiple selections
+                    ->preload(), // Preload options for better performance
             ]);
     }
 
@@ -50,6 +54,13 @@ class UserResource extends Resource
             ->columns([
                 TextColumn::make('name')->label('Name'),
                 TextColumn::make('email')->label('Email'),
+                TextColumn::make('roles')
+                    ->label('Roles')
+                    ->formatStateUsing(function ($record) {
+                        // Concatenate role names into a single string
+                        return $record->roles->pluck('name')->join(', ');
+                    })
+                    ->limit(50), // Limit the number of characters displayed
             ])
             ->filters([
                 //
