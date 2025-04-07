@@ -8,6 +8,6 @@ class Client extends PassportClient
 {
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'oauth_client_roles', 'oauth_client_id', 'role_id');
+        return $this->belongsToMany(Role::class, 'oauth_client_role', 'oauth_client_id', 'role_id');
     }
 }

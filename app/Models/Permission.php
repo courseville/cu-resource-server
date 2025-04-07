@@ -25,7 +25,7 @@ class Permission extends Model
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'role_permissions'); 
+        return $this->belongsToMany(Role::class, 'permission_role'); 
     }
 
     // Convert the columns field to an array when it's retrieved from the database

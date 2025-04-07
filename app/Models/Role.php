@@ -38,16 +38,16 @@ class Role extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_roles'); 
+        return $this->belongsToMany(User::class, 'role_user'); 
     }
 
     public function clients()
     {
-        return $this->belongsToMany(Client::class, 'oauth_client_roles'); 
+        return $this->belongsToMany(Client::class, 'oauth_client_role'); 
     }
 
     public function permissions()
     {
-        return $this->belongsToMany(Permission::class, 'role_permissions'); 
+        return $this->belongsToMany(Permission::class, 'permission_role'); 
     }
 }
