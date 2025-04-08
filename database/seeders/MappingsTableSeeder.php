@@ -37,7 +37,16 @@ class MappingsTableSeeder extends Seeder
         DB::table('transformer_mappings')->insert([
             [
                 'data_source_id' => $source1Id,
-                'model' => 'App\Models\User',
+                'model' => 'App\Models\TestUser',
+                'field' => 'data_id',
+                'mapping' => 'id',
+                'formatting' => json_encode([]),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'data_source_id' => $source1Id,
+                'model' => 'App\Models\TestUser',
                 'field' => 'name',
                 'mapping' => 'full_name',
                 'formatting' => json_encode(['trim', 'uppercase']),
@@ -46,7 +55,7 @@ class MappingsTableSeeder extends Seeder
             ],
             [
                 'data_source_id' => $source1Id,
-                'model' => 'App\Models\User',
+                'model' => 'App\Models\TestUser',
                 'field' => 'email',
                 'mapping' => 'email_address',
                 'formatting' => json_encode(['trim', 'lowercase']),
@@ -55,7 +64,7 @@ class MappingsTableSeeder extends Seeder
             ],
             [
                 'data_source_id' => $source1Id,
-                'model' => 'App\Models\User',
+                'model' => 'App\Models\TestUser',
                 'field' => 'created_at',
                 'mapping' => 'registration_date',
                 'formatting' => json_encode(['date_format']),
@@ -64,7 +73,7 @@ class MappingsTableSeeder extends Seeder
             ],
             [
                 'data_source_id' => $source1Id,
-                'model' => 'App\Models\User',
+                'model' => 'App\Models\TestUser',
                 'field' => 'password',
                 'mapping' => 'password',
                 'formatting' => json_encode([]),
@@ -73,8 +82,8 @@ class MappingsTableSeeder extends Seeder
             ],
             [
                 'data_source_id' => $source1Id,
-                'model' => 'App\Models\Profile',
-                'field' => 'user_id',
+                'model' => 'App\Models\TestProfile',
+                'field' => 'data_id',
                 'mapping' => 'id',
                 'formatting' => json_encode([]),
                 'created_at' => Carbon::now(),
@@ -82,7 +91,7 @@ class MappingsTableSeeder extends Seeder
             ],
             [
                 'data_source_id' => $source1Id,
-                'model' => 'App\Models\Profile',
+                'model' => 'App\Models\TestProfile',
                 'field' => 'bio',
                 'mapping' => 'about_me',
                 'formatting' => json_encode(['trim']),
@@ -91,7 +100,7 @@ class MappingsTableSeeder extends Seeder
             ],
             [
                 'data_source_id' => $source1Id,
-                'model' => 'App\Models\Profile',
+                'model' => 'App\Models\TestProfile',
                 'field' => 'avatar',
                 'mapping' => 'profile_picture',
                 'formatting' => json_encode(['trim']),
@@ -101,7 +110,7 @@ class MappingsTableSeeder extends Seeder
 
             [
                 'data_source_id' => $source2Id,
-                'model' => 'App\Models\User',
+                'model' => 'App\Models\TestUser',
                 'field' => 'name',
                 'mapping' => 'username',
                 'formatting' => json_encode(['trim', 'lowercase']),
@@ -110,7 +119,7 @@ class MappingsTableSeeder extends Seeder
             ],
             [
                 'data_source_id' => $source2Id,
-                'model' => 'App\Models\User',
+                'model' => 'App\Models\TestUser',
                 'field' => 'email',
                 'mapping' => 'contact_email',
                 'formatting' => json_encode(['trim', 'lowercase', 'replace:example.com,mydomain.com']),
@@ -119,7 +128,7 @@ class MappingsTableSeeder extends Seeder
             ],
             [
                 'data_source_id' => $source2Id,
-                'model' => 'App\Models\User',
+                'model' => 'App\Models\TestUser',
                 'field' => 'created_at',
                 'mapping' => 'signup_date',
                 'formatting' => json_encode(['date_format']),
@@ -128,7 +137,7 @@ class MappingsTableSeeder extends Seeder
             ],
             [
                 'data_source_id' => $source2Id,
-                'model' => 'App\Models\Profile',
+                'model' => 'App\Models\TestProfile',
                 'field' => 'bio',
                 'mapping' => 'bio_info',
                 'formatting' => json_encode(['trim']),
@@ -137,7 +146,7 @@ class MappingsTableSeeder extends Seeder
             ],
             [
                 'data_source_id' => $source2Id,
-                'model' => 'App\Models\Profile',
+                'model' => 'App\Models\TestProfile',
                 'field' => 'avatar',
                 'mapping' => 'image_url',
                 'formatting' => json_encode(['trim']),
@@ -146,7 +155,7 @@ class MappingsTableSeeder extends Seeder
             ],
             [
                 'data_source_id' => $source2Id,
-                'model' => 'App\Models\Profile',
+                'model' => 'App\Models\TestProfile',
                 'field' => 'user_id',
                 'mapping' => 'id',
                 'formatting' => json_encode([]),
@@ -155,7 +164,7 @@ class MappingsTableSeeder extends Seeder
             ],
             [
                 'data_source_id' => $source3Id,
-                'model' => 'App\Models\Profile',
+                'model' => 'App\Models\TestProfile',
                 'field' => 'user_id',
                 'mapping' => 'id',
                 'formatting' => json_encode([]),

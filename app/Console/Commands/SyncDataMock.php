@@ -3,10 +3,11 @@
 namespace App\Console\Commands;
 
 use App\Models\DataSource;
-use App\Models\User;
-use App\Models\Profile;
+use App\Models\TestUser;
+use App\Models\TestProfile;
 use App\Transformers\DataTransformer;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class SyncDataMock extends Command
 {
@@ -31,15 +32,16 @@ class SyncDataMock extends Command
     {
         // Define required fields
         $userRequiredFields = ['name', 'email', 'created_at', 'password'];
-        $profileRequiredFields = ['user_id', 'bio', 'avatar'];
+        $profileRequiredFields = ['test_user_id', 'bio', 'avatar'];
 
         $source1Data = [
             [
                 'id' => '5',
-                'full_name' => 'John Doe',
+                'full_name' => 'John Does',
                 'email_address' => 'john.doe@example.com',
+                'password' => '123456',
                 'registration_date' => '2025-01-01 12:00:00',
-                'about_me' => 'A short about_me about John.',
+                'about_me' => 'A short about_me about Johnnnn.',
                 'profile_picture' => 'john_profile_picture.jpg',
             ],
             [
@@ -65,37 +67,37 @@ class SyncDataMock extends Command
         $source1Id = DataSource::where("name", "=", "source1")->value('id');
 
         $formattedData1 = DataTransformer::transformFromSource($source1Id, $source1Data);
-        $emailToSourceId = collect($source1Data)->pluck('id', 'email_address')->toArray();
 
         $userIds = [];
-        if (isset($formattedData1['App\\Models\\User'])) {
-            foreach ($formattedData1['App\\Models\\User'] as $userData) {
+        if (isset($formattedData1['App\\Models\\TestUser'])) {
+            foreach ($formattedData1['App\\Models\\TestUser'] as $userData) {
                 $missing = collect($userRequiredFields)->filter(fn($field) => empty($userData[$field]));
                 if ($missing->isNotEmpty()) {
                     $this->warn("Skipping user, missing required fields: " . $missing->implode(', '));
                     continue;
                 }
 
-                $user = User::create([
-                    'name' => $userData['name'],
-                    'email' => $userData['email'],
-                    'password' => $userData['password'],
-                    'created_at' => $userData['created_at'],
-                ]);
+                $user = TestUser::updateOrCreate(
+                    ['data_source_id' => $source1Id, 'data_id' => $userData['data_id']],
+                    [
+                        'email' => $userData['email'],
+                        'name' => $userData['name'],
+                        'password' => $userData['password'],
+                        'created_at' => $userData['created_at'],
+                    ]
+                );
 
-                $sourceId = $emailToSourceId[$userData['email']] ?? null;
-                if ($sourceId) {
-                    $userIds[$sourceId] = $user->id;
-                }
+
+                $userIds[$userData['data_id']] = $user->id;
 
                 $this->info("Inserted user: " . json_encode($userData));
             }
         }
 
 
-        if (isset($formattedData1['App\\Models\\Profile'])) {
-            foreach ($formattedData1['App\\Models\\Profile'] as $profileData) {
-                $sourceUserId = $profileData['user_id'];
+        if (isset($formattedData1['App\\Models\\TestProfile'])) {
+            foreach ($formattedData1['App\\Models\\TestProfile'] as $profileData) {
+                $sourceUserId = $profileData['data_id'];
                 $realUserId = $userIds[$sourceUserId] ?? null;
 
                 if (!$realUserId) {
@@ -103,7 +105,7 @@ class SyncDataMock extends Command
                     continue;
                 }
 
-                $profileData['user_id'] = $realUserId;
+                $profileData['test_user_id'] = $realUserId;
 
                 $missing = collect($profileRequiredFields)->filter(fn($field) => empty($profileData[$field]));
                 if ($missing->isNotEmpty()) {
@@ -111,15 +113,17 @@ class SyncDataMock extends Command
                     continue;
                 }
 
-                Profile::create([
-                    'user_id' => $profileData['user_id'],
-                    'bio' => $profileData['bio'],
-                    'avatar' => $profileData['avatar'],
-                ]);
+                $profile = TestProfile::updateOrCreate(
+                    ['data_source_id' => $source1Id, 'data_id' => $profileData['data_id']],
+                    [
+                        'test_user_id' => $profileData['test_user_id'],
+                        'bio' => $profileData['bio'],
+                        'avatar' => $profileData['avatar'],
+                    ]
+                );
 
-                $this->info("Inserted profile for user_id {$realUserId}");
+                $this->info("Inserted profile for user_id {$profile}");
             }
         }
-
     }
 }

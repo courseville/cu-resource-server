@@ -22,7 +22,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'created_at'
+        'created_at',
+        'data_source_id',
+        'data_id'
     ];
 
     /**
@@ -52,7 +54,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class, 'role_user');
     }
-    
+
     public function permissions()
     {
         return $this->roles()->with('permissions')->get()

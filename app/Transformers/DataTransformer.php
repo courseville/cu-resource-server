@@ -18,7 +18,7 @@ class DataTransformer
      */
     public static function getMappings(string $source): array
     {
-        $rows = DB::table('transformer_mappings')->where('data_source_id', $source)->get();
+        $rows = DB::table('transformer_mappings')->where('data_source_id', $source)->latest()->get();
 
         $mappings = [];
         foreach ($rows as $row) {
@@ -45,11 +45,12 @@ class DataTransformer
 
         foreach ($mappings as $modelClass => $mapping) {
             $modelInstance = new $modelClass();
-            $transformedData[$modelClass] = self::transformArray($dataArray, $modelInstance, $mapping);
+            $transformedData[$modelClass] = self::transformArray($dataArray, $modelInstance, $mapping, $source);
         }
 
         return $transformedData;
     }
+
 
     /**
      * Transform an array of fetched data into the given model format with a provided mapping.
@@ -59,10 +60,11 @@ class DataTransformer
      * @param array $mapping
      * @return array
      */
-    public static function transformArray(array $dataArray, Model $model, array $mapping): array
+    public static function transformArray(array $dataArray, Model $model, array $mapping, ?string $source = null): array
     {
-        return array_map(fn($data) => self::transform($data, $model, $mapping), $dataArray);
+        return array_map(fn($data) => self::transform($data, $model, $mapping, $source), $dataArray);
     }
+
 
     /**
      * Transform a single fetched data item into the given model format with a provided mapping.
@@ -70,9 +72,10 @@ class DataTransformer
      * @param array $data
      * @param Model $model
      * @param array $mapping
+     * @param string|null $source
      * @return array
      */
-    public static function transform(array $data, Model $model, array $mapping): array
+    public static function transform(array $data, Model $model, array $mapping, ?string $source = null): array
     {
         $transformed = [];
         foreach ($model->getFillable() as $field) {
@@ -90,6 +93,9 @@ class DataTransformer
             }
         }
 
+        if ($source && in_array('data_source_id', $model->getFillable())) {
+            $transformed['data_source_id'] = $source;
+        }
 
         return $transformed;
     }

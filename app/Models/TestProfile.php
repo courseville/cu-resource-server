@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Profile extends Model
+class TestProfile extends Model
 {
     use HasFactory;
-    protected $table = 'profiles';
+    protected $table = 'test_profiles';
     protected $fillable = [
-        'user_id',
+        'test_user_id',
         'bio',
         'avatar',
         'data_source_id',
@@ -28,6 +28,6 @@ class Profile extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(TestUser::class);
     }
 }
