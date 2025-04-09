@@ -43,15 +43,10 @@ Route::middleware(['auth:api'])->prefix('internal')->group(function () {
 Route::middleware(['auth:api', 'scopes:user.read'])->prefix('external')->group(function () {
     Route::get('/user', function (Request $request) {
         $user = $request->user();
-        $permissionService = app(PermissionService::class);
-        $viewableColumns = $permissionService->allowedColumns($user, 'view', User::class);
-        if (empty($viewableColumns)) {
-            return response()->json(['error' => 'No permission to view any columns.'], 403);
-
-        }
+        $viewableColumns = $request->get('viewableColumns');
         $userData = User::select($viewableColumns)->where('id', $user->id)->first();
         return $userData;
-    })->middleware('role:admin,student');
+    })->middleware('permission:view|App\Models\User');
 });
 
 // Route for client no user data access
@@ -63,15 +58,9 @@ Route::middleware('client:general.read,machine')->group(function () {
 });
 
 // Route for client user data access
-Route::middleware(['client:admin.read', 'roles:client_full_access'])->prefix('client')->group(function () {
+Route::middleware(['client:admin.read', 'permission:view|App\Models\User'])->prefix('client')->group(function () {
     Route::get('/users', function (Request $request) {
-        $client = auth('api')->client();
-        $permissionService = app(PermissionService::class);
-        $viewableColumns = $permissionService->allowedColumns($client, 'view', User::class);
-        if (empty($viewableColumns)) {
-            return response()->json(['error' => 'No permission to view any columns.'], 403);
-
-        }
+        $viewableColumns = $request->get('viewableColumns');
         $userData = User::select($viewableColumns)->get();
         return $userData;
     });

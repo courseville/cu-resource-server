@@ -13,6 +13,7 @@ use Laravel\Passport\Http\Middleware\CheckClientCredentials;
 use Laravel\Passport\Http\Middleware\CheckClientCredentialsForAnyScope;
 use App\Http\Middleware\CheckRoles;
 use App\Http\Middleware\CheckForAnyRole;
+use App\Http\Middleware\CheckPermission;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -36,7 +37,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'clients' => CheckClientCredentials::class,
             'client' => CheckClientCredentialsForAnyScope::class,
             'roles' => CheckRoles::class,
-            'role'=> CheckForAnyRole::class
+            'role'=> CheckForAnyRole::class,
+            'permission' => CheckPermission::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
