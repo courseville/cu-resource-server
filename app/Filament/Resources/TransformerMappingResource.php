@@ -22,7 +22,7 @@ class TransformerMappingResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('source')
+                TextInput::make('data_source_id')
                     ->required()
                     ->maxLength(255),
                 TextInput::make('model')
