@@ -43,7 +43,7 @@ class TransformerMappingResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('source')->sortable()->searchable(),
+                TextColumn::make('data_source_id')->sortable()->searchable(),
                 TextColumn::make('model')->sortable()->searchable(),
                 TextColumn::make('field')->sortable()->searchable(),
                 TextColumn::make('mapping')->sortable()->searchable(),
