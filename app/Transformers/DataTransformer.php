@@ -88,8 +88,6 @@ class DataTransformer
                     $field,
                     $mapping[$field]['formatting']
                 );
-            } else {
-                $transformed[$field] = $data[$field] ?? null;
             }
         }
 

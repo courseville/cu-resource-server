@@ -34,6 +34,20 @@ class MappingsTableSeeder extends Seeder
             'updated_at' => Carbon::now(),
         ]);
 
+        $source4Id = DB::table('data_sources')->insertGetId([
+            'name' => 'source4',
+            'url' => 'https://source4.com',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+
+        $source5Id = DB::table('data_sources')->insertGetId([
+            'name' => 'source5',
+            'url' => 'https://source5.com',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+
         DB::table('transformer_mappings')->insert([
             [
                 'data_source_id' => $source1Id,
@@ -107,7 +121,6 @@ class MappingsTableSeeder extends Seeder
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
-
             [
                 'data_source_id' => $source2Id,
                 'model' => 'App\Models\TestUser',
@@ -168,6 +181,78 @@ class MappingsTableSeeder extends Seeder
                 'field' => 'user_id',
                 'mapping' => 'id',
                 'formatting' => json_encode([]),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'data_source_id' => $source4Id,
+                'model' => 'App\Models\TestNisit',
+                'field' => 'student_id',
+                'mapping' => 'id',
+                'formatting' => json_encode([]),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'data_source_id' => $source4Id,
+                'model' => 'App\Models\TestNisit',
+                'field' => 'name',
+                'mapping' => 'full_name',
+                'formatting' => json_encode(['trim', 'uppercase']),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'data_source_id' => $source4Id,
+                'model' => 'App\Models\TestNisit',
+                'field' => 'email',
+                'mapping' => 'email_address',
+                'formatting' => json_encode(['trim', 'lowercase']),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'data_source_id' => $source4Id,
+                'model' => 'App\Models\TestNisit',
+                'field' => 'password',
+                'mapping' => 'password',
+                'formatting' => json_encode([]),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'data_source_id' => $source5Id,
+                'model' => 'App\Models\TestNisit',
+                'field' => 'student_id',
+                'mapping' => 'nisit_id',
+                'formatting' => json_encode([]),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'data_source_id' => $source5Id,
+                'model' => 'App\Models\TestNisit',
+                'field' => 'phone_number',
+                'mapping' => 'telephone',
+                'formatting' => json_encode([]),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'data_source_id' => $source5Id,
+                'model' => 'App\Models\TestNisit',
+                'field' => 'bio',
+                'mapping' => 'about_me',
+                'formatting' => json_encode(['trim']),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'data_source_id' => $source5Id,
+                'model' => 'App\Models\TestNisit',
+                'field' => 'avatar',
+                'mapping' => 'profile_picture',
+                'formatting' => json_encode(['trim']),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],

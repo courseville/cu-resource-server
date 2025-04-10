@@ -88,7 +88,7 @@ Route::get('/transformer/source1', function (Request $request) {
     // Sample data from source1
     $source1Data = [
         [
-            'id' => '5',
+            'id' => '6431311921',
             'full_name' => 'John Does',
             'email_address' => 'john.doe@example.com',
             'password' => '123456',
@@ -97,7 +97,7 @@ Route::get('/transformer/source1', function (Request $request) {
             'profile_picture' => 'john_profile_picture.jpg',
         ],
         [
-            'id' => '6',
+            'id' => '6431311922',
             'full_name' => 'Alice Johnson',
             'email_address' => 'alice.johnson@example.com',
             'password' => '123456',
@@ -106,7 +106,7 @@ Route::get('/transformer/source1', function (Request $request) {
             'profile_picture' => 'alice_profile_picture.jpg',
         ],
         [
-            'id' => '7',
+            'id' => '6431311923',
             'full_name' => 'Bob Smith',
             'email_address' => 'bob.smith@example.com',
             'password' => '123456',
@@ -206,6 +206,45 @@ Route::get('/transformer/source3', function (Request $request) {
     $source3Id = DataSource::where("name", "=", "source3")->latest()->value('id');
 
     $formattedData1 = DataTransformer::transformFromSource($source3Id, $source3Data);
+
+    return $formattedData1;
+})->middleware('client:machine');
+
+Route::get('/transformer/source4', function (Request $request) {
+    // Sample data from source1
+    $source1Data = [
+        [
+            'id' => '6431311921',
+            'full_name' => 'John Does',
+            'email_address' => 'john.doe@example.com',
+            'password' => '123456',
+            'registration_date' => '2025-01-01 12:00:00',
+            'about_me' => 'A short about_me about Johnnnn.',
+            'profile_picture' => 'john_profile_picture.jpg',
+        ],
+        [
+            'id' => '6431311922',
+            'full_name' => 'Alice Johnson',
+            'email_address' => 'alice.johnson@example.com',
+            'password' => '123456',
+            'registration_date' => '2025-02-10 15:30:00',
+            'about_me' => 'Passionate about tech and programming.',
+            'profile_picture' => 'alice_profile_picture.jpg',
+        ],
+        [
+            'id' => '6431311923',
+            'full_name' => 'Bob Smith',
+            'email_address' => 'bob.smith@example.com',
+            'password' => '123456',
+            'registration_date' => '2025-03-25 09:00:00',
+            'about_me' => 'Loves hiking and outdoor adventures.',
+            'profile_picture' => 'bob_profile_picture.jpg',
+        ]
+    ];
+
+    $source1Id = DataSource::where("name", "=", "source4")->latest()->value('id');
+
+    $formattedData1 = DataTransformer::transformFromSource($source1Id, $source1Data);
 
     return $formattedData1;
 })->middleware('client:machine');

@@ -37,7 +37,7 @@ class SyncDataMock extends Command
         $source1Data = [
             [
                 'id' => '5',
-                'full_name' => 'John Does',
+                'full_name' => 'John Doe',
                 'email_address' => 'john.doe@example.com',
                 'password' => '123456',
                 'registration_date' => '2025-01-01 12:00:00',
@@ -64,7 +64,56 @@ class SyncDataMock extends Command
             ]
         ];
 
+        $source2Data = [
+            [
+                'id' => '1',
+                'username' => 'Jane Smith',
+                'password' => '123456',
+                'contact_email' => 'jane.smith@example.com',
+                'signup_date' => '1712490600',
+                'bio_info' => 'A short bio_info about Jane.',
+                'image_url' => 'jane_image_url.jpg',
+            ],
+            [
+                'id' => '2',
+                'username' => 'Michael Taylor',
+                'password' => '123456',
+                'contact_email' => 'michael.taylor@example.com',
+                'signup_date' => '1712490600',
+                'bio_info' => 'Software engineer with a love for gaming.',
+                'image_url' => 'michael_image_url.jpg',
+            ],
+            [
+                'id' => '3',
+                'username' => 'Sophia Davis',
+                'password' => '123456',
+                'contact_email' => 'sophia.davis@example.com',
+                'signup_date' => '1712490600',
+                'bio_info' => 'Designs websites and UX interfaces.',
+                'image_url' => 'sophia_image_url.jpg',
+            ],
+            [
+                'id' => '4',
+                'username' => 'Ethan Wilson',
+                'password' => '123456',
+                'contact_email' => 'ethan.wilson@example.com',
+                'signup_date' => '1712490600',
+                'bio_info' => 'Photographer and nature lover.',
+                'image_url' => 'ethan_image_url.jpg',
+            ],
+            [
+                'id' => '5',
+                'username' => 'Olivia Martinez',
+                'password' => '123456',
+                'contact_email' => 'olivia.martinez@example.com',
+                'signup_date' => '1712490600',
+                'bio_info' => 'Creative writer and content strategist.',
+                'image_url' => 'olivia_image_url.jpg',
+            ],
+        ];
+
         $source1Id = DataSource::where("name", "=", "source1")->value('id');
+        // $source2Id = DataSource::where("name", "=", "source2")->value('id');
 
         $formattedData1 = DataTransformer::transformFromSource($source1Id, $source1Data);
 
@@ -93,7 +142,6 @@ class SyncDataMock extends Command
                 $this->info("Inserted user: " . json_encode($userData));
             }
         }
-
 
         if (isset($formattedData1['App\\Models\\TestProfile'])) {
             foreach ($formattedData1['App\\Models\\TestProfile'] as $profileData) {
