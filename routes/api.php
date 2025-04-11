@@ -66,7 +66,7 @@ Route::middleware(['client:admin.read', 'permission:view|App\Models\User'])->pre
     });
 });
 
-Route::middleware('auth:api')->get('/resources/{entity}', function (Request $request, $entity) {
+Route::middleware('auth:api')->get('/resource/{entity}', function (Request $request, $entity) {     
     // Check if the table exists
     if (!Schema::hasTable($entity)) {
         abort(404, "Table not found");
@@ -74,12 +74,17 @@ Route::middleware('auth:api')->get('/resources/{entity}', function (Request $req
 
     $modelClass = 'App\\Models\\' . Str::studly(Str::singular($entity));
 
-    Log::info($modelClass);
     if (!class_exists($modelClass)) {
         abort(404, "Model not found");
     }
+    // Check permission 
+    $permissionService = app(PermissionService::class);
+    $viewableColumns = $permissionService->allowedColumns($request->user(), 'view', $modelClass);
+    if (empty($viewableColumns)) {
+        abort(403, "No permission to view any columns");
+    }
 
-    $data = $modelClass::get();
+    $data = $modelClass::select($viewableColumns)->get();
 
     return response()->json($data);
 });
