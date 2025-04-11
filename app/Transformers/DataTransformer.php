@@ -78,8 +78,9 @@ class DataTransformer
     public static function transform(array $data, Model $model, array $mapping, ?string $source = null): array
     {
         $transformed = [];
-        foreach ($model->getFillable() as $field) {
 
+        //Get only fillable field of that model to map
+        foreach ($model->getFillable() as $field) {
             if (isset($mapping[$field])) {
                 $transformed[$field] = self::applyTransformation($data, $mapping[$field]['mapping']);
 
@@ -134,6 +135,7 @@ class DataTransformer
         $str = Str::of($value);
 
         foreach ($formattingRules as $rule) {
+            //date_format function is written because fluent string don't have dat format
             if (str_starts_with($rule, 'date_format')) {
                 $value = Carbon::parse($value)->toDateTimeString();
                 $str = Str::of($value);

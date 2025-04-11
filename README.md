@@ -70,6 +70,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 4. Create .env file with same content as .env.example and then edit the database part same as in docker-compose.yml
 5. Run command "php artisan key:generate"
 6. Run command "php artisan migrate"
+7. Run command "php artisan db:seed"
 
 ## Run Project
 1. php artisan serve

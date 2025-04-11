@@ -73,11 +73,19 @@ class SyncDataMock2 extends Command
             ]
         ];
 
-        $source1Id = DataSource::where("name", "=", "source5")->value('id');
+        $source4Id = DataSource::where("name", "=", "source4")->value('id');
+        $source5Id = DataSource::where("name", "=", "source5")->value('id');
 
-        $formattedData1 = DataTransformer::transformFromSource($source1Id, $source5Data);
+        $formattedData1 = DataTransformer::transformFromSource($source4Id, $source4Data);
+        $formattedData2 = DataTransformer::transformFromSource($source5Id, $source5Data);
 
-        foreach ($formattedData1 as $model => $data) {
+        $this->insert($formattedData1);
+        $this->insert($formattedData2);
+    }
+
+    public function insert($datas)
+    {
+        foreach ($datas as $model => $data) {
             // Check if the model exists
             if (class_exists($model)) {
                 foreach ($data as $item) {

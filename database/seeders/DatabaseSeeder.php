@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             CourseSeeder::class,
             MappingsTableSeeder::class,
             RolePermissionSeeder::class,
+            PrimaryModelTableSeeder::class
         ]);
     }
 }
