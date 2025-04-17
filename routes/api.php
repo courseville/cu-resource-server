@@ -36,7 +36,7 @@ Route::get('/scopes-nomid', function (Request $request) {
 Route::middleware(['auth:api'])->prefix('internal')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
-    });
+    })->middleware('permission:view|App\Models\User');
 });
 
 // Route for client autho code access 
