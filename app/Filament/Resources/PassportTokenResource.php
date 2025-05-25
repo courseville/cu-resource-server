@@ -12,6 +12,7 @@ use Filament\Tables\Actions\DeleteAction;
 class PassportTokenResource extends Resource
 {
     protected static ?string $model = Token::class;
+
     protected static ?string $navigationIcon = 'heroicon-o-shield-check';
 
     public static function table(Tables\Table $table): Tables\Table
@@ -41,4 +42,3 @@ class PassportTokenResource extends Resource
         return false; // Disable the Create button
     }
 }
-

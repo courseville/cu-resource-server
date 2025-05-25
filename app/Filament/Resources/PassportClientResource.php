@@ -3,10 +3,11 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PassportClientResource\Pages;
+use App\Filament\Resources\PassportClientResource\RelationManagers;
+use App\Models\Client;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Forms;
-use Laravel\Passport\Client;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -16,6 +17,7 @@ use Filament\Tables\Actions\EditAction;
 class PassportClientResource extends Resource
 {
     protected static ?string $model = Client::class;
+
     protected static ?string $navigationIcon = 'heroicon-o-key';
 
     public static function form(Forms\Form $form): Forms\Form
@@ -49,7 +51,8 @@ class PassportClientResource extends Resource
                 ->color(fn($state) => $state ? 'danger' : 'success')
                 ->formatStateUsing(fn($state) => $state ? 'Revoked' : 'Active'),
 
-            TextColumn::make('secret')->limit(40)->label('Client Secret'),
+            // TextColumn::make('secret')
+            //     ->limit(40),
         ])
             ->filters([])
             ->actions([EditAction::make(), DeleteAction::make()])
@@ -64,5 +67,16 @@ class PassportClientResource extends Resource
             'edit' => Pages\EditPassportClient::route('/{record}/edit'),
         ];
     }
-}
 
+    public static function canCreate(): bool
+    {
+        return false; // Disable the Create button
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            RelationManagers\RolesRelationManager::class,
+        ];
+    }
+}

@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Passport::useClientModel(Client::class);
-        Passport::personalAccessTokensExpireIn(now()->addMonths(6));
+        Passport::personalAccessTokensExpireIn(now()->addMonths(1));
         // Passport::tokensCan([
         //     'student' => 'View user profile',
         //     'admin' => 'Edit user profile',

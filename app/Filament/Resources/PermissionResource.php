@@ -18,6 +18,7 @@ use Filament\Tables\Columns\TextColumn;
 class PermissionResource extends Resource
 {
     protected static ?string $model = Permission::class;
+
     protected static ?string $navigationIcon = 'heroicon-o-key';
 
     public static function form(Forms\Form $form): Forms\Form
