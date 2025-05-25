@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Laravel\Passport\Passport;
 use App\Models\Client;
 use App\Services\PermissionService;
+use Illuminate\Support\ServiceProvider;
+use Laravel\Passport\Passport;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -14,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(PermissionService::class, function ($app) {
-            return new PermissionService();
+            return new PermissionService;
         });
     }
 
@@ -49,11 +50,11 @@ class AppServiceProvider extends ServiceProvider
             'admin.update' => 'Modify admin resources',
             'admin.manage' => 'Manage users and system settings',
 
-            'machine' => 'View global resource'
+            'machine' => 'View global resource',
         ]);
 
         Passport::setDefaultScope([
-            'general.read', 
+            'general.read',
             'machine',
         ]);
     }

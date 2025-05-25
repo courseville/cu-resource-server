@@ -4,8 +4,8 @@ namespace App\Filament\Resources\PassportClientResource\Pages;
 
 use App\Filament\Resources\PassportClientResource;
 use Filament\Resources\Pages\CreateRecord;
-use Laravel\Passport\Client;
 use Illuminate\Support\Str;
+use Laravel\Passport\Client;
 
 class CreatePassportClient extends CreateRecord
 {

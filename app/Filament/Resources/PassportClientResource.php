@@ -5,14 +5,14 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PassportClientResource\Pages;
 use App\Filament\Resources\PassportClientResource\RelationManagers;
 use App\Models\Client;
-use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Forms;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Resources\Resource;
+use Filament\Tables;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
 
 class PassportClientResource extends Resource
 {
@@ -39,17 +39,17 @@ class PassportClientResource extends Resource
             TextColumn::make('redirect')->limit(30),
             TextColumn::make('personal_access_client')
                 ->badge()
-                ->color(fn($state) => $state ? 'success' : 'danger')
-                ->formatStateUsing(fn($state) => $state ? 'Yes' : 'No'),
+                ->color(fn ($state) => $state ? 'success' : 'danger')
+                ->formatStateUsing(fn ($state) => $state ? 'Yes' : 'No'),
             TextColumn::make('password_client')
                 ->badge()
-                ->color(fn($state) => $state ? 'success' : 'danger')
-                ->formatStateUsing(fn($state) => $state ? 'Yes' : 'No'),
+                ->color(fn ($state) => $state ? 'success' : 'danger')
+                ->formatStateUsing(fn ($state) => $state ? 'Yes' : 'No'),
 
             TextColumn::make('revoked')
                 ->badge()
-                ->color(fn($state) => $state ? 'danger' : 'success')
-                ->formatStateUsing(fn($state) => $state ? 'Revoked' : 'Active'),
+                ->color(fn ($state) => $state ? 'danger' : 'success')
+                ->formatStateUsing(fn ($state) => $state ? 'Revoked' : 'Active'),
 
             // TextColumn::make('secret')
             //     ->limit(40),

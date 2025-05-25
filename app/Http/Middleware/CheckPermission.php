@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Http\Middleware;
 
+use App\Services\PermissionService;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Services\PermissionService;
 
 class CheckPermission
 {
@@ -16,6 +17,7 @@ class CheckPermission
 
         return static::class.':'.implode(',', $roles);
     }
+
     /**
      * Handle an incoming request.
      *
@@ -26,7 +28,7 @@ class CheckPermission
         [$action, $model] = explode('|', $parameters);
         $user = $request->user();
         $permissionService = app(PermissionService::class);
-        if (!$user) {
+        if (! $user) {
             $client = auth('api')->client();
             if ($client) {
                 $viewableColumns = $permissionService->allowedColumns($client, $action, $model);
@@ -34,8 +36,10 @@ class CheckPermission
                     return response()->json(['error' => 'Client have no permission to view any columns.'], 403);
                 }
                 $request->merge(['viewableColumns' => $viewableColumns]);
+
                 return $next($request);
             }
+
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
         $viewableColumns = $permissionService->allowedColumns($user, $action, $model);
@@ -43,6 +47,7 @@ class CheckPermission
             return response()->json(['error' => 'User have no permission to view any columns.'], 403);
         }
         $request->merge(['viewableColumns' => $viewableColumns]);
+
         return $next($request);
     }
 }

@@ -4,14 +4,13 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 
 class UserResource extends Resource
 {
@@ -38,7 +37,7 @@ class UserResource extends Resource
                     ->label('Password')
                     ->required()
                     ->minLength(8)
-                    ->dehydrateStateUsing(fn($state) => bcrypt($state)),
+                    ->dehydrateStateUsing(fn ($state) => bcrypt($state)),
 
                 Select::make('roles')
                     ->label('Roles')

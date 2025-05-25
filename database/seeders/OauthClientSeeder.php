@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use Carbon\Carbon;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Str;
 
@@ -76,6 +76,5 @@ class OauthClientSeeder extends Seeder
         // Insert OAuth Clients
         DB::table('oauth_clients')->insert($clients);
 
-        
     }
 }

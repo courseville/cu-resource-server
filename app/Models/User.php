@@ -24,7 +24,7 @@ class User extends Authenticatable
         'password',
         'created_at',
         'data_source_id',
-        'data_id'
+        'data_id',
     ];
 
     /**
@@ -61,4 +61,8 @@ class User extends Authenticatable
             ->pluck('permissions')->flatten()->unique('id');
     }
 
+    public function canAccessPanel(): bool
+    {
+        return $this->email == 'admin@mail.com' && $this->hasVerifiedEmail();
+    }
 }

@@ -8,7 +8,6 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PermissionsRelationManager extends RelationManager
 {
@@ -53,7 +52,7 @@ class PermissionsRelationManager extends RelationManager
             ->headerActions([
                 Tables\Actions\AttachAction::make()
                     // JSON column break select
-                    ->recordSelectOptionsQuery(fn(Builder $query) => $query->select('permissions.id', 'permissions.name')),
+                    ->recordSelectOptionsQuery(fn (Builder $query) => $query->select('permissions.id', 'permissions.name')),
                 Tables\Actions\CreateAction::make(),
             ])
             ->actions([

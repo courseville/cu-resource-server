@@ -5,9 +5,9 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PassportTokenResource\Pages;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Laravel\Passport\Token;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Columns\TextColumn;
+use Laravel\Passport\Token;
 
 class PassportTokenResource extends Resource
 {
@@ -23,8 +23,8 @@ class PassportTokenResource extends Resource
             TextColumn::make('client_id')->label('Client ID'),
             TextColumn::make('revoked')
                 ->badge()
-                ->color(fn($state) => $state ? 'danger' : 'success')
-                ->formatStateUsing(fn($state) => $state ? 'Revoked' : 'Active'),
+                ->color(fn ($state) => $state ? 'danger' : 'success')
+                ->formatStateUsing(fn ($state) => $state ? 'Revoked' : 'Active'),
         ])
             ->filters([])
             ->actions([DeleteAction::make()]);

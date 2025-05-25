@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Seeder;
 use Carbon\Carbon;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class RolePermissionSeeder extends Seeder
 {
@@ -23,7 +23,7 @@ class RolePermissionSeeder extends Seeder
         ];
 
         // Insert roles
-        DB::table('roles')->insert(array_map(fn($role) => [
+        DB::table('roles')->insert(array_map(fn ($role) => [
             'name' => $role['name'],
             'description' => $role['description'],
             'created_at' => Carbon::now(),
@@ -54,9 +54,9 @@ class RolePermissionSeeder extends Seeder
 
         // Map roles to permissions
         $rolePermissions = [
-            'admin' => ['view_users', 'edit_users', 'delete_users','view_courses', 'edit_courses'],
-            'faculty' => ['view_users','view_courses', 'edit_courses'],
-            'student' => ['view_courses','view_user_name'],
+            'admin' => ['view_users', 'edit_users', 'delete_users', 'view_courses', 'edit_courses'],
+            'faculty' => ['view_users', 'view_courses', 'edit_courses'],
+            'student' => ['view_courses', 'view_user_name'],
             'client_readonly' => ['view_courses'],
             'client_full_access' => ['view_courses', 'view_users'],
         ];

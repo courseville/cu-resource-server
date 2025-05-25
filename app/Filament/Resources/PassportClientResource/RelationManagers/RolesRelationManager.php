@@ -8,7 +8,6 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class RolesRelationManager extends RelationManager
 {
@@ -37,7 +36,7 @@ class RolesRelationManager extends RelationManager
             ->headerActions([
                 Tables\Actions\AttachAction::make()
                     // JSON column break select
-                    ->recordSelectOptionsQuery(fn(Builder $query) => $query->select('roles.id', 'roles.name')),
+                    ->recordSelectOptionsQuery(fn (Builder $query) => $query->select('roles.id', 'roles.name')),
                 // Tables\Actions\CreateAction::make(),
             ])
             ->actions([

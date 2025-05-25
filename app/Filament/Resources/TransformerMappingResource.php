@@ -5,17 +5,18 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\TransformerMappingResource\Pages;
 use App\Models\TransformerMapping;
 use Filament\Forms;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 
 class TransformerMappingResource extends Resource
 {
     protected static ?string $model = TransformerMapping::class;
+
     protected static ?string $navigationIcon = 'heroicon-o-cog';
 
     public static function form(Forms\Form $form): Forms\Form

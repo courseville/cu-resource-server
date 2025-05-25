@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Facades\Auth;
 
 class CheckForAnyRole
 {
@@ -17,6 +16,7 @@ class CheckForAnyRole
 
         return static::class.':'.implode(',', $roles);
     }
+
     /**
      * Handle an incoming request.
      *
@@ -25,8 +25,8 @@ class CheckForAnyRole
     public function handle(Request $request, Closure $next, ...$role): Response
     {
         $user = $request->user();
-        
-        if (!$user) {
+
+        if (! $user) {
             $client = auth('api')->client();
             if ($client) {
                 // check if client has any of the required roles
@@ -35,8 +35,10 @@ class CheckForAnyRole
                         return $next($request);
                     }
                 }
+
                 return response()->json(['error' => 'Unauthorized.'], 403);
             }
+
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
         // check if user has any of the required roles
@@ -45,7 +47,8 @@ class CheckForAnyRole
                 return $next($request);
             }
         }
+
         return response()->json(['error' => 'Unauthorized.'], 403);
-       
+
     }
 }

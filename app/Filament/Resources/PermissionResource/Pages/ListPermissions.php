@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Filament\Resources\PermissionResource\Pages;
 
 use App\Filament\Resources\PermissionResource;

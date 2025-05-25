@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Permission extends Model
 {
@@ -21,7 +21,7 @@ class Permission extends Model
      *
      * @var array
      */
-    protected $fillable = ['name','action', 'model', 'columns'];
+    protected $fillable = ['name', 'action', 'model', 'columns'];
 
     protected $casts = [
         'columns' => 'array', // Automatically cast 'columns' to an array
@@ -29,7 +29,7 @@ class Permission extends Model
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'permission_role'); 
+        return $this->belongsToMany(Role::class, 'permission_role');
     }
 
     // Dynamically resolve the related model based on the 'model' field

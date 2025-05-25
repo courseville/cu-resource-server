@@ -2,16 +2,15 @@
 
 use App\Http\Controllers\ResourceController;
 use App\Models\DataSource;
-use App\Models\PkModel;
-use Illuminate\Support\Facades\Schema;
+use App\Models\User;
+use App\Services\PermissionService;
+use App\Transformers\DataTransformer;
+use Filament\Resources\Resource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Models\User;
-use App\Transformers\DataTransformer;
+use Illuminate\Support\Facades\Schema;
 use Laravel\Passport\Client;
 use Laravel\Passport\Passport;
-use App\Services\PermissionService;
-use Filament\Resources\Resource;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -42,12 +41,13 @@ Route::middleware(['auth:api'])->prefix('internal')->group(function () {
     })->middleware('permission:view|App\Models\User');
 });
 
-// Route for client oauth code access 
+// Route for client oauth code access
 Route::middleware(['auth:api', 'scopes:user.read'])->prefix('external')->group(function () {
     Route::get('/user', function (Request $request) {
         $user = $request->user();
         $viewableColumns = $request->get('viewableColumns');
         $userData = User::select($viewableColumns)->where('id', $user->id)->first();
+
         return $userData;
     })->middleware('permission:view|App\Models\User');
 });
@@ -56,6 +56,7 @@ Route::middleware(['auth:api', 'scopes:user.read'])->prefix('external')->group(f
 Route::middleware('client:general.read,machine')->group(function () {
     Route::get('/scopes', function (Request $request) {
         $scopes = Passport::scopes();
+
         return response()->json($scopes);
     });
 });
@@ -65,6 +66,7 @@ Route::middleware(['client:admin.read', 'permission:view|App\Models\User'])->pre
     Route::get('/users', function (Request $request) {
         $viewableColumns = $request->get('viewableColumns');
         $userData = User::select($viewableColumns)->get();
+
         return $userData;
     });
 });
@@ -81,7 +83,7 @@ Route::middleware(['client:admin.read', 'permission:view|App\Models\User'])->pre
 //         abort(404, "Model not found");
 //     }
 
-//     // Check permission 
+//     // Check permission
 //     $permissionService = app(PermissionService::class);
 //     $viewableColumns = $permissionService->allowedColumns($request->user(), 'view', $modelClass);
 //     if (empty($viewableColumns)) {
