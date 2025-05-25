@@ -10,29 +10,31 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('test_users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email');
-            $table->string('password');
-            $table->foreignId('data_source_id')
-                ->constrained('data_sources')
-                ->onDelete('cascade');
-            $table->string('data_id')->nullable();
-            $table->timestamps();
-        });
-
-        Schema::create('test_profiles', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('test_user_id')->constrained("test_users")->onDelete('cascade');
-            $table->text('bio')->nullable();
-            $table->string('avatar')->nullable();
-            $table->foreignId('data_source_id')
-                ->constrained('data_sources')
-                ->onDelete('cascade');
-            $table->string('data_id')->nullable();
-            $table->timestamps();
-        });
+        if (config('app.env') === 'local') {
+            Schema::create('test_users', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->string('email');
+                $table->string('password');
+                $table->foreignId('data_source_id')
+                    ->constrained('data_sources')
+                    ->onDelete('cascade');
+                $table->string('data_id')->nullable();
+                $table->timestamps();
+            });
+    
+            Schema::create('test_profiles', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('test_user_id')->constrained("test_users")->onDelete('cascade');
+                $table->text('bio')->nullable();
+                $table->string('avatar')->nullable();
+                $table->foreignId('data_source_id')
+                    ->constrained('data_sources')
+                    ->onDelete('cascade');
+                $table->string('data_id')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**
