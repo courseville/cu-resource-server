@@ -66,6 +66,10 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
+        if (config('app.env') === 'local') {
+            return true; // Allow access in local environment
+        }
+
         return $this->email == 'admin@mail.com' && $this->hasVerifiedEmail();
     }
 }

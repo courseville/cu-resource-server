@@ -27,9 +27,9 @@ trait Paginatable
 
     private function paginateChooser($param, $builder)
     {
-        if (! isset($param['page'])) {
-            return $builder->get();
-        }
+        // if (! isset($param['page'])) {
+        //     return $builder->get();
+        // }
 
         return $builder->paginate($param['n'] ?? 10);
     }

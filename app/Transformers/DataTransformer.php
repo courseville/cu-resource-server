@@ -111,7 +111,7 @@ class DataTransformer
         $str = Str::of($value);
 
         foreach ($formattingRules as $rule) {
-            // date_format function is written because fluent string don't have dat format
+            // date_format function is written because fluent string don't have date format
             if (str_starts_with($rule, 'date_format')) {
                 $value = Carbon::parse($value)->toDateTimeString();
                 $str = Str::of($value);

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\Resources\PersonnelController;
+use App\Http\Controllers\Resources\StudentController;
 use App\Models\DataSource;
 use App\Models\User;
 use App\Services\PermissionService;
@@ -95,9 +97,13 @@ Route::middleware(['client:admin.read', 'permission:view|App\Models\User'])->pre
 //     return response()->json($data);
 // });
 
-Route::prefix('resource')->middleware('clients')->group(function () {
-    Route::get('/{entity}', [ResourceController::class, 'index'])->name('resource.index');
-    Route::get('/{entity}/{id}', [ResourceController::class, 'show'])->name('resource.show');
+Route::prefix('v1')->middleware('clients')->group(function () {
+    Route::get('/personnels', [PersonnelController::class, 'index'])->name('personnels.index');
+    Route::get('/personnels/{personnel:personnel_id}', [PersonnelController::class, 'show'])->name('personnels.show');
+    Route::get('/students', [StudentController::class, 'index'])->name('students.index');
+
+    // Route::get('/{entity}', [ResourceController::class, 'index'])->name('resources.index');
+    // Route::get('/{entity}/{id}', [ResourceController::class, 'show'])->name('resources.show');
 });
 
 // Route::get('/transformer/source1', function (Request $request) {

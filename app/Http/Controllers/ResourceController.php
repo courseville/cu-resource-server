@@ -38,8 +38,10 @@ class ResourceController extends Controller
             abort(403, 'No permission to view any columns');
         }
 
+        // Initialize the query builder with viewable columns
+        $builder = $modelClass::select($viewableColumns);
+
         // Search on searchable columns
-        $builder = $modelClass::query();
         if (method_exists($modelClass, 'getSearchable')) {
             $searchableAttributes = (new $modelClass)->getSearchable();
             $builder = $this->searchByAttributes($request, $builder, ...$searchableAttributes);
@@ -76,7 +78,6 @@ class ResourceController extends Controller
 
         // Check primary key from PkModel
         $modelPk = PkModel::where('model', '=', $modelClass)->first();
-        \Log::info("Primary key for model {$modelClass}: ".($modelPk->primary_key ?? 'id'));
         $primaryKey = $modelPk->primary_key ?? 'id';
 
         // Check permission
