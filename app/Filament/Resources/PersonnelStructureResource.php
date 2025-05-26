@@ -36,8 +36,15 @@ class PersonnelStructureResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('personnel_id')
-                    ->label('Personnel ID')
+                Tables\Columns\TextColumn::make('id')
+                    ->label('ID')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('structure_id')
+                    ->label('Structure ID')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('name')
+                    ->label('Name')
                     ->sortable()
                     ->searchable(),
             ])
