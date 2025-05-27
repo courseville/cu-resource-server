@@ -46,7 +46,7 @@ class StudentController extends Controller
 
         // Apply pagination
         $request->page = $request->integer('page', 1);
-        $data = $builder->paginage($request->integer('n', 10));
+        $data = $builder->paginate($request->integer('n', 10));
 
         return response()->json($data);
     }

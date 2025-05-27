@@ -65,7 +65,7 @@ class PersonnelController extends Controller
         );
 
         $request->page = $request->integer('page', 1);
-        $data = $builder->paginage($request->integer('n', 10));
+        $data = $builder->paginate($request->integer('n', 10));
 
         return response()->json(PersonnelCollection::make($data));
     }
