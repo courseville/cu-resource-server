@@ -5,13 +5,12 @@ namespace App\Http\Controllers\Resources;
 use App\Http\Controllers\Controller;
 use App\Models\Resources\Student;
 use App\Services\PermissionService;
-use App\Traits\Paginatable;
 use App\Traits\Searchable;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
-    use Paginatable, Searchable;
+    use Searchable;
 
     protected $modelClass;
 
@@ -25,7 +24,7 @@ class StudentController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the students.
      */
     public function index(Request $request)
     {
@@ -46,13 +45,14 @@ class StudentController extends Controller
         }
 
         // Apply pagination
-        $data = $this->paginatableGet($builder, $request);
+        $request->page = $request->integer('page', 1);
+        $data = $builder->paginage($request->integer('n', 10));
 
         return response()->json($data);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created student in storage.
      */
     public function store(Request $request)
     {
@@ -60,7 +60,7 @@ class StudentController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified student.
      */
     public function show(Student $student)
     {
@@ -68,7 +68,7 @@ class StudentController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified student in storage.
      */
     public function update(Request $request, Student $student)
     {
@@ -76,7 +76,7 @@ class StudentController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified student from storage.
      */
     public function destroy(Student $student)
     {

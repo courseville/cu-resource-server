@@ -4,6 +4,11 @@ namespace App\Providers;
 
 use App\Models\Client;
 use App\Services\PermissionService;
+use Dedoc\Scramble\Scramble;
+use Dedoc\Scramble\Support\Generator\OpenApi;
+use Dedoc\Scramble\Support\Generator\SecurityScheme;
+use Dedoc\Scramble\Support\Generator\SecuritySchemes\OAuthFlow;
+use Gate;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Passport\Passport;
 
@@ -57,5 +62,23 @@ class AppServiceProvider extends ServiceProvider
             'general.read',
             'machine',
         ]);
+
+        Gate::define('viewApiDocs', function ($user) {
+            return in_array($user->email, ['admin@mail.com']);
+        });
+
+        Scramble::configure()
+            ->withDocumentTransformers(function (OpenApi $openApi) {
+                $openApi->secure(
+                    // SecurityScheme::http('bearer')
+                    SecurityScheme::oauth2()
+                        ->flow('clientCredentials', function (OAuthFlow $flow) {
+                            $flow
+                                ->authorizationUrl(config('app.url').'/oauth/authorize')
+                                ->tokenUrl(config('app.url').'/oauth/token')
+                                ->addScope('*', 'all');
+                        })
+                );
+            });
     }
 }

@@ -98,8 +98,8 @@ Route::middleware(['client:admin.read', 'permission:view|App\Models\User'])->pre
 // });
 
 Route::prefix('v1')->middleware('clients')->group(function () {
-    Route::get('/personnels', [PersonnelController::class, 'index'])->name('personnels.index');
-    Route::get('/personnels/{personnel:personnel_id}', [PersonnelController::class, 'show'])->name('personnels.show');
+    Route::get('/personnel', [PersonnelController::class, 'index'])->name('personnels.index');
+    Route::get('/personnel/{personnel:personnel_id}', [PersonnelController::class, 'show'])->name('personnels.show');
     Route::get('/students', [StudentController::class, 'index'])->name('students.index');
 
     // Route::get('/{entity}', [ResourceController::class, 'index'])->name('resources.index');

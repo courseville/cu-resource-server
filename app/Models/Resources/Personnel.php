@@ -2,11 +2,14 @@
 
 namespace App\Models\Resources;
 
+use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Personnel extends Model
 {
+    use Searchable;
+
     protected $fillable = [
         'personnel_id',
         'title_th',

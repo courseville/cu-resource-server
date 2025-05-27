@@ -7,6 +7,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class StructureProfile extends Model
 {
+    protected $fillable = [
+        'structure_level1_id',
+        'structure_level2_id',
+        'structure_level3_id',
+        'structure_level4_id',
+        'personnel_id',
+    ];
+
     public function structureLevel1(): BelongsTo
     {
         return $this->belongsTo(Structure::class, 'structure_level1_id', 'id');

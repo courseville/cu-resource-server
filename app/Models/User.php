@@ -64,12 +64,13 @@ class User extends Authenticatable implements FilamentUser
             ->pluck('permissions')->flatten()->unique('id');
     }
 
+    // Filament Panel Access Control
     public function canAccessPanel(Panel $panel): bool
     {
         if (config('app.env') === 'local') {
             return true; // Allow access in local environment
         }
 
-        return $this->email == 'admin@mail.com' && $this->hasVerifiedEmail();
+        return in_array($this->email, ['admin@mail.com']) && $this->hasVerifiedEmail();
     }
 }
