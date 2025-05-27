@@ -27,11 +27,6 @@ class Personnel extends Model
         'last_name_en',
     ];
 
-    public function getSearchable(): array
-    {
-        return $this->searchable ?? [];
-    }
-
     public function structureProfiles(): HasMany
     {
         return $this->hasMany(StructureProfile::class, 'personnel_id', 'id');

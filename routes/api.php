@@ -97,7 +97,8 @@ Route::middleware(['client:admin.read', 'permission:view|App\Models\User'])->pre
 //     return response()->json($data);
 // });
 
-Route::prefix('v1')->middleware('clients')->group(function () {
+Route::prefix('v1')->group(function () {
+// Route::prefix('v1')->middleware('clients')->group(function () {
     Route::get('/personnel', [PersonnelController::class, 'index'])->name('personnels.index');
     Route::get('/personnel/{personnel:personnel_id}', [PersonnelController::class, 'show'])->name('personnels.show');
     Route::get('/students', [StudentController::class, 'index'])->name('students.index');

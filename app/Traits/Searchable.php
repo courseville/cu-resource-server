@@ -2,7 +2,6 @@
 
 namespace App\Traits;
 
-use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -10,9 +9,14 @@ use Illuminate\Database\Eloquent\Builder;
  */
 trait Searchable
 {
-    protected function _getSearchQuery(Builder $builder, string $token, string ...$attributes)
+    public function getSearchable(): array
     {
-        return $builder->where(function ($query) use ($attributes, $token) {
+        return $this->searchable ?? [];
+    }
+
+    protected function _searchBuilder(Builder $builder, string $token, string ...$attributes): void
+    {
+        $builder->where(function ($query) use ($attributes, $token) {
             foreach ($attributes as $aIdx => $attribute) {
                 $tokens = explode(':', $attribute);
                 if (count($tokens) === 2) {
@@ -38,8 +42,7 @@ trait Searchable
         });
     }
 
-    #[Scope]
-    protected function searchByAttributes(Builder $builder, string $query, string ...$attributes): void
+    public function scopeSearchByAttributes(Builder $builder, string $query, string ...$attributes): void
     {
         if ($query === '') {
             return;
@@ -47,7 +50,7 @@ trait Searchable
 
         $tokens = explode(' ', $query);
         foreach ($tokens as $token) {
-            $this->_getSearchQuery($builder, $token, ...$attributes);
+            $this->_searchBuilder($builder, $token, ...$attributes);
         }
     }
 }
