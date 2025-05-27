@@ -25,7 +25,7 @@ class PersonnelResource extends JsonResource
             'title_en' => $this->title_en,
             'first_name_en' => $this->first_name_en,
             'last_name_en' => $this->last_name_en,
-            'structureProfiles' => StructureProfileResource::collection($this->whenLoaded('structureProfiles')),
+            'structure_profiles' => StructureProfileResource::collection($this->whenLoaded('structureProfiles')),
         ];
     }
 }

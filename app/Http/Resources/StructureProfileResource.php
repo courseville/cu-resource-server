@@ -15,10 +15,10 @@ class StructureProfileResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'structureLevel1' => new StructureResource($this->whenLoaded('structureLevel1')),
-            'structureLevel2' => new StructureResource($this->whenLoaded('structureLevel2')),
-            'structureLevel3' => new StructureResource($this->whenLoaded('structureLevel3')),
-            'structureLevel4' => new StructureResource($this->whenLoaded('structureLevel4')),
+            'structure_level_1' => new StructureResource($this->whenLoaded('structureLevel1')),
+            'structure_level_2' => new StructureResource($this->whenLoaded('structureLevel2')),
+            'structure_level_3' => new StructureResource($this->whenLoaded('structureLevel3')),
+            'structure_level_4' => new StructureResource($this->whenLoaded('structureLevel4')),
         ];
     }
 }

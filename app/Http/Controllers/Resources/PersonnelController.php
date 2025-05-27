@@ -9,6 +9,7 @@ use App\Models\Resources\Personnel;
 use App\Models\Resources\Structure;
 use App\Services\PermissionService;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PersonnelController extends Controller
 {
@@ -23,7 +24,7 @@ class PersonnelController extends Controller
     /**
      * Display a listing of the personnel.
      *
-     * @response Illuminate\Pagination\LengthAwarePaginator<PersonnelCollection>
+     * @response PersonnelCollection<LengthAwarePaginator<PersonnelResource>>
      */
     public function index(Request $request)
     {
@@ -67,7 +68,7 @@ class PersonnelController extends Controller
         $request->page = $request->integer('page', 1);
         $data = $builder->paginate($request->integer('n', 10));
 
-        return response()->json(PersonnelCollection::make($data));
+        return PersonnelResource::collection($data);
     }
 
     /**
