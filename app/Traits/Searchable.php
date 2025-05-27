@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -37,17 +38,16 @@ trait Searchable
         });
     }
 
-    public function searchByAttributes(Builder $builder, string $query, string ...$attributes)
+    #[Scope]
+    protected function searchByAttributes(Builder $builder, string $query, string ...$attributes): void
     {
         if ($query === '') {
-            return $builder;
+            return;
         }
 
         $tokens = explode(' ', $query);
         foreach ($tokens as $token) {
             $this->_getSearchQuery($builder, $token, ...$attributes);
         }
-
-        return $builder;
     }
 }

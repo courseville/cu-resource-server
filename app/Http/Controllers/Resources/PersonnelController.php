@@ -60,7 +60,6 @@ class PersonnelController extends Controller
         // Search on searchable columns
         $searchableAttributes = (new Personnel)->getSearchable();
         $builder->searchByAttributes(
-            $builder,
             $request->string('name', ''),
             ...$searchableAttributes
         );
