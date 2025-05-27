@@ -28,12 +28,12 @@ class PersonnelController extends Controller
      */
     public function index(Request $request)
     {
-        // // Check permission
-        // $client = auth('api')->client();
-        // $viewableColumns = $this->permissionService->allowedColumns($client, 'view', Personnel::class);
-        // if (empty($viewableColumns)) {
-        //     abort(403, 'No permission to view any columns');
-        // }
+        // Check permission
+        $client = auth('api')->client();
+        $viewableColumns = $this->permissionService->allowedColumns($client, 'view', Personnel::class);
+        if (empty($viewableColumns)) {
+            abort(403, 'No permission to view any columns');
+        }
 
         // Initialize the query builder with viewable columns
         $builder = Personnel::query();
