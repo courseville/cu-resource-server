@@ -103,6 +103,7 @@ Route::prefix('v1')->middleware('clients')->group(function () {
     Route::get('/personnel', [PersonnelController::class, 'index'])->name('personnel.index');
     Route::get('/personnel/{personnel:personnel_id}', [PersonnelController::class, 'show'])->name('personnel.show');
     Route::get('/structures', [StructureController::class, 'index'])->name('structures.index');
+    Route::get('/structures/{structure:structure_id}', [StructureController::class, 'show'])->name('structures.show');
 
     // Route::get('/students', [StudentController::class, 'index'])->name('students.index');
 

@@ -62,9 +62,9 @@ class StructureController extends Controller
     /**
      * Display the specified structure.
      */
-    public function show(string $id)
+    public function show(Structure $structure)
     {
-        //
+        return new StructureResource($structure);
     }
 
     /**

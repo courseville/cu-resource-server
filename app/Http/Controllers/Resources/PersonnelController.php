@@ -121,7 +121,7 @@ class PersonnelController extends Controller
             },
         ]);
 
-        return response()->json(PersonnelResource::make($personnel));
+        return new PersonnelResource($personnel);
     }
 
     /**
