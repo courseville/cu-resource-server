@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\Resources\PersonnelController;
+use App\Http\Controllers\Resources\StructureController;
 use App\Http\Controllers\Resources\StudentController;
 use App\Models\DataSource;
 use App\Models\User;
@@ -99,9 +100,11 @@ Route::middleware(['client:admin.read', 'permission:view|App\Models\User'])->pre
 
 // Route::prefix('v1')->group(function () {
 Route::prefix('v1')->middleware('clients')->group(function () {
-    Route::get('/personnel', [PersonnelController::class, 'index'])->name('personnels.index');
-    Route::get('/personnel/{personnel:personnel_id}', [PersonnelController::class, 'show'])->name('personnels.show');
-    Route::get('/students', [StudentController::class, 'index'])->name('students.index');
+    Route::get('/personnel', [PersonnelController::class, 'index'])->name('personnel.index');
+    Route::get('/personnel/{personnel:personnel_id}', [PersonnelController::class, 'show'])->name('personnel.show');
+    Route::get('/structures', [StructureController::class, 'index'])->name('structures.index');
+
+    // Route::get('/students', [StudentController::class, 'index'])->name('students.index');
 
     // Route::get('/{entity}', [ResourceController::class, 'index'])->name('resources.index');
     // Route::get('/{entity}/{id}', [ResourceController::class, 'show'])->name('resources.show');
