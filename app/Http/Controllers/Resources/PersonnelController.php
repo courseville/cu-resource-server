@@ -65,6 +65,18 @@ class PersonnelController extends Controller
             ...$searchableAttributes
         );
 
+        // With relationships
+        $builder->with([
+            'structureProfiles' => function ($query) {
+                $query->with([
+                    'structureLevel1',
+                    'structureLevel2',
+                    'structureLevel3',
+                    'structureLevel4',
+                ]);
+            },
+        ]);
+
         $request->page = $request->integer('page', 1);
         $data = $builder->paginate($request->integer('n', 10));
 
