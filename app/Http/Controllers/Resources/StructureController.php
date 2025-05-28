@@ -20,8 +20,6 @@ class StructureController extends Controller
 
     /**
      * Display a listing of the structures.
-     * 
-     * @response StructureCollection<LengthAwarePaginator<StructureResource>>
      */
     public function index(Request $request)
     {
