@@ -24,18 +24,18 @@ trait Searchable
                     $attribute = $tokens[1];
                     if ($aIdx > 0) {
                         $query->orWhereHas($relationship, function ($query) use ($attribute, $token) {
-                            $query->where($attribute, 'like', '%' . $token . '%');
+                            $query->whereLike($attribute, '%' . $token . '%');
                         });
                     } else {
                         $query->whereHas($relationship, function ($query) use ($attribute, $token) {
-                            $query->where($attribute, 'like', '%' . $token . '%');
+                            $query->whereLike($attribute, '%' . $token . '%');
                         });
                     }
                 } else {
                     if ($aIdx > 0) {
-                        $query->orWhere($attribute, 'like', '%' . $token . '%');
+                        $query->orWhereLike($attribute, '%' . $token . '%');
                     } else {
-                        $query->where($attribute, 'like', '%' . $token . '%');
+                        $query->whereLike($attribute, '%' . $token . '%');
                     }
                 }
             }
