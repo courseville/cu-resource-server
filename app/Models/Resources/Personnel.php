@@ -5,9 +5,11 @@ namespace App\Models\Resources;
 use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Personnel extends Model
+class Personnel extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     use Searchable;
 
     protected $fillable = [

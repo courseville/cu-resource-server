@@ -4,9 +4,11 @@ namespace App\Models\Resources;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class StructureProfile extends Model
+class StructureProfile extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     protected $fillable = [
         'structure_level1_id',
         'structure_level2_id',
