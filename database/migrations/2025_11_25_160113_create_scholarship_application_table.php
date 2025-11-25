@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('scholarship_application', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Student::class)->nullable();
+            $table->foreignIdFor(Student::class)->nullable()->constrained()->cascadeOnDelete();
             $table->decimal('gpa', 3, 2)->nullable();
             $table->decimal('gpax', 3, 2)->nullable();
             $table->string('phone_brand_model')->nullable();
@@ -22,13 +22,13 @@ return new class extends Migration
             $table->text('reason_for_scholarship')->nullable();
             $table->text('financial_self_support_plan')->nullable();
             $table->string('bank_account_number')->nullable();
-            $table->string('account_book_pdf')->nullable(); // Store file path
-            $table->string('application_document_pdf')->nullable(); // Store file path
+            $table->text('account_book_pdf')->nullable(); // Store file path
+            $table->text('application_document_pdf')->nullable(); // Store file path
             $table->decimal('total_family_debt', 10, 2)->nullable();
             $table->text('debt_details')->nullable();
             $table->text('house_description')->nullable();
-            $table->string('house_and_surroundings_image')->nullable(); // Store file path
-            $table->string('house_interior_image')->nullable(); // Store file path
+            $table->text('house_and_surroundings_image')->nullable(); // Store file path
+            $table->text('house_interior_image')->nullable(); // Store file path
             $table->integer('number_of_cars')->nullable();
             $table->text('car_description')->nullable();
             $table->integer('sibling_order')->nullable();

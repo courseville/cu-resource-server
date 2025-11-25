@@ -14,12 +14,12 @@ return new class extends Migration
     {
         Schema::create('internship_student', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Student::class)->nullable();
+            $table->foreignIdFor(Student::class)->nullable()->constrained()->cascadeOnDelete();
             $table->integer('process_step')->nullable();
             $table->string('status')->nullable();
             $table->boolean('grant')->nullable();
-            $table->string('file')->nullable();
-            $table->string('address_pic')->nullable();
+            $table->text('file')->nullable();
+            $table->text('address_pic')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->string('location_address')->nullable();

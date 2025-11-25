@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('contract_personnel', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Personnel::class)->nullable();
+            $table->foreignIdFor(Personnel::class)->nullable()->constrained()->cascadeOnDelete();
             $table->string('contract_id')->nullable();
             $table->dateTime('start_date')->nullable();
             $table->dateTime('end_date')->nullable();

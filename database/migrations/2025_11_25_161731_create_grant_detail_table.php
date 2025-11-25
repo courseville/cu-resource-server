@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('grant_detail', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Student::class)->nullable();
+            $table->foreignIdFor(Student::class)->nullable()->constrained()->cascadeOnDelete();
             $table->string('type')->nullable();
             $table->decimal('travel_cost', 10, 2)->nullable();
             $table->decimal('accommodation_cost', 10, 2)->nullable();

@@ -1,6 +1,7 @@
 <?php
 
-use App\Models\Resources\Personnel;
+use App\Models\Resources\Interviewer;
+use App\Models\Resources\StudentApplication;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,11 +13,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('personnel_salary', function (Blueprint $table) {
+        Schema::create('interview_quota', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Personnel::class)->nullable()->constrained()->cascadeOnDelete();
-            $table->integer('amount')->nullable();
-            $table->dateTime('date')->nullable();
+            $table->foreignIdFor(StudentApplication::class, 'application_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Interviewer::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('personnel_salary');
+        Schema::dropIfExists('interview_quota');
     }
 };

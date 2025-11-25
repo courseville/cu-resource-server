@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('full_time_personnel', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Personnel::class)->nullable();
+            $table->foreignIdFor(Personnel::class)->nullable()->constrained()->cascadeOnDelete();
             $table->string('full_time_id')->nullable();
             $table->string('university')->nullable();
             $table->string('degree')->nullable();
