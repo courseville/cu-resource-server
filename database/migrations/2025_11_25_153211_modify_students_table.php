@@ -50,7 +50,6 @@ return new class extends Migration
             $table->string('parent_zip_code')->nullable();
             $table->decimal('parent_latitude', 11, 8)->nullable();
             $table->decimal('parent_longitude', 11, 8)->nullable();
-
         });
     }
 

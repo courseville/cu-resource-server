@@ -20,6 +20,25 @@ class Personnel extends Model implements Auditable
         'title_en',
         'first_name_en',
         'last_name_en',
+        'public_email',
+        'private_email',
+        'phone_no',
+        'telephone_no',
+        'website',
+        'building',
+        'floor',
+        'room',
+        'registered_address',
+        'registered_sub_district',
+        'registered_district',
+        'registered_province',
+        'registered_postal_code',
+        'current_address',
+        'current_sub_district',
+        'current_district',
+        'current_province',
+        'current_postal_code',
+        'passport_no',
     ];
 
     protected $searchable = [
@@ -32,5 +51,10 @@ class Personnel extends Model implements Auditable
     public function structureProfiles(): HasMany
     {
         return $this->hasMany(StructureProfile::class, 'personnel_id', 'id');
+    }
+
+    public function fulltime(): HasMany
+    {
+        return $this->hasMany(FulltimePersonnel::class, 'personnel_id', 'id');
     }
 }
