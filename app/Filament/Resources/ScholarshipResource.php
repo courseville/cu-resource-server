@@ -17,7 +17,7 @@ class ScholarshipResource extends Resource
 {
     protected static ?string $model = Scholarship::class;
 
-    protected static ?string $navigationGroup = 'Student';
+    protected static ?string $navigationGroup = 'Student Affair';
 
     protected static ?string $navigationLabel = 'Scholarships';
 
