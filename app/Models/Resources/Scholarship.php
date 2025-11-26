@@ -16,4 +16,9 @@ class Scholarship extends Model implements Auditable
         'file_description',
         'academic_year',
     ];
+
+    public function applications()
+    {
+        return $this->hasMany(ScholarshipApplication::class);
+    }
 }

@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('internship_student', function (Blueprint $table) {
+        Schema::create('student_internships', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Student::class)->nullable()->constrained()->cascadeOnDelete();
             $table->integer('process_step')->nullable();
