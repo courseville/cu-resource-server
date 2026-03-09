@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\PkModel;
 use App\Services\PermissionService;
-use App\Traits\Paginatable;
 use App\Traits\Searchable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
@@ -12,7 +11,7 @@ use Str;
 
 class ResourceController extends Controller
 {
-    use Paginatable, Searchable;
+    use Searchable;
 
     /**
      * Display a listing of the resource.

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Resources\Scholarship;
 use App\Models\Resources\Student;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -15,6 +16,7 @@ return new class extends Migration
         Schema::create('scholarship_application', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Student::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Scholarship::class)->nullable()->constrained()->cascadeOnDelete();
             $table->decimal('gpa', 3, 2)->nullable();
             $table->decimal('gpax', 3, 2)->nullable();
             $table->string('phone_brand_model')->nullable();

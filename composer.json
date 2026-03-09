@@ -3,15 +3,19 @@
     "name": "laravel/react-starter-kit",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
         "dedoc/scramble": "^0.12.19",
-        "filament/filament": "^3.3",
+        "filament/filament": "^5.0",
         "inertiajs/inertia-laravel": "^2.0",
         "laravel/framework": "^12.0",
         "laravel/passport": "^12.0",
+        "laravel/reverb": "^1.0",
         "laravel/tinker": "^2.10.1",
         "owen-it/laravel-auditing": "^14.0",
         "tightenco/ziggy": "^2.4"
@@ -72,6 +76,11 @@
         }
     },
     "config": {
+        "audit": {
+            "ignore": {
+                "PKSA-y2cr-5h3j-g3ys": "Waiting for laravel/passport to support firebase/php-jwt v7"
+            }
+        },
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true,

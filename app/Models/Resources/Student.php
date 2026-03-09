@@ -8,14 +8,17 @@ use OwenIt\Auditing\Contracts\Auditable;
 class Student extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
+
     protected $fillable = [
         'student_id',
         'title_th',
         'first_name_th',
         'last_name_th',
+        'full_name_th',
         'title_en',
         'first_name_en',
         'last_name_en',
+        'full_name_en',
     ];
 
     protected $searchable = [

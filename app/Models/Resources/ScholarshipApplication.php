@@ -12,6 +12,7 @@ class ScholarshipApplication extends Model implements Auditable
     protected $table = 'scholarship_application';
 
     protected $fillable = [
+        'scholarship_id',
         'student_id',
         'gpa',
         'gpax',
@@ -44,5 +45,10 @@ class ScholarshipApplication extends Model implements Auditable
     public function student()
     {
         return $this->belongsTo(Student::class);
+    }
+
+    public function scholarship()
+    {
+        return $this->belongsTo(Scholarship::class);
     }
 }

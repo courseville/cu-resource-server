@@ -39,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('internship_student');
+        Schema::dropIfExists('student_internships');
     }
 };
