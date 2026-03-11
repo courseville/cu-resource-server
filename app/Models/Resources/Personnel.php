@@ -7,9 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use OwenIt\Auditing\Contracts\Auditable;
 
+use App\Traits\HasDomainScope;
+
 class Personnel extends Model implements Auditable
 {
-    use \OwenIt\Auditing\Auditable;
+    use \OwenIt\Auditing\Auditable, HasDomainScope;
     use Searchable;
 
     protected $fillable = [
@@ -39,6 +41,8 @@ class Personnel extends Model implements Auditable
         'current_province',
         'current_postal_code',
         'passport_no',
+        'faccode',
+        'depcode',
     ];
 
     protected $searchable = [

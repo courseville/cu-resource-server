@@ -4,8 +4,11 @@ namespace App\Console\Commands;
 
 use App\Models\DataSource;
 use App\Models\PkModel;
+use App\Models\Import;
+use App\Models\FailedImportRow;
 use App\Transformers\DataTransformer;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -34,17 +37,21 @@ class SyncData extends Command
         // 1. Run the shell script to fetch CSV files via SFTP
         $this->info('Starting SFTP data fetch...');
 
-        // Executing the bash command as provided by the user
-        $bashCommand = "cd ~/dg-scripts && sshpass -f .dg_password sftp -o StrictHostKeyChecking=no -o LogLevel=ERROR sftp_mcv@161.200.194.183 <<< $'lcd dg/\nmget DG*.csv\nbye'";
+        if (app()->environment('testing')) {
+            $this->info('Skipping SFTP fetch in testing environment.');
+        } else {
+            // Executing the bash command as provided by the user
+            $bashCommand = "cd ~/dg-scripts && sshpass -f .dg_password sftp -o StrictHostKeyChecking=no -o LogLevel=ERROR sftp_mcv@161.200.194.183 <<< $'lcd dg/\nmget DG*.csv\nbye'";
+            
+            $this->info('Executing bash command...');
+            exec($bashCommand, $output, $returnVar);
 
-        $this->info('Executing bash command...');
-        exec($bashCommand, $output, $returnVar);
+            if ($returnVar !== 0) {
+                $this->error('SFTP fetch failed with exit code: '.$returnVar);
+                $this->error(implode("\n", $output));
 
-        if ($returnVar !== 0) {
-            $this->error('SFTP fetch failed with exit code: '.$returnVar);
-            $this->error(implode("\n", $output));
-
-            return 1;
+                return 1;
+            }
         }
 
         $this->info('SFTP fetch completed successfully.');
@@ -72,8 +79,24 @@ class SyncData extends Command
                 continue;
             }
 
+            // Start auditing
+            $import = Import::create([
+                'file_name' => basename($source->url),
+                'file_path' => $source->url,
+                'importer' => static::class,
+                'total_rows' => count($dataArray),
+                'user_id' => optional(Auth::user())->id ?? 1, // Fallback to system user
+            ]);
+
             $transformedData = DataTransformer::transformFromSource($source->id, $dataArray);
-            $this->insertAndSync($transformedData);
+            
+            $successfulRows = $this->insertAndSync($transformedData, $import);
+
+            $import->update([
+                'processed_rows' => count($dataArray),
+                'successful_rows' => $successfulRows,
+                'completed_at' => now(),
+            ]);
         }
 
         $this->info('Data sync completed.');
@@ -110,26 +133,39 @@ class SyncData extends Command
     /**
      * Generic insert logic (inspired by SyncDataMock2)
      */
-    protected function insertAndSync(array $transformedData)
+    protected function insertAndSync(array $transformedData, Import $import): int
     {
+        $successfulRows = 0;
+
         foreach ($transformedData as $model => $data) {
             if (class_exists($model)) {
                 $modelPk = PkModel::where('model', '=', $model)->first();
                 $pk = $modelPk ? $modelPk->primary_key : 'id';
 
                 foreach ($data as $item) {
-                    if (! isset($item[$pk])) {
-                        $this->warn("Missing primary key '{$pk}' for model {$model}. Skipping item.");
+                    try {
+                        if (! isset($item[$pk])) {
+                            throw new \Exception("Missing primary key '{$pk}' for model {$model}.");
+                        }
 
-                        continue;
+                        $model::updateOrCreate([$pk => $item[$pk]], $item);
+                        $this->info("Synced {$model} item: ".($item[$pk] ?? 'N/A'));
+                        $successfulRows++;
+                    } catch (\Exception $e) {
+                        $this->error("Failed to sync {$model} item: ".$e->getMessage());
+                        
+                        FailedImportRow::create([
+                            'import_id' => $import->id,
+                            'data' => $item,
+                            'validation_error' => $e->getMessage(),
+                        ]);
                     }
-
-                    $model::updateOrCreate([$pk => $item[$pk]], $item);
-                    $this->info("Synced {$model} item: ".($item[$pk] ?? 'N/A'));
                 }
             } else {
                 $this->error("Model {$model} does not exist.");
             }
         }
+
+        return $successfulRows;
     }
 }

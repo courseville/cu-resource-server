@@ -55,7 +55,7 @@ class User extends Authenticatable implements FilamentUser
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'role_user');
+        return $this->belongsToMany(Role::class, 'role_user')->withPivot('domain')->withTimestamps();
     }
 
     public function permissions()
