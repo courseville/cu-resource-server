@@ -12,8 +12,8 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use App\Filament\Actions\ExcelImportAction;
 use Filament\Actions\ExportAction;
-use Filament\Actions\ImportAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
@@ -233,7 +233,7 @@ class StudentResource extends Resource
                 //
             ])
             ->headerActions([
-                ImportAction::make()
+                ExcelImportAction::make()
                     ->importer(StudentImporter::class),
                 ExportAction::make()
                     ->exporter(StudentExporter::class),
