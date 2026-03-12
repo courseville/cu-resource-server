@@ -159,14 +159,6 @@ Route::prefix('v1')->middleware('clients')->group(function () {
     Route::get('/student-internships/{id}', [ResourceController::class, 'show'])->name('student-internships.show');
     Route::get('/student-status-histories', [ResourceController::class, 'index'])->name('student-status-histories.index');
     Route::get('/student-status-histories/{id}', [ResourceController::class, 'show'])->name('student-status-histories.show');
-    Route::get('/data-sources', [ResourceController::class, 'index'])->name('data-sources.index');
-    Route::get('/data-sources/{id}', [ResourceController::class, 'show'])->name('data-sources.show');
-    Route::get('/roles', [ResourceController::class, 'index'])->name('roles.index');
-    Route::get('/roles/{id}', [ResourceController::class, 'show'])->name('roles.show');
-    Route::get('/permissions', [ResourceController::class, 'index'])->name('permissions.index');
-    Route::get('/permissions/{id}', [ResourceController::class, 'show'])->name('permissions.show');
-    Route::get('/transformer-mappings', [ResourceController::class, 'index'])->name('transformer-mappings.index');
-    Route::get('/transformer-mappings/{id}', [ResourceController::class, 'show'])->name('transformer-mappings.show');
 });
 
 // Route::get('/transformer/source1', function (Request $request) {
