@@ -2,30 +2,26 @@
 
 namespace App\Filament\Resources\TransformerMappings;
 
-use Filament\Schemas\Schema;
-use Filament\Tables\Table;
 use App\Filament\Exports\TransformerMappingExporter;
-use App\Filament\Resources\TransformerMappings\Pages\ListTransformerMappings;
 use App\Filament\Resources\TransformerMappings\Pages\CreateTransformerMapping;
 use App\Filament\Resources\TransformerMappings\Pages\EditTransformerMapping;
-use App\Filament\Resources\TransformerMappingResource\Pages;
+use App\Filament\Resources\TransformerMappings\Pages\ListTransformerMappings;
 use App\Models\TransformerMapping;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Actions\ExportBulkAction;
-use Filament\Forms;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 
 class TransformerMappingResource extends Resource
 {
     protected static ?string $model = TransformerMapping::class;
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-cog';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-cog';
 
     public static function form(Schema $schema): Schema
     {

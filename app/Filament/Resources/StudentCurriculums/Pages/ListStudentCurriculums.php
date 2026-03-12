@@ -2,16 +2,12 @@
 
 namespace App\Filament\Resources\StudentCurriculums\Pages;
 
-use App\Filament\Exports\StudentCurriculumExporter;
-
-use App\Filament\Imports\Resources\StudentCurriculumImporter;
-
-use Filament\Actions\ExportAction;
-
 use App\Filament\Actions\ExcelImportAction;
-
+use App\Filament\Exports\StudentCurriculumExporter;
+use App\Filament\Imports\Resources\StudentCurriculumImporter;
 use App\Filament\Resources\StudentCurriculums\StudentCurriculumResource;
 use Filament\Actions\CreateAction;
+use Filament\Actions\ExportAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListStudentCurriculums extends ListRecords
@@ -25,7 +21,7 @@ class ListStudentCurriculums extends ListRecords
                 ->exporter(StudentCurriculumExporter::class),
             ExcelImportAction::make()
                 ->importer(StudentCurriculumImporter::class),
-CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

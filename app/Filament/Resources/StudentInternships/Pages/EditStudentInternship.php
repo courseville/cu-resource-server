@@ -2,9 +2,8 @@
 
 namespace App\Filament\Resources\StudentInternships\Pages;
 
-use Filament\Actions\DeleteAction;
 use App\Filament\Resources\StudentInternships\StudentInternshipResource;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditStudentInternship extends EditRecord

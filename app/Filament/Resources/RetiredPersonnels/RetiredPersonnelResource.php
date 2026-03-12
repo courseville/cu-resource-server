@@ -2,32 +2,30 @@
 
 namespace App\Filament\Resources\RetiredPersonnels;
 
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Section;
-use Filament\Actions\EditAction;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use App\Filament\Resources\RetiredPersonnels\Pages\ListRetiredPersonnels;
 use App\Filament\Resources\RetiredPersonnels\Pages\CreateRetiredPersonnel;
 use App\Filament\Resources\RetiredPersonnels\Pages\EditRetiredPersonnel;
-use App\Filament\Resources\RetiredPersonnelResource\Pages;
+use App\Filament\Resources\RetiredPersonnels\Pages\ListRetiredPersonnels;
 use App\Models\Resources\RetiredPersonnel;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 
 class RetiredPersonnelResource extends Resource
 {
     protected static ?string $model = RetiredPersonnel::class;
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Personnel';
+    protected static string|\UnitEnum|null $navigationGroup = 'Personnel';
 
     protected static ?string $navigationLabel = 'Retired';
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-users';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $pluralModelLabel = 'Retired';
 

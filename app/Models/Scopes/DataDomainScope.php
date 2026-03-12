@@ -18,7 +18,7 @@ class DataDomainScope implements Scope
         $entity = Auth::user();
 
         // If no authenticated user, try to get the client from the request (for client_credentials grant)
-        if (!$entity && request()->user('api')) {
+        if (! $entity && request()->user('api')) {
             $entity = request()->user('api');
         }
 
@@ -26,8 +26,8 @@ class DataDomainScope implements Scope
         // Assuming 'admin' role has no domain restriction or exists to see everything
         $isSuperAdmin = $entity ? $this->isSuperAdmin($entity) : false;
         logger()->info('isSuperAdmin check', ['result' => $isSuperAdmin]);
-        
-        if (!$entity || $isSuperAdmin) {
+
+        if (! $entity || $isSuperAdmin) {
             return;
         }
 
@@ -38,12 +38,13 @@ class DataDomainScope implements Scope
         // or everything if that's the policy. Usually, no domain means no access to scoped data.
         if (empty($domains)) {
             $builder->whereRaw('1 = 0');
+
             return;
         }
 
         // 3. Apply the filter based on the model's domain column
         $column = method_exists($model, 'getDomainColumn') ? $model->getDomainColumn() : 'faccode';
-        
+
         $builder->whereIn($column, $domains);
     }
 
@@ -54,8 +55,8 @@ class DataDomainScope implements Scope
     {
         // Check if user has 'admin' role with no domain restriction
         // This is a placeholder logic; adjust based on actual role names
-        return $entity->roles()->where('name', 'admin')->exists() && 
-               !$entity->roles()->where('name', 'admin')->wherePivotNotNull('domain')->exists();
+        return $entity->roles()->where('name', 'admin')->exists() &&
+               ! $entity->roles()->where('name', 'admin')->wherePivotNotNull('domain')->exists();
     }
 
     /**

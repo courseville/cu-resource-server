@@ -34,15 +34,15 @@ class TransformerMappingImporter extends Importer
 
     public function resolveRecord(): TransformerMapping
     {
-        return new TransformerMapping();
+        return new TransformerMapping;
     }
 
     public static function getCompletedNotificationBody(Import $import): string
     {
-        $body = 'Your transformer mapping import has completed and ' . Number::format($import->successful_rows) . ' ' . str('row')->plural($import->successful_rows) . ' imported.';
+        $body = 'Your transformer mapping import has completed and '.Number::format($import->successful_rows).' '.str('row')->plural($import->successful_rows).' imported.';
 
         if ($failedRowsCount = $import->getFailedRowsCount()) {
-            $body .= ' ' . Number::format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' failed to import.';
+            $body .= ' '.Number::format($failedRowsCount).' '.str('row')->plural($failedRowsCount).' failed to import.';
         }
 
         return $body;

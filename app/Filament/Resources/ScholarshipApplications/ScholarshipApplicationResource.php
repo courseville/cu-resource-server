@@ -2,15 +2,10 @@
 
 namespace App\Filament\Resources\ScholarshipApplications;
 
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Grid;
-use Filament\Tables\Columns\TextColumn;
 use App\Filament\Exports\Resources\ScholarshipApplicationExporter;
 use App\Filament\Resources\ScholarshipApplications\Pages\CreateScholarshipApplication;
 use App\Filament\Resources\ScholarshipApplications\Pages\EditScholarshipApplication;
 use App\Filament\Resources\ScholarshipApplications\Pages\ListScholarshipApplications;
-use App\Filament\Resources\ScholarshipApplicationResource\Pages;
 use App\Models\Resources\ScholarshipApplication;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -21,18 +16,21 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class ScholarshipApplicationResource extends Resource
 {
     protected static ?string $model = ScholarshipApplication::class;
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Student Affair';
+    protected static string|\UnitEnum|null $navigationGroup = 'Student Affair';
 
     protected static ?string $navigationLabel = 'Scholarship Applications';
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-users';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $pluralModelLabel = 'Scholarship Applications';
 

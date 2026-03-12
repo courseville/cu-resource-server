@@ -2,16 +2,12 @@
 
 namespace App\Filament\Resources\CourseSchedules\Pages;
 
-use App\Filament\Exports\CourseScheduleExporter;
-
-use App\Filament\Imports\Resources\CourseScheduleImporter;
-
-use Filament\Actions\ExportAction;
-
 use App\Filament\Actions\ExcelImportAction;
-
+use App\Filament\Exports\CourseScheduleExporter;
+use App\Filament\Imports\Resources\CourseScheduleImporter;
 use App\Filament\Resources\CourseSchedules\CourseScheduleResource;
 use Filament\Actions\CreateAction;
+use Filament\Actions\ExportAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListCourseSchedules extends ListRecords
@@ -25,7 +21,7 @@ class ListCourseSchedules extends ListRecords
                 ->exporter(CourseScheduleExporter::class),
             ExcelImportAction::make()
                 ->importer(CourseScheduleImporter::class),
-CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

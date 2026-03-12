@@ -9,6 +9,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 class StructureProfile extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
+
     protected $fillable = [
         'structure_level1_id',
         'structure_level2_id',

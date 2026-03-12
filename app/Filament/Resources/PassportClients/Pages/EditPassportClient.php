@@ -2,9 +2,8 @@
 
 namespace App\Filament\Resources\PassportClients\Pages;
 
-use Filament\Actions\DeleteAction;
 use App\Filament\Resources\PassportClients\PassportClientResource;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditPassportClient extends EditRecord

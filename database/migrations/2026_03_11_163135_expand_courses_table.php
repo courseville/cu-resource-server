@@ -33,10 +33,10 @@ return new class extends Migration
             $table->string('faccode')->nullable()->index();
 
             // Ingestion fields
-            if (!Schema::hasColumn('courses', 'data_source_id')) {
+            if (! Schema::hasColumn('courses', 'data_source_id')) {
                 $table->foreignId('data_source_id')->nullable()->constrained('data_sources')->onDelete('cascade');
             }
-            if (!Schema::hasColumn('courses', 'data_id')) {
+            if (! Schema::hasColumn('courses', 'data_id')) {
                 $table->string('data_id')->nullable();
             }
         });

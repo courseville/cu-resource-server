@@ -31,10 +31,10 @@ return new class extends Migration
             $table->string('major_name_eng')->nullable();
 
             // Ingestion fields (if not already present)
-            if (!Schema::hasColumn('students', 'data_source_id')) {
+            if (! Schema::hasColumn('students', 'data_source_id')) {
                 $table->foreignId('data_source_id')->nullable()->constrained('data_sources')->onDelete('cascade');
             }
-            if (!Schema::hasColumn('students', 'data_id')) {
+            if (! Schema::hasColumn('students', 'data_id')) {
                 $table->string('data_id')->nullable();
             }
         });

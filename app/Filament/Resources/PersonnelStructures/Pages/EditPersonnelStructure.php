@@ -2,9 +2,8 @@
 
 namespace App\Filament\Resources\PersonnelStructures\Pages;
 
-use Filament\Actions\DeleteAction;
 use App\Filament\Resources\PersonnelStructures\PersonnelStructureResource;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditPersonnelStructure extends EditRecord

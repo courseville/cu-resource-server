@@ -2,9 +2,8 @@
 
 namespace App\Filament\Resources\ScholarshipApplications\Pages;
 
-use Filament\Actions\DeleteAction;
 use App\Filament\Resources\ScholarshipApplications\ScholarshipApplicationResource;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditScholarshipApplication extends EditRecord

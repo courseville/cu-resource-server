@@ -30,15 +30,15 @@ class ContractPersonnelImporter extends Importer
 
     public function resolveRecord(): ContractPersonnel
     {
-        return new ContractPersonnel();
+        return new ContractPersonnel;
     }
 
     public static function getCompletedNotificationBody(Import $import): string
     {
-        $body = 'Your contract personnel import has completed and ' . Number::format($import->successful_rows) . ' ' . str('row')->plural($import->successful_rows) . ' imported.';
+        $body = 'Your contract personnel import has completed and '.Number::format($import->successful_rows).' '.str('row')->plural($import->successful_rows).' imported.';
 
         if ($failedRowsCount = $import->getFailedRowsCount()) {
-            $body .= ' ' . Number::format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' failed to import.';
+            $body .= ' '.Number::format($failedRowsCount).' '.str('row')->plural($failedRowsCount).' failed to import.';
         }
 
         return $body;

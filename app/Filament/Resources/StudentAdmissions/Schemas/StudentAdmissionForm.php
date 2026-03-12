@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\StudentAdmissions\Schemas;
 
-use Filament\Schemas\Schema;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 
 class StudentAdmissionForm
 {

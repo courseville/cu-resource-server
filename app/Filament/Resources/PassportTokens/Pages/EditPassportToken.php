@@ -2,9 +2,8 @@
 
 namespace App\Filament\Resources\PassportTokens\Pages;
 
-use Filament\Actions\DeleteAction;
 use App\Filament\Resources\PassportTokens\PassportTokenResource;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditPassportToken extends EditRecord

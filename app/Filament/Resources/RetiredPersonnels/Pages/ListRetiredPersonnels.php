@@ -2,17 +2,12 @@
 
 namespace App\Filament\Resources\RetiredPersonnels\Pages;
 
-use App\Filament\Exports\Resources\RetiredPersonnelExporter;
-
-use App\Filament\Imports\Resources\RetiredPersonnelImporter;
-
-use Filament\Actions\ExportAction;
-
 use App\Filament\Actions\ExcelImportAction;
-
-use Filament\Actions\CreateAction;
+use App\Filament\Exports\Resources\RetiredPersonnelExporter;
+use App\Filament\Imports\Resources\RetiredPersonnelImporter;
 use App\Filament\Resources\RetiredPersonnels\RetiredPersonnelResource;
-use Filament\Actions;
+use Filament\Actions\CreateAction;
+use Filament\Actions\ExportAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListRetiredPersonnels extends ListRecords
@@ -26,7 +21,7 @@ class ListRetiredPersonnels extends ListRecords
                 ->exporter(RetiredPersonnelExporter::class),
             ExcelImportAction::make()
                 ->importer(RetiredPersonnelImporter::class),
-CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

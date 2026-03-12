@@ -2,17 +2,12 @@
 
 namespace App\Filament\Resources\ScholarshipApplications\Pages;
 
-use App\Filament\Exports\Resources\ScholarshipApplicationExporter;
-
-use App\Filament\Imports\Resources\ScholarshipApplicationImporter;
-
-use Filament\Actions\ExportAction;
-
 use App\Filament\Actions\ExcelImportAction;
-
-use Filament\Actions\CreateAction;
+use App\Filament\Exports\Resources\ScholarshipApplicationExporter;
+use App\Filament\Imports\Resources\ScholarshipApplicationImporter;
 use App\Filament\Resources\ScholarshipApplications\ScholarshipApplicationResource;
-use Filament\Actions;
+use Filament\Actions\CreateAction;
+use Filament\Actions\ExportAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListScholarshipApplications extends ListRecords
@@ -26,7 +21,7 @@ class ListScholarshipApplications extends ListRecords
                 ->exporter(ScholarshipApplicationExporter::class),
             ExcelImportAction::make()
                 ->importer(ScholarshipApplicationImporter::class),
-CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

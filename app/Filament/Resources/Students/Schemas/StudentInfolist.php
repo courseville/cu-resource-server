@@ -2,10 +2,9 @@
 
 namespace App\Filament\Resources\Students\Schemas;
 
-use Filament\Schemas\Schema;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Components\ImageEntry;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 
 class StudentInfolist
 {

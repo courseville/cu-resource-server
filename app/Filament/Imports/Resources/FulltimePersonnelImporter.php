@@ -53,15 +53,15 @@ class FulltimePersonnelImporter extends Importer
 
     public function resolveRecord(): FulltimePersonnel
     {
-        return new FulltimePersonnel();
+        return new FulltimePersonnel;
     }
 
     public static function getCompletedNotificationBody(Import $import): string
     {
-        $body = 'Your fulltime personnel import has completed and ' . Number::format($import->successful_rows) . ' ' . str('row')->plural($import->successful_rows) . ' imported.';
+        $body = 'Your fulltime personnel import has completed and '.Number::format($import->successful_rows).' '.str('row')->plural($import->successful_rows).' imported.';
 
         if ($failedRowsCount = $import->getFailedRowsCount()) {
-            $body .= ' ' . Number::format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' failed to import.';
+            $body .= ' '.Number::format($failedRowsCount).' '.str('row')->plural($failedRowsCount).' failed to import.';
         }
 
         return $body;

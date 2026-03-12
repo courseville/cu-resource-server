@@ -3,14 +3,12 @@
 namespace App\Console\Commands;
 
 use App\Models\DataSource;
-use App\Models\PkModel;
-use App\Models\Import;
 use App\Models\FailedImportRow;
+use App\Models\Import;
+use App\Models\PkModel;
 use App\Transformers\DataTransformer;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class SyncData extends Command
@@ -42,7 +40,7 @@ class SyncData extends Command
         } else {
             // Executing the bash command as provided by the user
             $bashCommand = "cd ~/dg-scripts && sshpass -f .dg_password sftp -o StrictHostKeyChecking=no -o LogLevel=ERROR sftp_mcv@161.200.194.183 <<< $'lcd dg/\nmget DG*.csv\nbye'";
-            
+
             $this->info('Executing bash command...');
             exec($bashCommand, $output, $returnVar);
 
@@ -89,7 +87,7 @@ class SyncData extends Command
             ]);
 
             $transformedData = DataTransformer::transformFromSource($source->id, $dataArray);
-            
+
             $successfulRows = $this->insertAndSync($transformedData, $import);
 
             $import->update([
@@ -153,7 +151,7 @@ class SyncData extends Command
                         $successfulRows++;
                     } catch (\Exception $e) {
                         $this->error("Failed to sync {$model} item: ".$e->getMessage());
-                        
+
                         FailedImportRow::create([
                             'import_id' => $import->id,
                             'data' => $item,

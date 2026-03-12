@@ -2,15 +2,10 @@
 
 namespace App\Filament\Resources\GrantDetails;
 
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Section;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\BooleanColumn;
 use App\Filament\Exports\Resources\GrantDetailExporter;
-use App\Filament\Resources\GrantDetails\Pages\ListGrantDetails;
 use App\Filament\Resources\GrantDetails\Pages\CreateGrantDetail;
 use App\Filament\Resources\GrantDetails\Pages\EditGrantDetail;
-use App\Filament\Resources\GrantDetailResource\Pages;
+use App\Filament\Resources\GrantDetails\Pages\ListGrantDetails;
 use App\Models\Resources\GrantDetail;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -20,18 +15,21 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\BooleanColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class GrantDetailResource extends Resource
 {
     protected static ?string $model = GrantDetail::class;
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Student Affair';
+    protected static string|\UnitEnum|null $navigationGroup = 'Student Affair';
 
     protected static ?string $navigationLabel = 'Grant Detail';
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-users';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $pluralModelLabel = 'Grant Detail';
 

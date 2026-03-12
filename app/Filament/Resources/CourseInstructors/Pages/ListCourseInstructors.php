@@ -2,16 +2,12 @@
 
 namespace App\Filament\Resources\CourseInstructors\Pages;
 
-use App\Filament\Exports\CourseInstructorExporter;
-
-use App\Filament\Imports\Resources\CourseInstructorImporter;
-
-use Filament\Actions\ExportAction;
-
 use App\Filament\Actions\ExcelImportAction;
-
+use App\Filament\Exports\CourseInstructorExporter;
+use App\Filament\Imports\Resources\CourseInstructorImporter;
 use App\Filament\Resources\CourseInstructors\CourseInstructorResource;
 use Filament\Actions\CreateAction;
+use Filament\Actions\ExportAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListCourseInstructors extends ListRecords
@@ -25,7 +21,7 @@ class ListCourseInstructors extends ListRecords
                 ->exporter(CourseInstructorExporter::class),
             ExcelImportAction::make()
                 ->importer(CourseInstructorImporter::class),
-CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

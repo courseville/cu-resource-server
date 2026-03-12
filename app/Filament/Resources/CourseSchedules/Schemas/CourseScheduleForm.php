@@ -2,16 +2,16 @@
 
 namespace App\Filament\Resources\CourseSchedules\Schemas;
 
-use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 
 class CourseScheduleForm
 {
     public static function configure(Schema $schema): Schema
     {
         return $schema
-->components([
+            ->components([
                 Section::make('Schedule Identification')
                     ->schema([
                         TextInput::make('year')

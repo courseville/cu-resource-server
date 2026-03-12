@@ -2,9 +2,8 @@
 
 namespace App\Filament\Resources\RetiredPersonnels\Pages;
 
-use Filament\Actions\DeleteAction;
 use App\Filament\Resources\RetiredPersonnels\RetiredPersonnelResource;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditRetiredPersonnel extends EditRecord

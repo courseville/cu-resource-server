@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\Scholarships\Pages;
 
 use App\Filament\Resources\Scholarships\ScholarshipResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateScholarship extends CreateRecord

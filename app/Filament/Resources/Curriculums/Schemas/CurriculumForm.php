@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\Curriculums\Schemas;
 
-use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 
 class CurriculumForm
 {

@@ -2,33 +2,30 @@
 
 namespace App\Filament\Resources\StudentApplications;
 
-use Filament\Schemas\Schema;
-use Filament\Forms\Components\TextInput;
-use Filament\Tables\Columns\TextColumn;
 use App\Filament\Exports\Resources\StudentApplicationExporter;
-use App\Filament\Resources\StudentApplications\Pages\ListStudentApplications;
 use App\Filament\Resources\StudentApplications\Pages\CreateStudentApplication;
 use App\Filament\Resources\StudentApplications\Pages\EditStudentApplication;
-use App\Filament\Resources\StudentApplicationResource\Pages;
+use App\Filament\Resources\StudentApplications\Pages\ListStudentApplications;
 use App\Models\Resources\StudentApplication;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ExportBulkAction;
-use Filament\Forms\Components;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class StudentApplicationResource extends Resource
 {
     protected static ?string $model = StudentApplication::class;
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Academic';
+    protected static string|\UnitEnum|null $navigationGroup = 'Academic';
 
     protected static ?string $navigationLabel = 'Student Application';
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-users';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $pluralModelLabel = 'Student Applications';
 

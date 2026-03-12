@@ -2,9 +2,8 @@
 
 namespace App\Filament\Resources\TransformerMappings\Pages;
 
-use Filament\Actions\DeleteAction;
 use App\Filament\Resources\TransformerMappings\TransformerMappingResource;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditTransformerMapping extends EditRecord

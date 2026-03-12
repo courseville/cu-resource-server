@@ -2,16 +2,12 @@
 
 namespace App\Filament\Resources\AcademicPrograms\Pages;
 
-use App\Filament\Exports\AcademicProgramExporter;
-
-use App\Filament\Imports\Resources\AcademicProgramImporter;
-
-use Filament\Actions\ExportAction;
-
 use App\Filament\Actions\ExcelImportAction;
-
+use App\Filament\Exports\AcademicProgramExporter;
+use App\Filament\Imports\Resources\AcademicProgramImporter;
 use App\Filament\Resources\AcademicPrograms\AcademicProgramResource;
 use Filament\Actions\CreateAction;
+use Filament\Actions\ExportAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListAcademicPrograms extends ListRecords
@@ -25,7 +21,7 @@ class ListAcademicPrograms extends ListRecords
                 ->exporter(AcademicProgramExporter::class),
             ExcelImportAction::make()
                 ->importer(AcademicProgramImporter::class),
-CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

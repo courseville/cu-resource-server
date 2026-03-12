@@ -2,9 +2,8 @@
 
 namespace App\Filament\Resources\FulltimePersonnels\Pages;
 
-use Filament\Actions\DeleteAction;
 use App\Filament\Resources\FulltimePersonnels\FulltimePersonnelResource;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditFulltimePersonnel extends EditRecord

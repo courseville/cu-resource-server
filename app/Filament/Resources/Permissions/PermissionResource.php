@@ -2,30 +2,26 @@
 
 namespace App\Filament\Resources\Permissions;
 
-use Filament\Schemas\Schema;
-use Filament\Tables\Table;
 use App\Filament\Exports\PermissionExporter;
-use App\Filament\Resources\Permissions\Pages\ListPermissions;
 use App\Filament\Resources\Permissions\Pages\CreatePermission;
 use App\Filament\Resources\Permissions\Pages\EditPermission;
-use App\Filament\Resources\PermissionResource\Pages;
+use App\Filament\Resources\Permissions\Pages\ListPermissions;
 use App\Models\Permission;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Actions\ExportBulkAction;
-use Filament\Forms;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 
 class PermissionResource extends Resource
 {
     protected static ?string $model = Permission::class;
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-key';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-key';
 
     public static function form(Schema $schema): Schema
     {

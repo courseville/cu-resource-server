@@ -2,17 +2,12 @@
 
 namespace App\Filament\Resources\PersonnelSalaries\Pages;
 
-use App\Filament\Exports\Resources\PersonnelSalaryExporter;
-
-use App\Filament\Imports\Resources\PersonnelSalaryImporter;
-
-use Filament\Actions\ExportAction;
-
 use App\Filament\Actions\ExcelImportAction;
-
-use Filament\Actions\CreateAction;
+use App\Filament\Exports\Resources\PersonnelSalaryExporter;
+use App\Filament\Imports\Resources\PersonnelSalaryImporter;
 use App\Filament\Resources\PersonnelSalaries\PersonnelSalaryResource;
-use Filament\Actions;
+use Filament\Actions\CreateAction;
+use Filament\Actions\ExportAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListPersonnelSalaries extends ListRecords
@@ -26,7 +21,7 @@ class ListPersonnelSalaries extends ListRecords
                 ->exporter(PersonnelSalaryExporter::class),
             ExcelImportAction::make()
                 ->importer(PersonnelSalaryImporter::class),
-CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

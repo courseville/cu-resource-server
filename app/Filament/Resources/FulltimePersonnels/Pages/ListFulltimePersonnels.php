@@ -2,17 +2,12 @@
 
 namespace App\Filament\Resources\FulltimePersonnels\Pages;
 
-use App\Filament\Exports\Resources\FulltimePersonnelExporter;
-
-use App\Filament\Imports\Resources\FulltimePersonnelImporter;
-
-use Filament\Actions\ExportAction;
-
 use App\Filament\Actions\ExcelImportAction;
-
-use Filament\Actions\CreateAction;
+use App\Filament\Exports\Resources\FulltimePersonnelExporter;
+use App\Filament\Imports\Resources\FulltimePersonnelImporter;
 use App\Filament\Resources\FulltimePersonnels\FulltimePersonnelResource;
-use Filament\Actions;
+use Filament\Actions\CreateAction;
+use Filament\Actions\ExportAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListFulltimePersonnels extends ListRecords
@@ -26,7 +21,7 @@ class ListFulltimePersonnels extends ListRecords
                 ->exporter(FulltimePersonnelExporter::class),
             ExcelImportAction::make()
                 ->importer(FulltimePersonnelImporter::class),
-CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

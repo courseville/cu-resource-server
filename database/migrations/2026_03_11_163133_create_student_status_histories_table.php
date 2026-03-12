@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('to_semester')->nullable();
             $table->string('instruction_no')->nullable();
             $table->string('announcement')->nullable();
-            
+
             // Domain fields
             $table->string('faccode')->nullable()->index();
             $table->string('depcode')->nullable()->index();

@@ -38,15 +38,15 @@ class GrantDetailImporter extends Importer
 
     public function resolveRecord(): GrantDetail
     {
-        return new GrantDetail();
+        return new GrantDetail;
     }
 
     public static function getCompletedNotificationBody(Import $import): string
     {
-        $body = 'Your grant detail import has completed and ' . Number::format($import->successful_rows) . ' ' . str('row')->plural($import->successful_rows) . ' imported.';
+        $body = 'Your grant detail import has completed and '.Number::format($import->successful_rows).' '.str('row')->plural($import->successful_rows).' imported.';
 
         if ($failedRowsCount = $import->getFailedRowsCount()) {
-            $body .= ' ' . Number::format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' failed to import.';
+            $body .= ' '.Number::format($failedRowsCount).' '.str('row')->plural($failedRowsCount).' failed to import.';
         }
 
         return $body;

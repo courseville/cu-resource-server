@@ -24,11 +24,11 @@ return new class extends Migration
             $table->string('apply_semester')->nullable();
             $table->date('apply_date')->nullable();
             $table->string('apply_status')->nullable();
-            
+
             // Ingestion fields
             $table->foreignId('data_source_id')->nullable()->constrained('data_sources')->onDelete('cascade');
             $table->string('data_id')->nullable();
-            
+
             $table->timestamps();
         });
     }

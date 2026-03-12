@@ -2,17 +2,12 @@
 
 namespace App\Filament\Resources\Users\Pages;
 
-use App\Filament\Exports\UserExporter;
-
-use App\Filament\Imports\UserImporter;
-
-use Filament\Actions\ExportAction;
-
 use App\Filament\Actions\ExcelImportAction;
-
-use Filament\Actions\CreateAction;
+use App\Filament\Exports\UserExporter;
+use App\Filament\Imports\UserImporter;
 use App\Filament\Resources\Users\UserResource;
-use Filament\Actions;
+use Filament\Actions\CreateAction;
+use Filament\Actions\ExportAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListUsers extends ListRecords
@@ -26,7 +21,7 @@ class ListUsers extends ListRecords
                 ->exporter(UserExporter::class),
             ExcelImportAction::make()
                 ->importer(UserImporter::class),
-CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

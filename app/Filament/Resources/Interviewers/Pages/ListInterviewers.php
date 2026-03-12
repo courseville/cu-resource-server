@@ -2,17 +2,12 @@
 
 namespace App\Filament\Resources\Interviewers\Pages;
 
-use App\Filament\Exports\Resources\InterviewerExporter;
-
-use App\Filament\Imports\Resources\InterviewerImporter;
-
-use Filament\Actions\ExportAction;
-
 use App\Filament\Actions\ExcelImportAction;
-
-use Filament\Actions\CreateAction;
+use App\Filament\Exports\Resources\InterviewerExporter;
+use App\Filament\Imports\Resources\InterviewerImporter;
 use App\Filament\Resources\Interviewers\InterviewerResource;
-use Filament\Actions;
+use Filament\Actions\CreateAction;
+use Filament\Actions\ExportAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListInterviewers extends ListRecords
@@ -26,7 +21,7 @@ class ListInterviewers extends ListRecords
                 ->exporter(InterviewerExporter::class),
             ExcelImportAction::make()
                 ->importer(InterviewerImporter::class),
-CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

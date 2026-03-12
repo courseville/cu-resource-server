@@ -2,13 +2,10 @@
 
 namespace App\Filament\Resources\PersonnelSalaries;
 
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Section;
 use App\Filament\Exports\Resources\PersonnelSalaryExporter;
-use App\Filament\Resources\PersonnelSalaries\Pages\ListPersonnelSalaries;
 use App\Filament\Resources\PersonnelSalaries\Pages\CreatePersonnelSalary;
 use App\Filament\Resources\PersonnelSalaries\Pages\EditPersonnelSalary;
-use App\Filament\Resources\PersonnelSalaryResource\Pages;
+use App\Filament\Resources\PersonnelSalaries\Pages\ListPersonnelSalaries;
 use App\Models\Resources\PersonnelSalary;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -19,18 +16,19 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 
 class PersonnelSalaryResource extends Resource
 {
     protected static ?string $model = PersonnelSalary::class;
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Personnel';
+    protected static string|\UnitEnum|null $navigationGroup = 'Personnel';
 
     protected static ?string $navigationLabel = 'Salary';
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-users';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $pluralModelLabel = 'Salary';
 

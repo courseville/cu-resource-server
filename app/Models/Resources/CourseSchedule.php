@@ -2,13 +2,13 @@
 
 namespace App\Models\Resources;
 
+use App\Traits\HasDomainScope;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
-use App\Traits\HasDomainScope;
 
 class CourseSchedule extends Model implements Auditable
 {
-    use \OwenIt\Auditing\Auditable, HasDomainScope;
+    use HasDomainScope, \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
         'year',

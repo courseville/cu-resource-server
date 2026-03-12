@@ -2,20 +2,18 @@
 
 namespace App\Filament\Resources\PassportTokens;
 
-use Filament\Tables\Table;
-use Filament\Actions\DeleteAction;
 use App\Filament\Resources\PassportTokens\Pages\ListPassportTokens;
-use App\Filament\Resources\PassportTokenResource\Pages;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 use Laravel\Passport\Token;
 
 class PassportTokenResource extends Resource
 {
     protected static ?string $model = Token::class;
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-shield-check';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-shield-check';
 
     public static function table(Table $table): Table
     {

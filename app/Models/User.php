@@ -16,7 +16,7 @@ use LdapRecord\Laravel\Auth\LdapAuthenticatable;
 class User extends Authenticatable implements FilamentUser, LdapAuthenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable, AuthenticatesWithLdap;
+    use AuthenticatesWithLdap, HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.

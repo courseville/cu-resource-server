@@ -2,17 +2,12 @@
 
 namespace App\Filament\Resources\ContractPersonnels\Pages;
 
-use App\Filament\Exports\Resources\ContractPersonnelExporter;
-
-use App\Filament\Imports\Resources\ContractPersonnelImporter;
-
-use Filament\Actions\ExportAction;
-
 use App\Filament\Actions\ExcelImportAction;
-
-use Filament\Actions\CreateAction;
+use App\Filament\Exports\Resources\ContractPersonnelExporter;
+use App\Filament\Imports\Resources\ContractPersonnelImporter;
 use App\Filament\Resources\ContractPersonnels\ContractPersonnelResource;
-use Filament\Actions;
+use Filament\Actions\CreateAction;
+use Filament\Actions\ExportAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListContractPersonnels extends ListRecords
@@ -26,7 +21,7 @@ class ListContractPersonnels extends ListRecords
                 ->exporter(ContractPersonnelExporter::class),
             ExcelImportAction::make()
                 ->importer(ContractPersonnelImporter::class),
-CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

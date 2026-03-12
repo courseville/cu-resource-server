@@ -16,15 +16,15 @@ class ResourceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, string $entity = null)
+    public function index(Request $request, ?string $entity = null)
     {
         $entity = $entity ?? $request->segment(3);
-        
+
         // Find model class
         $modelClass = $this->resolveModelClass($entity);
 
         if (! $modelClass || ! class_exists($modelClass)) {
-            abort(404, 'Model not found for entity: ' . $entity);
+            abort(404, 'Model not found for entity: '.$entity);
         }
 
         // Check if the table exists
@@ -66,7 +66,7 @@ class ResourceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $entity, string $id = null)
+    public function show(string $entity, ?string $id = null)
     {
         // If entity looks like an ID (numeric or long string), it might be the second param redirected
         if (is_null($id)) {
@@ -120,14 +120,14 @@ class ResourceController extends Controller
     protected function resolveModelClass(string $entity): ?string
     {
         $singular = Str::studly(Str::singular($entity));
-        
+
         $namespaces = [
             'App\\Models\\Resources\\',
             'App\\Models\\',
         ];
 
         foreach ($namespaces as $namespace) {
-            $class = $namespace . $singular;
+            $class = $namespace.$singular;
             if (class_exists($class)) {
                 return $class;
             }

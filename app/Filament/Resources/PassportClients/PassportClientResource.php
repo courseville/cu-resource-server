@@ -2,29 +2,25 @@
 
 namespace App\Filament\Resources\PassportClients;
 
-use Filament\Schemas\Schema;
-use Filament\Tables\Table;
-use Filament\Actions\EditAction;
-use Filament\Actions\DeleteAction;
-use App\Filament\Resources\PassportClients\Pages\ListPassportClients;
 use App\Filament\Resources\PassportClients\Pages\CreatePassportClient;
 use App\Filament\Resources\PassportClients\Pages\EditPassportClient;
+use App\Filament\Resources\PassportClients\Pages\ListPassportClients;
 use App\Filament\Resources\PassportClients\RelationManagers\RolesRelationManager;
-use App\Filament\Resources\PassportClientResource\Pages;
-use App\Filament\Resources\PassportClientResource\RelationManagers;
 use App\Models\Client;
-use Filament\Forms;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 
 class PassportClientResource extends Resource
 {
     protected static ?string $model = Client::class;
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-key';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-key';
 
     public static function form(Schema $schema): Schema
     {

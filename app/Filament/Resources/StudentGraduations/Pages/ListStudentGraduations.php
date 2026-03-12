@@ -2,16 +2,12 @@
 
 namespace App\Filament\Resources\StudentGraduations\Pages;
 
-use App\Filament\Exports\StudentGraduationExporter;
-
-use App\Filament\Imports\Resources\StudentGraduationImporter;
-
-use Filament\Actions\ExportAction;
-
 use App\Filament\Actions\ExcelImportAction;
-
+use App\Filament\Exports\StudentGraduationExporter;
+use App\Filament\Imports\Resources\StudentGraduationImporter;
 use App\Filament\Resources\StudentGraduations\StudentGraduationResource;
 use Filament\Actions\CreateAction;
+use Filament\Actions\ExportAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListStudentGraduations extends ListRecords
@@ -25,7 +21,7 @@ class ListStudentGraduations extends ListRecords
                 ->exporter(StudentGraduationExporter::class),
             ExcelImportAction::make()
                 ->importer(StudentGraduationImporter::class),
-CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

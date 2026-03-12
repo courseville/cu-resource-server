@@ -2,33 +2,31 @@
 
 namespace App\Filament\Resources\Interviewers;
 
-use Filament\Schemas\Schema;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Tables\Columns\TextColumn;
 use App\Filament\Exports\Resources\InterviewerExporter;
 use App\Filament\Resources\Interviewers\Pages\CreateInterviewer;
 use App\Filament\Resources\Interviewers\Pages\EditInterviewer;
 use App\Filament\Resources\Interviewers\Pages\ListInterviewers;
-use App\Filament\Resources\InterviewerResource\Pages;
 use App\Models\Resources\Interviewer;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ExportBulkAction;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class InterviewerResource extends Resource
 {
     protected static ?string $model = Interviewer::class;
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Academic';
+    protected static string|\UnitEnum|null $navigationGroup = 'Academic';
 
     protected static ?string $navigationLabel = 'Interviewer';
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-users';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $pluralModelLabel = 'Interviewers';
 
