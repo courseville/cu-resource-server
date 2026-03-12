@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\FulltimePersonnels\Tables;
 
+use App\Filament\Exports\Resources\FulltimePersonnelExporter;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ExportBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -45,6 +47,8 @@ class FulltimePersonnelsTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    ExportBulkAction::make()
+                        ->exporter(FulltimePersonnelExporter::class),
                 ]),
             ]);
     }

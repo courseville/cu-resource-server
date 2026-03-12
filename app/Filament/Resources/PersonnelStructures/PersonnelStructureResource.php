@@ -5,14 +5,16 @@ namespace App\Filament\Resources\PersonnelStructures;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Actions\EditAction;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
+use App\Filament\Exports\Resources\StructureExporter;
 use App\Filament\Resources\PersonnelStructures\Pages\ListPersonnelStructures;
 use App\Filament\Resources\PersonnelStructures\Pages\CreatePersonnelStructure;
 use App\Filament\Resources\PersonnelStructures\Pages\EditPersonnelStructure;
 use App\Filament\Resources\PersonnelStructureResource\Pages;
 use App\Models\Resources\Structure;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ExportBulkAction;
 use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -65,6 +67,8 @@ class PersonnelStructureResource extends Resource
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    ExportBulkAction::make()
+                        ->exporter(StructureExporter::class),
                 ]),
             ]);
     }

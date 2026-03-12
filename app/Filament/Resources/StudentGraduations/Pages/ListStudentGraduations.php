@@ -2,6 +2,14 @@
 
 namespace App\Filament\Resources\StudentGraduations\Pages;
 
+use App\Filament\Exports\StudentGraduationExporter;
+
+use App\Filament\Imports\Resources\StudentGraduationImporter;
+
+use Filament\Actions\ExportAction;
+
+use App\Filament\Actions\ExcelImportAction;
+
 use App\Filament\Resources\StudentGraduations\StudentGraduationResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
@@ -13,7 +21,11 @@ class ListStudentGraduations extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            ExportAction::make()
+                ->exporter(StudentGraduationExporter::class),
+            ExcelImportAction::make()
+                ->importer(StudentGraduationImporter::class),
+CreateAction::make(),
         ];
     }
 }

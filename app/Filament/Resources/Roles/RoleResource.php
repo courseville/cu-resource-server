@@ -6,6 +6,7 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
+use App\Filament\Exports\RoleExporter;
 use App\Filament\Resources\Roles\Pages\ListRoles;
 use App\Filament\Resources\Roles\Pages\CreateRole;
 use App\Filament\Resources\Roles\Pages\EditRole;
@@ -13,6 +14,9 @@ use App\Filament\Resources\Roles\RelationManagers\PermissionsRelationManager;
 use App\Filament\Resources\RoleResource\Pages;
 use App\Filament\Resources\RoleResource\RelationManagers;
 use App\Models\Role;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ExportBulkAction;
 use Filament\Forms;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -56,8 +60,13 @@ class RoleResource extends Resource
                 // TextColumn::make('created_at')->dateTime()->sortable(),
             ])
             ->filters([])
-            ->recordActions([EditAction::make(), DeleteAction::make()])
-            ->toolbarActions([]);
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                    ExportBulkAction::make()
+                        ->exporter(RoleExporter::class),
+                ]),
+            ]);
     }
 
     public static function getPages(): array

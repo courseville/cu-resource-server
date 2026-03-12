@@ -2,6 +2,14 @@
 
 namespace App\Filament\Resources\Curriculums\Pages;
 
+use App\Filament\Exports\CurriculumExporter;
+
+use App\Filament\Imports\Resources\CurriculumImporter;
+
+use Filament\Actions\ExportAction;
+
+use App\Filament\Actions\ExcelImportAction;
+
 use App\Filament\Resources\Curriculums\CurriculumResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
@@ -13,7 +21,11 @@ class ListCurriculums extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            ExportAction::make()
+                ->exporter(CurriculumExporter::class),
+            ExcelImportAction::make()
+                ->importer(CurriculumImporter::class),
+CreateAction::make(),
         ];
     }
 }

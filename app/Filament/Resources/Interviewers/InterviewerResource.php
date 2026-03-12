@@ -6,14 +6,16 @@ use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Actions\EditAction;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use App\Filament\Resources\Interviewers\Pages\ListInterviewers;
+use App\Filament\Exports\Resources\InterviewerExporter;
 use App\Filament\Resources\Interviewers\Pages\CreateInterviewer;
 use App\Filament\Resources\Interviewers\Pages\EditInterviewer;
+use App\Filament\Resources\Interviewers\Pages\ListInterviewers;
 use App\Filament\Resources\InterviewerResource\Pages;
 use App\Models\Resources\Interviewer;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ExportBulkAction;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -68,6 +70,8 @@ class InterviewerResource extends Resource
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    ExportBulkAction::make()
+                        ->exporter(InterviewerExporter::class),
                 ]),
             ]);
     }

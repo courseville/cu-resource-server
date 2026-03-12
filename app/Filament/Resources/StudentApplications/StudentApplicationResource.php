@@ -5,14 +5,16 @@ namespace App\Filament\Resources\StudentApplications;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Actions\EditAction;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
+use App\Filament\Exports\Resources\StudentApplicationExporter;
 use App\Filament\Resources\StudentApplications\Pages\ListStudentApplications;
 use App\Filament\Resources\StudentApplications\Pages\CreateStudentApplication;
 use App\Filament\Resources\StudentApplications\Pages\EditStudentApplication;
 use App\Filament\Resources\StudentApplicationResource\Pages;
 use App\Models\Resources\StudentApplication;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ExportBulkAction;
 use Filament\Forms\Components;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -88,6 +90,8 @@ class StudentApplicationResource extends Resource
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    ExportBulkAction::make()
+                        ->exporter(StudentApplicationExporter::class),
                 ]),
             ]);
     }

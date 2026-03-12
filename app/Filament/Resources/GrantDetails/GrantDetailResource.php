@@ -6,14 +6,16 @@ use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\BooleanColumn;
-use Filament\Actions\EditAction;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
+use App\Filament\Exports\Resources\GrantDetailExporter;
 use App\Filament\Resources\GrantDetails\Pages\ListGrantDetails;
 use App\Filament\Resources\GrantDetails\Pages\CreateGrantDetail;
 use App\Filament\Resources\GrantDetails\Pages\EditGrantDetail;
 use App\Filament\Resources\GrantDetailResource\Pages;
 use App\Models\Resources\GrantDetail;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ExportBulkAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -92,6 +94,8 @@ class GrantDetailResource extends Resource
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    ExportBulkAction::make()
+                        ->exporter(GrantDetailExporter::class),
                 ]),
             ]);
     }

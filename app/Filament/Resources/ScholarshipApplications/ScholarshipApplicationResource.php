@@ -6,14 +6,16 @@ use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Grid;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Actions\EditAction;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use App\Filament\Resources\ScholarshipApplications\Pages\ListScholarshipApplications;
+use App\Filament\Exports\Resources\ScholarshipApplicationExporter;
 use App\Filament\Resources\ScholarshipApplications\Pages\CreateScholarshipApplication;
 use App\Filament\Resources\ScholarshipApplications\Pages\EditScholarshipApplication;
+use App\Filament\Resources\ScholarshipApplications\Pages\ListScholarshipApplications;
 use App\Filament\Resources\ScholarshipApplicationResource\Pages;
 use App\Models\Resources\ScholarshipApplication;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ExportBulkAction;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -227,6 +229,8 @@ class ScholarshipApplicationResource extends Resource
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    ExportBulkAction::make()
+                        ->exporter(ScholarshipApplicationExporter::class),
                 ]),
             ]);
     }

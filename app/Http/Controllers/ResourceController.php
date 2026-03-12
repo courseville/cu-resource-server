@@ -16,17 +16,20 @@ class ResourceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, string $entity)
+    public function index(Request $request, string $entity = null)
     {
-        // Check if the table exists
-        if (! Schema::hasTable($entity)) {
-            abort(404, 'Table not found');
+        $entity = $entity ?? $request->segment(3);
+        
+        // Find model class
+        $modelClass = $this->resolveModelClass($entity);
+
+        if (! $modelClass || ! class_exists($modelClass)) {
+            abort(404, 'Model not found for entity: ' . $entity);
         }
 
-        $modelClass = 'App\\Models\\Resources\\'.Str::studly(Str::singular($entity));
-
-        if (! class_exists($modelClass)) {
-            abort(404, 'Model not found');
+        // Check if the table exists
+        if (! Schema::hasTable((new $modelClass)->getTable())) {
+            abort(404, 'Table not found');
         }
 
         // Check permission
@@ -63,16 +66,22 @@ class ResourceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $entity, string $id)
+    public function show(string $entity, string $id = null)
     {
-        // Check if the table exists
-        if (! Schema::hasTable($entity)) {
-            abort(404, 'Table not found');
+        // If entity looks like an ID (numeric or long string), it might be the second param redirected
+        if (is_null($id)) {
+            $id = $entity;
+            $entity = request()->segment(3);
         }
 
-        $modelClass = 'App\\Models\\Resources\\'.Str::studly(Str::singular($entity));
-        if (! class_exists($modelClass)) {
+        $modelClass = $this->resolveModelClass($entity);
+        if (! $modelClass || ! class_exists($modelClass)) {
             abort(404, 'Model not found');
+        }
+
+        // Check if the table exists
+        if (! Schema::hasTable((new $modelClass)->getTable())) {
+            abort(404, 'Table not found');
         }
 
         // Check primary key from PkModel
@@ -106,5 +115,24 @@ class ResourceController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    protected function resolveModelClass(string $entity): ?string
+    {
+        $singular = Str::studly(Str::singular($entity));
+        
+        $namespaces = [
+            'App\\Models\\Resources\\',
+            'App\\Models\\',
+        ];
+
+        foreach ($namespaces as $namespace) {
+            $class = $namespace . $singular;
+            if (class_exists($class)) {
+                return $class;
+            }
+        }
+
+        return null;
     }
 }

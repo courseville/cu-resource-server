@@ -2,6 +2,14 @@
 
 namespace App\Filament\Resources\TransformerMappings\Pages;
 
+use App\Filament\Exports\TransformerMappingExporter;
+
+use App\Filament\Imports\TransformerMappingImporter;
+
+use Filament\Actions\ExportAction;
+
+use App\Filament\Actions\ExcelImportAction;
+
 use Filament\Actions\CreateAction;
 use App\Filament\Resources\TransformerMappings\TransformerMappingResource;
 use Filament\Actions;
@@ -14,7 +22,11 @@ class ListTransformerMappings extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            ExportAction::make()
+                ->exporter(TransformerMappingExporter::class),
+            ExcelImportAction::make()
+                ->importer(TransformerMappingImporter::class),
+CreateAction::make(),
         ];
     }
 }

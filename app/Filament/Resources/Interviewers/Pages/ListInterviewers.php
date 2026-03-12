@@ -2,6 +2,14 @@
 
 namespace App\Filament\Resources\Interviewers\Pages;
 
+use App\Filament\Exports\Resources\InterviewerExporter;
+
+use App\Filament\Imports\Resources\InterviewerImporter;
+
+use Filament\Actions\ExportAction;
+
+use App\Filament\Actions\ExcelImportAction;
+
 use Filament\Actions\CreateAction;
 use App\Filament\Resources\Interviewers\InterviewerResource;
 use Filament\Actions;
@@ -14,7 +22,11 @@ class ListInterviewers extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            ExportAction::make()
+                ->exporter(InterviewerExporter::class),
+            ExcelImportAction::make()
+                ->importer(InterviewerImporter::class),
+CreateAction::make(),
         ];
     }
 }

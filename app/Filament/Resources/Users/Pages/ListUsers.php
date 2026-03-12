@@ -2,6 +2,14 @@
 
 namespace App\Filament\Resources\Users\Pages;
 
+use App\Filament\Exports\UserExporter;
+
+use App\Filament\Imports\UserImporter;
+
+use Filament\Actions\ExportAction;
+
+use App\Filament\Actions\ExcelImportAction;
+
 use Filament\Actions\CreateAction;
 use App\Filament\Resources\Users\UserResource;
 use Filament\Actions;
@@ -14,7 +22,11 @@ class ListUsers extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            ExportAction::make()
+                ->exporter(UserExporter::class),
+            ExcelImportAction::make()
+                ->importer(UserImporter::class),
+CreateAction::make(),
         ];
     }
 }

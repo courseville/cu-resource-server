@@ -5,14 +5,17 @@ namespace App\Filament\Resources\Scholarships;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Actions\EditAction;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use App\Filament\Resources\Scholarships\Pages\ListScholarships;
+use App\Filament\Exports\Resources\ScholarshipExporter;
 use App\Filament\Resources\Scholarships\Pages\CreateScholarship;
 use App\Filament\Resources\Scholarships\Pages\EditScholarship;
+use App\Filament\Resources\Scholarships\Pages\ListScholarships;
 use App\Filament\Resources\ScholarshipResource\Pages;
+use App\Filament\Resources\ScholarshipResource\RelationManagers;
 use App\Models\Resources\Scholarship;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ExportBulkAction;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -74,6 +77,8 @@ class ScholarshipResource extends Resource
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    ExportBulkAction::make()
+                        ->exporter(ScholarshipExporter::class),
                 ]),
             ]);
     }

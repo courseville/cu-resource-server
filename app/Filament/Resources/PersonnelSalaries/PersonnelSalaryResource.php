@@ -4,14 +4,16 @@ namespace App\Filament\Resources\PersonnelSalaries;
 
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
-use Filament\Actions\EditAction;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
+use App\Filament\Exports\Resources\PersonnelSalaryExporter;
 use App\Filament\Resources\PersonnelSalaries\Pages\ListPersonnelSalaries;
 use App\Filament\Resources\PersonnelSalaries\Pages\CreatePersonnelSalary;
 use App\Filament\Resources\PersonnelSalaries\Pages\EditPersonnelSalary;
 use App\Filament\Resources\PersonnelSalaryResource\Pages;
 use App\Models\Resources\PersonnelSalary;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ExportBulkAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -72,6 +74,8 @@ class PersonnelSalaryResource extends Resource
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    ExportBulkAction::make()
+                        ->exporter(PersonnelSalaryExporter::class),
                 ]),
             ]);
     }

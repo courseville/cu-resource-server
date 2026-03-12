@@ -4,13 +4,16 @@ namespace App\Filament\Resources\TransformerMappings;
 
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
-use Filament\Actions\EditAction;
-use Filament\Actions\DeleteAction;
+use App\Filament\Exports\TransformerMappingExporter;
 use App\Filament\Resources\TransformerMappings\Pages\ListTransformerMappings;
 use App\Filament\Resources\TransformerMappings\Pages\CreateTransformerMapping;
 use App\Filament\Resources\TransformerMappings\Pages\EditTransformerMapping;
 use App\Filament\Resources\TransformerMappingResource\Pages;
 use App\Models\TransformerMapping;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ExportBulkAction;
 use Filament\Forms;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -57,8 +60,13 @@ class TransformerMappingResource extends Resource
                 TextColumn::make('created_at')->dateTime()->sortable(),
             ])
             ->filters([])
-            ->recordActions([EditAction::make(), DeleteAction::make()])
-            ->toolbarActions([]);
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                    ExportBulkAction::make()
+                        ->exporter(TransformerMappingExporter::class),
+                ]),
+            ]);
     }
 
     public static function getPages(): array

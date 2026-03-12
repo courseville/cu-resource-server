@@ -10,6 +10,8 @@ class Curriculum extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable, HasDomainScope;
 
+    protected $table = 'curriculums';
+
     protected $fillable = [
         'course_code_no',
         'major_code',

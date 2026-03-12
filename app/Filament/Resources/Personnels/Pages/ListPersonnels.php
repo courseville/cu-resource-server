@@ -2,6 +2,14 @@
 
 namespace App\Filament\Resources\Personnels\Pages;
 
+use App\Filament\Exports\Resources\PersonnelExporter;
+
+use App\Filament\Imports\Resources\PersonnelImporter;
+
+use Filament\Actions\ExportAction;
+
+use App\Filament\Actions\ExcelImportAction;
+
 use Filament\Actions\CreateAction;
 use App\Filament\Resources\Personnels\PersonnelResource;
 use Filament\Actions;
@@ -14,7 +22,11 @@ class ListPersonnels extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            ExportAction::make()
+                ->exporter(PersonnelExporter::class),
+            ExcelImportAction::make()
+                ->importer(PersonnelImporter::class),
+CreateAction::make(),
         ];
     }
 }

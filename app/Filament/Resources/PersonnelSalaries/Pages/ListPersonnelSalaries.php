@@ -2,6 +2,14 @@
 
 namespace App\Filament\Resources\PersonnelSalaries\Pages;
 
+use App\Filament\Exports\Resources\PersonnelSalaryExporter;
+
+use App\Filament\Imports\Resources\PersonnelSalaryImporter;
+
+use Filament\Actions\ExportAction;
+
+use App\Filament\Actions\ExcelImportAction;
+
 use Filament\Actions\CreateAction;
 use App\Filament\Resources\PersonnelSalaries\PersonnelSalaryResource;
 use Filament\Actions;
@@ -14,7 +22,11 @@ class ListPersonnelSalaries extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            ExportAction::make()
+                ->exporter(PersonnelSalaryExporter::class),
+            ExcelImportAction::make()
+                ->importer(PersonnelSalaryImporter::class),
+CreateAction::make(),
         ];
     }
 }

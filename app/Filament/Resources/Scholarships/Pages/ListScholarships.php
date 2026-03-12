@@ -2,6 +2,14 @@
 
 namespace App\Filament\Resources\Scholarships\Pages;
 
+use App\Filament\Exports\Resources\ScholarshipExporter;
+
+use App\Filament\Imports\Resources\ScholarshipImporter;
+
+use Filament\Actions\ExportAction;
+
+use App\Filament\Actions\ExcelImportAction;
+
 use Filament\Actions\CreateAction;
 use App\Filament\Resources\Scholarships\ScholarshipResource;
 use Filament\Actions;
@@ -14,7 +22,11 @@ class ListScholarships extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            ExportAction::make()
+                ->exporter(ScholarshipExporter::class),
+            ExcelImportAction::make()
+                ->importer(ScholarshipImporter::class),
+CreateAction::make(),
         ];
     }
 }
