@@ -17,10 +17,10 @@ class ListPassportClients extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            ExportAction::make()
-                ->exporter(PassportClientExporter::class),
-            ExcelImportAction::make()
-                ->importer(PassportClientImporter::class),
+            // ExportAction::make()
+            //     ->exporter(PassportClientExporter::class),
+            // ExcelImportAction::make()
+            //     ->importer(PassportClientImporter::class),
             CreateAction::make(),
         ];
     }

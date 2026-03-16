@@ -17,10 +17,10 @@ class ListPassportTokens extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            ExportAction::make()
-                ->exporter(PassportTokenExporter::class),
-            ExcelImportAction::make()
-                ->importer(PassportTokenImporter::class),
+            // ExportAction::make()
+            //     ->exporter(PassportTokenExporter::class),
+            // ExcelImportAction::make()
+            //     ->importer(PassportTokenImporter::class),
             CreateAction::make(),
         ];
     }

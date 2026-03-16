@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\Api\StudentCurriculumController;
 use App\Http\Controllers\ResourceController;
-use App\Http\Controllers\Resources\PersonnelController;
-use App\Http\Controllers\Resources\StructureController;
-use App\Http\Controllers\Resources\StudentController;
+use App\Http\Controllers\Api\PersonnelController;
+use App\Http\Controllers\Api\StructureController;
+use App\Http\Controllers\Api\StudentController;
 use App\Models\DataSource;
 use App\Models\User;
 use App\Services\PermissionService;
@@ -106,6 +106,7 @@ Route::prefix('v1')->middleware('clients')->group(function () {
     Route::get('/structures/{structure:structure_id}', [StructureController::class, 'show'])->name('structures.show');
 
     Route::get('/students', [StudentController::class, 'index'])->name('students.index');
+    Route::get('/students/export', [StudentController::class, 'export'])->name('students.export');
     Route::get('/students/{student:student_code}', [StudentController::class, 'show'])->name('students.show');
     Route::get('/student-curriculums', [StudentCurriculumController::class, 'index'])->name('student-curriculums.index');
     Route::get('/student-curriculums/{studentCurriculum}', [StudentCurriculumController::class, 'show'])->name('student-curriculums.show');
