@@ -43,10 +43,10 @@ class CourseInstructorsTable
                 //
             ])
             ->headerActions([
-                ExcelImportAction::make()
-                    ->importer(CourseInstructorImporter::class),
-                ExportAction::make()
-                    ->exporter(CourseInstructorExporter::class),
+                // ExcelImportAction::make()
+                //     ->importer(CourseInstructorImporter::class),
+                // ExportAction::make()
+                //     ->exporter(CourseInstructorExporter::class),
             ])
             ->recordActions([
                 ViewAction::make(),

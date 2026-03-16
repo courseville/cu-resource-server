@@ -44,10 +44,10 @@ class ProgramCommitteesTable
                 //
             ])
             ->headerActions([
-                ExcelImportAction::make()
-                    ->importer(ProgramCommitteeImporter::class),
-                ExportAction::make()
-                    ->exporter(ProgramCommitteeExporter::class),
+                // ExcelImportAction::make()
+                //     ->importer(ProgramCommitteeImporter::class),
+                // ExportAction::make()
+                //     ->exporter(ProgramCommitteeExporter::class),
             ])
             ->recordActions([
                 ViewAction::make(),

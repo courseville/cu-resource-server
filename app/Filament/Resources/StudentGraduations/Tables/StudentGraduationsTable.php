@@ -43,10 +43,10 @@ class StudentGraduationsTable
                 //
             ])
             ->headerActions([
-                ExcelImportAction::make()
-                    ->importer(StudentGraduationImporter::class),
-                ExportAction::make()
-                    ->exporter(StudentGraduationExporter::class),
+                // ExcelImportAction::make()
+                //     ->importer(StudentGraduationImporter::class),
+                // ExportAction::make()
+                //     ->exporter(StudentGraduationExporter::class),
             ])
             ->recordActions([
                 ViewAction::make(),

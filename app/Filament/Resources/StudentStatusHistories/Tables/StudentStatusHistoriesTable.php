@@ -44,10 +44,10 @@ class StudentStatusHistoriesTable
                 //
             ])
             ->headerActions([
-                ExcelImportAction::make()
-                    ->importer(StudentStatusHistoryImporter::class),
-                ExportAction::make()
-                    ->exporter(StudentStatusHistoryExporter::class),
+                // ExcelImportAction::make()
+                //     ->importer(StudentStatusHistoryImporter::class),
+                // ExportAction::make()
+                //     ->exporter(StudentStatusHistoryExporter::class),
             ])
             ->recordActions([
                 ViewAction::make(),

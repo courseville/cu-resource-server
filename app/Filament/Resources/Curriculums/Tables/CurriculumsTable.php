@@ -42,10 +42,10 @@ class CurriculumsTable
                 //
             ])
             ->headerActions([
-                ExcelImportAction::make()
-                    ->importer(CurriculumImporter::class),
-                ExportAction::make()
-                    ->exporter(CurriculumExporter::class),
+                // ExcelImportAction::make()
+                //     ->importer(CurriculumImporter::class),
+                // ExportAction::make()
+                //     ->exporter(CurriculumExporter::class),
             ])
             ->recordActions([
                 ViewAction::make(),

@@ -45,10 +45,10 @@ class CourseSchedulesTable
                 //
             ])
             ->headerActions([
-                ExcelImportAction::make()
-                    ->importer(CourseScheduleImporter::class),
-                ExportAction::make()
-                    ->exporter(CourseScheduleExporter::class),
+                // ExcelImportAction::make()
+                //     ->importer(CourseScheduleImporter::class),
+                // ExportAction::make()
+                //     ->exporter(CourseScheduleExporter::class),
             ])
             ->recordActions([
                 ViewAction::make(),

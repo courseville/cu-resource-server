@@ -43,10 +43,10 @@ class AcademicProgramsTable
                 //
             ])
             ->headerActions([
-                ExcelImportAction::make()
-                    ->importer(AcademicProgramImporter::class),
-                ExportAction::make()
-                    ->exporter(AcademicProgramExporter::class),
+                // ExcelImportAction::make()
+                //     ->importer(AcademicProgramImporter::class),
+                // ExportAction::make()
+                //     ->exporter(AcademicProgramExporter::class),
             ])
             ->recordActions([
                 ViewAction::make(),
