@@ -8,8 +8,6 @@ class User extends OpenLDAPUser
 {
     /**
      * The attribute that should be used for identification.
-     *
-     * @var string
      */
-    protected static string $username = 'mail';
+    public static string $username = 'mail';
 }
