@@ -24,6 +24,10 @@ class CourseSchedulesTable
                     ->label('Course Code')
                     ->sortable()
                     ->searchable(),
+                TextColumn::make('course_name')
+                    ->label('Course Name')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('year')
                     ->label('Year')
                     ->sortable(),
@@ -33,12 +37,11 @@ class CourseSchedulesTable
                 TextColumn::make('section')
                     ->label('Section')
                     ->sortable(),
-                TextColumn::make('daycode')
-                    ->label('Day')
-                    ->sortable(),
-                TextColumn::make('teach_time_from')
+                TextColumn::make('day1')
+                    ->label('Day'),
+                TextColumn::make('start_time')
                     ->label('From'),
-                TextColumn::make('teach_time_to')
+                TextColumn::make('end_time')
                     ->label('To'),
             ])
             ->filters([
