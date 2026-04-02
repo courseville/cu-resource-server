@@ -23,7 +23,7 @@ class RolePermissionSeeder extends Seeder
         ];
 
         // Insert roles
-        DB::table('roles')->insert(array_map(fn ($role) => [
+        DB::table('roles')->updateOrInsert(array_map(fn ($role) => [
             'name' => $role['name'],
             'description' => $role['description'],
             'created_at' => Carbon::now(),
@@ -32,6 +32,7 @@ class RolePermissionSeeder extends Seeder
 
         // Preset permissions for User-related actions
         $permissions = [
+            ['name' => 'access_admin_panel', 'action' => 'view', 'model' => null, 'columns' => null],
             ['name' => 'view_users', 'action' => 'view', 'model' => 'App\Models\User', 'columns' => json_encode(['id', 'name', 'email'])],
             ['name' => 'view_user_name', 'action' => 'view', 'model' => 'App\Models\User', 'columns' => json_encode(['name'])],
             ['name' => 'edit_users', 'action' => 'edit', 'model' => 'App\Models\User', 'columns' => json_encode(['name', 'email'])],
@@ -42,7 +43,7 @@ class RolePermissionSeeder extends Seeder
 
         // Insert permissions
         foreach ($permissions as $perm) {
-            DB::table('permissions')->insert([
+            DB::table('permissions')->updateOrInsert([
                 'name' => $perm['name'],
                 'action' => $perm['action'],
                 'model' => $perm['model'],
@@ -67,7 +68,7 @@ class RolePermissionSeeder extends Seeder
 
             foreach ($perms as $perm) {
                 $permId = DB::table('permissions')->where('name', $perm)->value('id');
-                DB::table('permission_role')->insert([
+                DB::table('permission_role')->updateOrInsert([
                     'role_id' => $roleId,
                     'permission_id' => $permId,
                     'created_at' => Carbon::now(),
@@ -76,16 +77,16 @@ class RolePermissionSeeder extends Seeder
             }
         }
 
-        // Assign roles to example users
-        DB::table('role_user')->insert([
-            ['user_id' => DB::table('users')->where('name', '2')->value('id'), 'role_id' => DB::table('roles')->where('name', 'admin')->value('id')],
-            ['user_id' => DB::table('users')->where('name', '3')->value('id'), 'role_id' => DB::table('roles')->where('name', 'faculty')->value('id')],
-            ['user_id' => DB::table('users')->where('name', '4')->value('id'), 'role_id' => DB::table('roles')->where('name', 'student')->value('id')],
-        ]);
+        // // Assign roles to example users
+        // DB::table('role_user')->insert([
+        //     ['user_id' => DB::table('users')->where('name', '2')->value('id'), 'role_id' => DB::table('roles')->where('name', 'admin')->value('id')],
+        //     ['user_id' => DB::table('users')->where('name', '3')->value('id'), 'role_id' => DB::table('roles')->where('name', 'faculty')->value('id')],
+        //     ['user_id' => DB::table('users')->where('name', '4')->value('id'), 'role_id' => DB::table('roles')->where('name', 'student')->value('id')],
+        // ]);
 
-        // Optionally, assign roles to the OAuth clients (if needed)
-        DB::table('oauth_client_role')->insert([
-            ['oauth_client_id' => DB::table('oauth_clients')->where('name', 'Client with User Data')->value('id'), 'role_id' => DB::table('roles')->where('name', 'client_full_access')->value('id')],
-        ]);
+        // // Optionally, assign roles to the OAuth clients (if needed)
+        // DB::table('oauth_client_role')->insert([
+        //     ['oauth_client_id' => DB::table('oauth_clients')->where('name', 'Client with User Data')->value('id'), 'role_id' => DB::table('roles')->where('name', 'client_full_access')->value('id')],
+        // ]);
     }
 }

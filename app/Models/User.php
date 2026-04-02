@@ -75,8 +75,6 @@ class User extends Authenticatable implements FilamentUser, LdapAuthenticatable
             return true; // Allow access in local environment
         }
 
-        // Allow all users to access the panel for now
-        // Later, we can restrict this based on LDAP attributes or roles
-        return false;
+        return $this->permissions()->contains('name', 'access_admin_panel');
     }
 }
