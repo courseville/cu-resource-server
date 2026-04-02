@@ -77,6 +77,6 @@ class User extends Authenticatable implements FilamentUser, LdapAuthenticatable
 
         // Allow all users to access the panel for now
         // Later, we can restrict this based on LDAP attributes or roles
-        return true;
+        return false;
     }
 }
