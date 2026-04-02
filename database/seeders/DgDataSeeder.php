@@ -43,22 +43,32 @@ class DgDataSeeder extends Seeder
                 ],
             ],
             'DG0202' => [
-                'model' => \App\Models\Resources\StudentStatusHistory::class,
-                'fields' => [
-                    'student_code' => 'STUDENTCODE',
-                    'name_thai' => 'NAME_THAI',
-                    'name_english' => 'NAME_ENGLISH',
-                    'status' => 'STATUS',
-                    'effect_date' => 'EFFECTDATE',
-                    'from_acad_year' => 'FROMACADYEAR',
-                    'from_semester' => 'FROMSEMESTER',
-                    'to_acad_year' => 'TOACADYEAR',
-                    'to_semester' => 'TOSEMESTER',
-                    'instruction_no' => 'INSTRUCTIONNO',
-                    'announcement' => 'ANNOUNCEMENT',
-                    'faccode' => 'FACCODE',
-                    'depcode' => 'DEPCODE',
-                    'majorcode' => 'MAJORCODE',
+                [
+                    'model' => \App\Models\Resources\StudentStatusHistory::class,
+                    'fields' => [
+                        'student_code' => 'STUDENTCODE',
+                        'name_thai' => 'NAME_THAI',
+                        'name_english' => 'NAME_ENGLISH',
+                        'status' => 'STATUS',
+                        'effect_date' => 'EFFECTDATE',
+                        'from_acad_year' => 'FROMACADYEAR',
+                        'from_semester' => 'FROMSEMESTER',
+                        'to_acad_year' => 'TOACADYEAR',
+                        'to_semester' => 'TOSEMESTER',
+                        'instruction_no' => 'INSTRUCTIONNO',
+                        'announcement' => 'ANNOUNCEMENT',
+                        'faccode' => 'FACCODE',
+                        'depcode' => 'DEPCODE',
+                        'majorcode' => 'MAJORCODE',
+                    ],
+                ],
+                [
+                    'model' => \App\Models\Resources\Student::class,
+                    'fields' => [
+                        'student_id' => 'STUDENTCODE',
+                        'full_name_th' => 'NAME_THAI',
+                        'full_name_en' => 'NAME_ENGLISH',
+                    ],
                 ],
             ],
             'DG0203' => [
@@ -232,49 +242,54 @@ class DgDataSeeder extends Seeder
         ];
 
         DB::transaction(function () use ($dgMappings) {
-            foreach ($dgMappings as $dgCode => $config) {
+            foreach ($dgMappings as $dgCode => $configs) {
                 // 1. Create or update the DataSource
                 $dataSource = DataSource::updateOrCreate(
                     ['name' => $dgCode],
                     ['url' => "storage:local:dg/{$dgCode}.csv"]
                 );
 
-                // 2. Update PkModel for this resource
-                // Use explicit 'pks' if defined, otherwise fallback to the first field
-                $pkField = $config['pks'] ?? array_key_first($config['fields']);
-                \App\Models\PkModel::updateOrCreate(
-                    ['model' => $config['model']],
-                    ['primary_key' => $pkField]
-                );
+                // Determine if it's a single configuration or multiple
+                $configList = (isset($configs['model'])) ? [$configs] : $configs;
 
-                // 3. Update Transformer Mappings
-                $sourceId = $dataSource->id;
-                $modelClass = $config['model'];
-                $currentFields = array_keys($config['fields']);
-
-                // Delete any existing mappings for this model/source NOT in the seeder
-                TransformerMapping::where('data_source_id', $sourceId)
-                    ->where('model', $modelClass)
-                    ->whereNotIn('field', $currentFields)
-                    ->delete();
-
-                // Update or create mappings from the seeder
-                foreach ($config['fields'] as $fillableField => $csvHeader) {
-                    TransformerMapping::updateOrCreate(
-                        [
-                            'data_source_id' => $sourceId,
-                            'model' => $modelClass,
-                            'field' => $fillableField,
-                        ],
-                        [
-                            'mapping' => $csvHeader,
-                            'formatting' => json_encode([]),
-                            'updated_at' => Carbon::now(),
-                        ]
+                foreach ($configList as $config) {
+                    // 2. Update PkModel for this resource
+                    // Use explicit 'pks' if defined, otherwise fallback to the first field
+                    $pkField = $config['pks'] ?? array_key_first($config['fields']);
+                    \App\Models\PkModel::updateOrCreate(
+                        ['model' => $config['model']],
+                        ['primary_key' => $pkField]
                     );
-                }
 
-                $this->command->info("Updated mappings for DataSource: {$dgCode}");
+                    // 3. Update Transformer Mappings
+                    $sourceId = $dataSource->id;
+                    $modelClass = $config['model'];
+                    $currentFields = array_keys($config['fields']);
+
+                    // Delete any existing mappings for this model/source NOT in the seeder
+                    TransformerMapping::where('data_source_id', $sourceId)
+                        ->where('model', $modelClass)
+                        ->whereNotIn('field', $currentFields)
+                        ->delete();
+
+                    // Update or create mappings from the seeder
+                    foreach ($config['fields'] as $fillableField => $csvHeader) {
+                        TransformerMapping::updateOrCreate(
+                            [
+                                'data_source_id' => $sourceId,
+                                'model' => $modelClass,
+                                'field' => $fillableField,
+                            ],
+                            [
+                                'mapping' => $csvHeader,
+                                'formatting' => json_encode([]),
+                                'updated_at' => Carbon::now(),
+                            ]
+                        );
+                    }
+
+                    $this->command->info("Updated mappings for DataSource: {$dgCode} (Model: {$modelClass})");
+                }
             }
         });
 

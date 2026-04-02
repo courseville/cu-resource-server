@@ -24,12 +24,12 @@ class StudentsTable
                     ->label('Student ID')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('first_name_th')
-                    ->label('First Name (TH)')
+                TextColumn::make('full_name_th')
+                    ->label('Full Name (TH)')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('last_name_th')
-                    ->label('Last Name (TH)')
+                TextColumn::make('full_name_en')
+                    ->label('Full Name (EN)')
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('fac_name')
