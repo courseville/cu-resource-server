@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('major_code')->index();
             $table->string('degree')->nullable();
             $table->string('major')->nullable();
-            $table->integer('no_year_study')->nullable();
+            $table->string('no_year_study')->nullable();
             $table->string('plan1')->nullable();
             $table->string('language1')->nullable();
             $table->string('program_system')->nullable();
