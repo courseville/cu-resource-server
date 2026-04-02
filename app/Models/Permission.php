@@ -24,7 +24,7 @@ class Permission extends Model
     protected $fillable = ['name', 'action', 'model', 'columns'];
 
     protected $casts = [
-        'columns' => 'array', // Automatically cast 'columns' to an array
+        'columns' => 'array',
     ];
 
     public function roles()

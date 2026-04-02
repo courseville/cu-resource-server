@@ -10,7 +10,7 @@ use App\Models\Permission;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ExportBulkAction;
-use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -31,18 +31,10 @@ class PermissionResource extends Resource
                     ->required()
                     ->maxLength(255),
                 TextInput::make('action')
-                    ->required()
                     ->maxLength(255),
                 TextInput::make('model')
-                    ->required()
                     ->maxLength(255),
-                Repeater::make('columns')
-                    ->schema([
-                        TextInput::make('column')->label('Column Name'),
-                    ])
-                    ->label('Columns')
-                    ->required()
-                    ->columns(1),
+                TagsInput::make('columns'),
             ]);
     }
 
@@ -55,9 +47,7 @@ class PermissionResource extends Resource
                 TextColumn::make('model')->sortable()->searchable(),
                 TextColumn::make('columns')
                     ->label('Columns')
-                    ->formatStateUsing(function ($state) {
-                        return is_array($state) ? implode(', ', $state) : $state;
-                    }),
+                    ->badge(),
                 TextColumn::make('created_at')->dateTime()->sortable(),
             ])
             ->filters([])

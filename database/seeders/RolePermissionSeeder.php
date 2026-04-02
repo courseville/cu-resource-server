@@ -23,40 +23,46 @@ class RolePermissionSeeder extends Seeder
         ];
 
         // Insert roles
-        DB::table('roles')->updateOrInsert(array_map(fn ($role) => [
-            'name' => $role['name'],
-            'description' => $role['description'],
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ], $roles));
+        foreach ($roles as $role) {
+            DB::table('roles')->updateOrInsert(
+                ['name' => $role['name']],
+                [
+                    'description' => $role['description'],
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]
+            );
+        }
 
         // Preset permissions for User-related actions
         $permissions = [
             ['name' => 'access_admin_panel', 'action' => 'view', 'model' => null, 'columns' => null],
-            ['name' => 'view_users', 'action' => 'view', 'model' => 'App\Models\User', 'columns' => json_encode(['id', 'name', 'email'])],
-            ['name' => 'view_user_name', 'action' => 'view', 'model' => 'App\Models\User', 'columns' => json_encode(['name'])],
-            ['name' => 'edit_users', 'action' => 'edit', 'model' => 'App\Models\User', 'columns' => json_encode(['name', 'email'])],
-            ['name' => 'delete_users', 'action' => 'delete', 'model' => 'App\Models\User', 'columns' => json_encode(['id'])],
-            ['name' => 'view_courses', 'action' => 'view', 'model' => 'App\Models\Course', 'columns' => json_encode(['id', 'name'])],
-            ['name' => 'edit_courses', 'action' => 'edit', 'model' => 'App\Models\Course', 'columns' => json_encode(['name'])],
+            ['name' => 'view_users', 'action' => 'view', 'model' => 'App\Models\User', 'columns' => ['id', 'name', 'email']],
+            ['name' => 'view_user_name', 'action' => 'view', 'model' => 'App\Models\User', 'columns' => ['name']],
+            ['name' => 'edit_users', 'action' => 'edit', 'model' => 'App\Models\User', 'columns' => ['name', 'email']],
+            ['name' => 'delete_users', 'action' => 'delete', 'model' => 'App\Models\User', 'columns' => ['id']],
+            ['name' => 'view_courses', 'action' => 'view', 'model' => 'App\Models\Course', 'columns' => ['id', 'name']],
+            ['name' => 'edit_courses', 'action' => 'edit', 'model' => 'App\Models\Course', 'columns' => ['name']],
         ];
 
         // Insert permissions
         foreach ($permissions as $perm) {
-            DB::table('permissions')->updateOrInsert([
-                'name' => $perm['name'],
-                'action' => $perm['action'],
-                'model' => $perm['model'],
-                'columns' => json_encode($perm['columns']),
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]);
+            DB::table('permissions')->updateOrInsert(
+                ['name' => $perm['name']],
+                [
+                    'action' => $perm['action'],
+                    'model' => $perm['model'],
+                    'columns' => $perm['columns'] ? json_encode($perm['columns']) : null,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]
+            );
         }
 
         // Map roles to permissions
         $rolePermissions = [
-            'admin' => ['view_users', 'edit_users', 'delete_users', 'view_courses', 'edit_courses'],
-            'faculty' => ['view_users', 'view_courses', 'edit_courses'],
+            'admin' => ['access_admin_panel', 'view_users', 'edit_users', 'delete_users', 'view_courses', 'edit_courses'],
+            'faculty' => ['access_admin_panel', 'view_users', 'view_courses', 'edit_courses'],
             'student' => ['view_courses', 'view_user_name'],
             'client_readonly' => ['view_courses'],
             'client_full_access' => ['view_courses', 'view_users'],
@@ -68,12 +74,16 @@ class RolePermissionSeeder extends Seeder
 
             foreach ($perms as $perm) {
                 $permId = DB::table('permissions')->where('name', $perm)->value('id');
-                DB::table('permission_role')->updateOrInsert([
-                    'role_id' => $roleId,
-                    'permission_id' => $permId,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ]);
+                DB::table('permission_role')->updateOrInsert(
+                    [
+                        'role_id' => $roleId,
+                        'permission_id' => $permId,
+                    ],
+                    [
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                    ]
+                );
             }
         }
 
