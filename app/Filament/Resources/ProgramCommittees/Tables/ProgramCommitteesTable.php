@@ -37,7 +37,6 @@ class ProgramCommitteesTable
                     ->sortable(),
                 TextColumn::make('effective_date')
                     ->label('Effective Date')
-                    ->date()
                     ->sortable(),
             ])
             ->filters([

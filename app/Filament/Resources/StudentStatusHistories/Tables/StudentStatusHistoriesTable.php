@@ -34,7 +34,7 @@ class StudentStatusHistoriesTable
                     ->searchable(),
                 TextColumn::make('effect_date')
                     ->label('Effect Date')
-                    ->date()
+                    // ->date()
                     ->sortable(),
                 TextColumn::make('from_acad_year')
                     ->label('Year')

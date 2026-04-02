@@ -27,17 +27,25 @@ class CourseInstructorsTable
                 TextColumn::make('section')
                     ->label('Section')
                     ->sortable(),
-                TextColumn::make('instructor_no')
-                    ->label('Instructor No.')
-                    ->sortable()
-                    ->searchable(),
-                TextColumn::make('instructor_name')
-                    ->label('Instructor Name (Thai)')
-                    ->sortable()
-                    ->searchable(),
                 TextColumn::make('acad_year')
                     ->label('Year')
                     ->sortable(),
+                // TextColumn::make('instructor_no')
+                //     ->label('Instructor No.')
+                //     ->sortable()
+                //     ->searchable(),
+                TextColumn::make('position')
+                    ->label('Position')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('name_thai')
+                    ->label('Instructor Name (Thai)')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('surname_thai')
+                    ->label('Instructor Surname (Thai)')
+                    ->sortable()
+                    ->searchable(),
             ])
             ->filters([
                 //

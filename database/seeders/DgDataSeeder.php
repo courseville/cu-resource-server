@@ -93,9 +93,9 @@ class DgDataSeeder extends Seeder
             'DG0205' => [
                 'model' => \App\Models\Resources\StudentGraduation::class,
                 'fields' => [
+                    'student_code' => 'STUDENTCODE',
                     'acad_year' => 'ACADYEAR',
                     'semester' => 'SEMESTER',
-                    'student_code' => 'STUDENTCODE',
                     'name_thai' => 'NAME_THAI',
                     'name_english' => 'NAME_ENGLISH',
                     'major_thai' => 'MAJOR_THAI',
