@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (config('app.env') === 'local') {
-            Schema::create('courses', function (Blueprint $table) {
-                $table->id();
-                $table->string('name');
-                $table->text('description')->nullable();
-                $table->string('code')->unique(); // e.g., CSE101, MTH102
-                $table->integer('credits')->default(3); // Number of credits
-                $table->timestamps();
-            });
-        }
+        Schema::create('courses', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->string('code')->unique(); // e.g., CSE101, MTH102
+            $table->integer('credits')->default(3); // Number of credits
+            $table->timestamps();
+        });
     }
 
     /**
