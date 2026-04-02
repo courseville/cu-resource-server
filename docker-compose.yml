@@ -1,6 +1,46 @@
 version: '3.8'
 
 services:
+  # PHP Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mcv-app
+    restart: unless-stopped
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - REDIS_HOST=redis
+    volumes:
+      - ./.env:/var/www/.env
+      - app-storage:/var/www/storage
+      - app-cache:/var/www/bootstrap/cache
+    networks:
+      - mcv-network
+    depends_on:
+      - postgres
+      - redis
+
+  # Web Server (Nginx)
+  web:
+    image: nginx:alpine
+    container_name: mcv-web
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - mcv-network
+    depends_on:
+      - app
+
+  # Database (Existing)
   postgres:
     image: postgres:16
     container_name: postgres-db
@@ -13,7 +53,64 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - mcv-network
+
+  # Cache and Queue Driver
+  redis:
+    image: redis:alpine
+    container_name: mcv-redis
+    restart: unless-stopped
+    networks:
+      - mcv-network
+
+  # Queue Worker
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mcv-worker
+    restart: unless-stopped
+    command: php artisan queue:work --tries=3
+    environment:
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - REDIS_HOST=redis
+    volumes:
+      - ./.env:/var/www/.env
+      - app-storage:/var/www/storage
+    networks:
+      - mcv-network
+    depends_on:
+      - app
+      - redis
+
+  # Task Scheduler
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mcv-scheduler
+    restart: unless-stopped
+    command: /bin/sh -c "while [ true ]; do php artisan schedule:run; sleep 60; done"
+    environment:
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - REDIS_HOST=redis
+    volumes:
+      - ./.env:/var/www/.env
+      - app-storage:/var/www/storage
+    networks:
+      - mcv-network
+    depends_on:
+      - app
+
+networks:
+  mcv-network:
+    driver: bridge
 
 volumes:
   postgres_data:
     driver: local
+  app-storage:
+  app-cache:

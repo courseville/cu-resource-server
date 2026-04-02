@@ -22,7 +22,9 @@ class StudentStatusHistoryResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Resources';
+    protected static string|\UnitEnum|null $navigationGroup = 'CU Data Gateway';
+
+    protected static ?string $navigationLabel = 'Student Status History (DG0202)';
 
     public static function form(Schema $schema): Schema
     {

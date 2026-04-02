@@ -127,8 +127,6 @@ class DataTransformer
             }
         }
 
-        Log::info($str->toString());
-
         return $str->toString();
     }
 }

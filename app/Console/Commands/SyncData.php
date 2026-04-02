@@ -9,6 +9,7 @@ use App\Models\PkModel;
 use App\Transformers\DataTransformer;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class SyncData extends Command
@@ -32,11 +33,13 @@ class SyncData extends Command
      */
     public function handle()
     {
+        DB::disableQueryLog();
+
         // 1. Run the shell script to fetch CSV files via SFTP
         $this->info('Starting SFTP data fetch...');
 
-        if (app()->environment('testing')) {
-            $this->info('Skipping SFTP fetch in testing environment.');
+        if (app()->environment('testing', 'local')) {
+            $this->info('Skipping SFTP fetch in testing or local environment.');
         } else {
             // Executing the bash command as provided by the user
             $bashCommand = "cd ~/dg-scripts && sshpass -f .dg_password sftp -o StrictHostKeyChecking=no -o LogLevel=ERROR sftp_mcv@161.200.194.183 <<< $'lcd dg/\nmget DG*.csv\nbye'";
@@ -61,43 +64,141 @@ class SyncData extends Command
         foreach ($sources as $source) {
             $this->info("Processing data source: {$source->name} (URL: {$source->url})");
 
-            $rawData = $source->getData();
+            $filePath = $source->getFilePath();
 
-            if (! $rawData) {
-                $this->warn("No data found or failed to fetch from: {$source->url}");
+            if ($filePath && Str::endsWith(strtolower($filePath), '.csv')) {
+                $this->processCsvSource($source, $filePath);
+            } else {
+                $rawData = $source->getData();
 
-                continue;
+                if (! $rawData) {
+                    $this->warn("No data found or failed to fetch from: {$source->url}");
+
+                    continue;
+                }
+
+                $dataArray = $this->parseData($rawData, $source->url);
+
+                if (empty($dataArray)) {
+                    $this->warn("Data is empty after parsing for source: {$source->name}");
+
+                    continue;
+                }
+
+                // Start auditing
+                $import = Import::create([
+                    'file_name' => basename($source->url),
+                    'file_path' => $source->url,
+                    'importer' => static::class,
+                    'total_rows' => count($dataArray),
+                    'user_id' => optional(Auth::user())->id ?? 1, // Fallback to system user
+                ]);
+
+                $transformedData = DataTransformer::transformFromSource($source->id, $dataArray);
+
+                $successfulRows = $this->insertAndSync($transformedData, $import);
+
+                $import->update([
+                    'processed_rows' => count($dataArray),
+                    'successful_rows' => $successfulRows,
+                    'completed_at' => now(),
+                ]);
             }
-
-            $dataArray = $this->parseData($rawData, $source->url);
-
-            if (empty($dataArray)) {
-                $this->warn("Data is empty after parsing for source: {$source->name}");
-
-                continue;
-            }
-
-            // Start auditing
-            $import = Import::create([
-                'file_name' => basename($source->url),
-                'file_path' => $source->url,
-                'importer' => static::class,
-                'total_rows' => count($dataArray),
-                'user_id' => optional(Auth::user())->id ?? 1, // Fallback to system user
-            ]);
-
-            $transformedData = DataTransformer::transformFromSource($source->id, $dataArray);
-
-            $successfulRows = $this->insertAndSync($transformedData, $import);
-
-            $import->update([
-                'processed_rows' => count($dataArray),
-                'successful_rows' => $successfulRows,
-                'completed_at' => now(),
-            ]);
         }
 
         $this->info('Data sync completed.');
+    }
+
+    /**
+     * Process CSV data source by streaming.
+     */
+    protected function processCsvSource(DataSource $source, string $filePath)
+    {
+        if (! ($handle = fopen($filePath, 'r'))) {
+            $this->error("Failed to open file: {$filePath}");
+
+            return;
+        }
+
+        $header = fgetcsv($handle);
+        if (! $header) {
+            $this->warn("Empty CSV or missing header: {$filePath}");
+            fclose($handle);
+
+            return;
+        }
+
+        // Count total rows without loading everything (still takes some time but saves memory)
+        $totalRows = 0;
+        while (! feof($handle)) {
+            if (fgets($handle)) {
+                $totalRows++;
+            }
+        }
+        rewind($handle);
+        fgetcsv($handle); // Skip header again
+
+        $import = Import::create([
+            'file_name' => basename($source->url),
+            'file_path' => $source->url,
+            'importer' => static::class,
+            'total_rows' => $totalRows,
+            'user_id' => optional(Auth::user())->id ?? 1,
+        ]);
+
+        $successfulRows = 0;
+        $mappings = DataTransformer::getMappings($source->id);
+
+        while (($row = fgetcsv($handle)) !== false) {
+            if (count($row) !== count($header)) {
+                continue;
+            }
+
+            $item = array_combine($header, $row);
+
+            foreach ($mappings as $model => $mapping) {
+                if (! class_exists($model)) {
+                    continue;
+                }
+
+                try {
+                    $transformedItem = DataTransformer::transform($item, new $model, $mapping, $source->id);
+
+                    $modelPk = PkModel::where('model', '=', $model)->first();
+                    $pkString = $modelPk ? $modelPk->primary_key : 'id';
+                    $pks = explode(',', $pkString);
+                    $search = [];
+
+                    foreach ($pks as $pk) {
+                        $pk = trim($pk);
+                        if (! isset($transformedItem[$pk])) {
+                            throw new \Exception("Missing primary key '{$pk}' for model {$model}.");
+                        }
+                        $search[$pk] = $transformedItem[$pk];
+                    }
+
+                    $model::updateOrCreate($search, $transformedItem);
+                    $this->info("Synced {$model} item: ".implode(', ', $search));
+                    $successfulRows++;
+                } catch (\Exception $e) {
+                    $this->error("Failed to sync {$model} item: ".$e->getMessage());
+
+                    FailedImportRow::create([
+                        'import_id' => $import->id,
+                        'data' => $item,
+                        'validation_error' => $e->getMessage(),
+                    ]);
+                }
+            }
+        }
+
+        fclose($handle);
+
+        $import->update([
+            'processed_rows' => $totalRows,
+            'successful_rows' => $successfulRows,
+            'completed_at' => now(),
+        ]);
     }
 
     /**
@@ -138,16 +239,22 @@ class SyncData extends Command
         foreach ($transformedData as $model => $data) {
             if (class_exists($model)) {
                 $modelPk = PkModel::where('model', '=', $model)->first();
-                $pk = $modelPk ? $modelPk->primary_key : 'id';
+                $pkString = $modelPk ? $modelPk->primary_key : 'id';
+                $pks = explode(',', $pkString);
 
                 foreach ($data as $item) {
                     try {
-                        if (! isset($item[$pk])) {
-                            throw new \Exception("Missing primary key '{$pk}' for model {$model}.");
+                        $search = [];
+                        foreach ($pks as $pk) {
+                            $pk = trim($pk);
+                            if (! isset($item[$pk])) {
+                                throw new \Exception("Missing primary key '{$pk}' for model {$model}.");
+                            }
+                            $search[$pk] = $item[$pk];
                         }
 
-                        $model::updateOrCreate([$pk => $item[$pk]], $item);
-                        $this->info("Synced {$model} item: ".($item[$pk] ?? 'N/A'));
+                        $model::updateOrCreate($search, $item);
+                        $this->info("Synced {$model} item: ".implode(', ', $search));
                         $successfulRows++;
                     } catch (\Exception $e) {
                         $this->error("Failed to sync {$model} item: ".$e->getMessage());

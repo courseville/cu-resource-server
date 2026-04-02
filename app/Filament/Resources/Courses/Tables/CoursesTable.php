@@ -24,14 +24,14 @@ class CoursesTable
                     ->label('Course ID')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('name_th')
-                    ->label('Course Name (Thai)')
+                TextColumn::make('name')
+                    ->label('Course Name')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('name_en')
-                    ->label('Course Name (English)')
-                    ->sortable()
-                    ->searchable(),
+                // TextColumn::make('name_en')
+                //     ->label('Course Name (English)')
+                //     ->sortable()
+                //     ->searchable(),
                 TextColumn::make('credits')
                     ->label('Credits')
                     ->sortable(),
