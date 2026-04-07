@@ -44,10 +44,10 @@ class StudentAdmissionsTable
                 //
             ])
             ->headerActions([
-                ExcelImportAction::make()
-                    ->importer(StudentAdmissionImporter::class),
-                ExportAction::make()
-                    ->exporter(StudentAdmissionExporter::class),
+                // ExcelImportAction::make()
+                //     ->importer(StudentAdmissionImporter::class),
+                // ExportAction::make()
+                //     ->exporter(StudentAdmissionExporter::class),
             ])
             ->recordActions([
                 ViewAction::make(),

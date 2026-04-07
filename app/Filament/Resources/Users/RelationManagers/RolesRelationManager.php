@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\PassportClients\RelationManagers;
+namespace App\Filament\Resources\Users\RelationManagers;
 
 use Filament\Actions\AttachAction;
 use Filament\Actions\BulkActionGroup;
@@ -11,14 +11,14 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
-use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 
 class RolesRelationManager extends RelationManager
 {
     protected static string $relationship = 'roles';
+
+    protected static ?string $title = 'Roles';
 
     public function form(Schema $schema): Schema
     {
@@ -109,10 +109,7 @@ class RolesRelationManager extends RelationManager
                             ->searchable()
                             ->placeholder('Full Access (Global)')
                             ->helperText('Empty domain means full access to all data.'),
-                    ])
-                    // JSON column break select
-                    ->recordSelectOptionsQuery(fn (Builder $query) => $query->select('roles.id', 'roles.name')),
-                // Tables\Actions\CreateAction::make(),
+                    ]),
             ])
             ->recordActions([
                 EditAction::make(),
@@ -120,7 +117,6 @@ class RolesRelationManager extends RelationManager
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    // Tables\Actions\DeleteBulkAction::make(),
                     DetachBulkAction::make(),
                 ]),
             ]);

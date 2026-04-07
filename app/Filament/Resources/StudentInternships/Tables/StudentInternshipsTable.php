@@ -48,10 +48,10 @@ class StudentInternshipsTable
                 //
             ])
             ->headerActions([
-                ExcelImportAction::make()
-                    ->importer(StudentInternshipImporter::class),
-                ExportAction::make()
-                    ->exporter(StudentInternshipExporter::class),
+                // ExcelImportAction::make()
+                //     ->importer(StudentInternshipImporter::class),
+                // ExportAction::make()
+                //     ->exporter(StudentInternshipExporter::class),
             ])
             ->recordActions([
                 ViewAction::make(),

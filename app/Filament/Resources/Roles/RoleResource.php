@@ -43,13 +43,13 @@ class RoleResource extends Resource
             ->columns([
                 TextColumn::make('name')->sortable()->searchable(),
                 TextColumn::make('description'),
-                TextColumn::make('permissions')
-                    ->label('Permissions')
-                    ->formatStateUsing(function ($record) {
-                        // Concatenate permission names into a single string
-                        return $record->permissions->pluck('name')->join(', ');
-                    })
-                    ->limit(50), // Limit the number of characters displayed
+                // TextColumn::make('permissions')
+                //     ->label('Permissions')
+                //     ->formatStateUsing(function ($record) {
+                //         // Concatenate permission names into a single string
+                //         return $record->permissions->pluck('name')->join(', ');
+                //     })
+                //     ->limit(50), // Limit the number of characters displayed
 
                 // TextColumn::make('created_at')->dateTime()->sortable(),
             ])

@@ -11,7 +11,6 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ExportBulkAction;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -46,11 +45,6 @@ class UserResource extends Resource
                     ->minLength(8)
                     ->dehydrateStateUsing(fn ($state) => bcrypt($state)),
 
-                Select::make('roles')
-                    ->label('Roles')
-                    ->relationship('roles', 'name') // Define the relationship and display field
-                    ->multiple() // Allow multiple selections
-                    ->preload(), // Preload options for better performance
             ]);
     }
 
@@ -86,7 +80,7 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\RolesRelationManager::class,
         ];
     }
 
