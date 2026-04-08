@@ -143,6 +143,8 @@ class StudentImporter extends Importer
                 ->rules(['max:255']),
             ImportColumn::make('full_name_en')
                 ->rules(['max:255']),
+            ImportColumn::make('reg_code')
+                ->rules(['max:255']),
             ImportColumn::make('data_id'),
         ];
     }

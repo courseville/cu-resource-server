@@ -66,6 +66,7 @@ class StudentExporter extends Exporter
             ExportColumn::make('parent_longitude'),
             ExportColumn::make('full_name_th'),
             ExportColumn::make('full_name_en'),
+            ExportColumn::make('reg_code'),
         ];
     }
 

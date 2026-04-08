@@ -134,6 +134,8 @@ class StudentForm
                             ->label('Study Program System'),
                         TextInput::make('project_code')
                             ->label('Project Code'),
+                        TextInput::make('reg_code')
+                            ->label('Registration Code'),
                         TextInput::make('start_acad_year')
                             ->label('Start Academic Year'),
                         TextInput::make('start_semester')

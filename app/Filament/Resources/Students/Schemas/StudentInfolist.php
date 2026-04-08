@@ -34,6 +34,8 @@ class StudentInfolist
                             ->label('Department'),
                         TextEntry::make('major_name')
                             ->label('Major'),
+                        TextEntry::make('reg_code')
+                            ->label('Registration Code'),
                         TextEntry::make('start_acad_year')
                             ->label('Start Year'),
                         TextEntry::make('credit_tot')
