@@ -16,6 +16,12 @@ class PiDataSeeder extends Seeder
      */
     public function run(): void
     {
+        /**
+         * NOTE: This seeder requires a database connection named 'pi' to be configured 
+         * in your config/database.php file. This connection is used as the remote 
+         * source for the MySQL data sync process.
+         */
+
         $dgMappings = [
             'PI regcode' => [
                 'url' => 'pi:mx_student_regcode',

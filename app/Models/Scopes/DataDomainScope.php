@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 
 class DataDomainScope implements Scope
 {
@@ -44,6 +45,13 @@ class DataDomainScope implements Scope
 
         // 3. Apply the filter based on the model's domain column
         $column = method_exists($model, 'getDomainColumn') ? $model->getDomainColumn() : 'faccode';
+
+        // If the column does not exist in the table, give no results
+        if (! Schema::hasColumn($model->getTable(), $column)) {
+            $builder->whereRaw('1 = 0');
+
+            return;
+        }
 
         $builder->whereIn($column, $domains);
     }

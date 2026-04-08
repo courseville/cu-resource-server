@@ -24,10 +24,6 @@ class StudentsTable
                     ->label('Student ID')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('reg_code')
-                    ->label('Reg Code')
-                    ->sortable()
-                    ->searchable(),
                 TextColumn::make('full_name_th')
                     ->label('Full Name (TH)')
                     ->sortable()
