@@ -35,30 +35,7 @@ class SyncData extends Command
     {
         DB::disableQueryLog();
 
-        // 1. Run the shell script to fetch CSV files via SFTP
-        $this->info('Starting SFTP data fetch...');
-
-        // if (app()->environment('testing', 'local')) {
-        //     $this->info('Skipping SFTP fetch in testing or local environment.');
-        // } else {
-        //     // Executing the bash command as provided by the user
-        //     $bashCommand = "cd ~/dg-scripts && sshpass -f .dg_password sftp -o StrictHostKeyChecking=no -o LogLevel=ERROR sftp_mcv@161.200.194.183 <<< $'lcd dg/\nmget DG*.csv\nbye'";
-
-        //     $this->info('Executing bash command...');
-        //     exec($bashCommand, $output, $returnVar);
-
-        //     if ($returnVar !== 0) {
-        //         $this->error('SFTP fetch failed with exit code: '.$returnVar);
-        //         $this->error(implode("\n", $output));
-
-        //         return 1;
-        //     }
-        // }
-
-        $this->info('SFTP fetch completed successfully.');
-        $this->info('===================================');
-
-        // 2. Iterate over active DataSource and transform/sync data
+        // 1. Iterate over active DataSource and transform/sync data
         $sources = DataSource::where('is_active', true)->get();
 
         foreach ($sources as $source) {
