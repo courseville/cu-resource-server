@@ -116,7 +116,7 @@ class StudentController extends Controller
 
     protected function exportCsv($data, $columns)
     {
-        $filename = "students_" . date('Ymd_His') . ".csv";
+        $filename = 'students_'.date('Ymd_His').'.csv';
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => "attachment; filename=\"$filename\"",
@@ -141,7 +141,7 @@ class StudentController extends Controller
 
     protected function exportXlsx($data, $columns)
     {
-        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet;
         $sheet = $spreadsheet->getActiveSheet();
 
         // Add headers
@@ -156,7 +156,7 @@ class StudentController extends Controller
             }
         }
 
-        $filename = "students_" . date('Ymd_His') . ".xlsx";
+        $filename = 'students_'.date('Ymd_His').'.xlsx';
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
 
         return response()->streamDownload(function () use ($writer) {

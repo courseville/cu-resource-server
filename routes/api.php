@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\Api\StudentCurriculumController;
-use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\Api\PersonnelController;
 use App\Http\Controllers\Api\StructureController;
 use App\Http\Controllers\Api\StudentController;
+use App\Http\Controllers\Api\StudentCurriculumController;
+use App\Http\Controllers\ResourceController;
 use App\Models\DataSource;
 use App\Models\User;
 use App\Services\PermissionService;
