@@ -42,7 +42,7 @@ return [
         ],
         'admin' => [
             'driver' => 'session',
-            'provider' => 'ldap',
+            'provider' => 'users', // ldap
         ],
         'api' => [
             'driver' => 'passport',

@@ -24,7 +24,12 @@ class DataSourcesTable
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('type')
-                    ->searchable()
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'file' => 'info',
+                        'mysql' => 'success',
+                        default => 'gray',
+                    })
                     ->sortable(),
                 TextColumn::make('url')
                     ->searchable(),

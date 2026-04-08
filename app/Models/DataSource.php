@@ -16,8 +16,21 @@ class DataSource extends Model
 
     protected $fillable = [
         'name',
+        'type',
         'url',
+        'is_active',
+        'last_synced_at',
     ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'last_synced_at' => 'datetime',
+    ];
+
+    public function imports()
+    {
+        return $this->hasMany(Import::class, 'data_source_id');
+    }
 
     public function transformerMappings()
     {

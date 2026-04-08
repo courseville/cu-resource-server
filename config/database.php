@@ -112,6 +112,40 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
+        // 'pi' => [
+        //     'driver' => 'pgsql',
+        //     'url' => env('DB_PI_URL'),
+        //     'host' => env('DB_PI_HOST', '127.0.0.1'),
+        //     'port' => env('DB_PI_PORT', '5432'),
+        //     'database' => env('DB_PI_DATABASE', 'remote_resource_server'),
+        //     'username' => env('DB_PI_USERNAME', 'postgres'),
+        //     'password' => env('DB_PI_PASSWORD', ''),
+        //     'unix_socket' => env('DB_PI_SOCKET', ''),
+        //     'charset' => env('DB_PI_CHARSET', 'utf8mb4'),
+        //     'collation' => env('DB_PI_COLLATION', 'utf8mb4_unicode_ci'),
+        //     'prefix' => '',
+        //     'prefix_indexes' => true,
+        //     'strict' => true,
+        //     'engine' => null,
+        //     'options' => extension_loaded('pdo_mysql') ? array_filter([
+        //         PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+        //     ]) : [],
+        // ],
+
+        'pi' => [
+            'driver' => 'pgsql',
+            'host' => '127.0.0.1',
+            'port' => '5432',
+            'database' => 'remote_resource_server',
+            'username' => 'postgres',
+            'password' => '',
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => 'prefer',
+        ],
+
     ],
 
     /*

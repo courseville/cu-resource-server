@@ -14,11 +14,14 @@ class DataSourceForm
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('type')
+                Forms\Components\Select::make('type')
+                    ->options([
+                        'file' => 'File',
+                        'mysql' => 'MySQL',
+                    ])
                     ->required()
-                    ->maxLength(255),
+                    ->default('file'),
                 Forms\Components\TextInput::make('url')
-                    ->url()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Toggle::make('is_active')

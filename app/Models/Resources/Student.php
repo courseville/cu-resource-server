@@ -41,6 +41,7 @@ class Student extends Model implements Auditable
         'major_name_eng',
         'data_source_id',
         'data_id',
+        'reg_code',
     ];
 
     protected $searchable = [
