@@ -340,7 +340,7 @@ class SyncData extends Command
             }
 
             $model::updateOrCreate($search, $transformedItem);
-            $this->info("Synced {$model} item: ".implode(', ', $search));
+            // $this->info("Synced {$model} item: ".implode(', ', $search));
 
             return true;
         } catch (\Exception $e) {

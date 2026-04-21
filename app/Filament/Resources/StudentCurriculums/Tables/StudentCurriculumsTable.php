@@ -32,9 +32,9 @@ class StudentCurriculumsTable
                     ->label('Course')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('grade')
-                    ->label('Grade')
-                    ->sortable(),
+                // TextColumn::make('grade')
+                //     ->label('Grade')
+                //     ->sortable(),
                 TextColumn::make('year')
                     ->label('Year')
                     ->sortable(),
