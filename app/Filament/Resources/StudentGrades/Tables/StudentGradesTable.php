@@ -5,11 +5,11 @@ namespace App\Filament\Resources\StudentGrades\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Tables\Actions\ViewAction;
-use Filament\Tables\Actions\DeleteAction;
+use Filament\Actions\ViewAction;
+use Filament\Actions\DeleteAction;
 
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Actions\ExportBulkAction;
+use Filament\Actions\ExportBulkAction;
 use App\Filament\Exports\StudentGradeExporter;
 use Filament\Tables\Table;
 

@@ -20,6 +20,10 @@ class StudentGradeResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static string|\UnitEnum|null $navigationGroup = 'CU Data Gateway';
+
+    protected static ?string $navigationLabel = 'Student Grade (DG0204)';
+
     public static function form(Schema $schema): Schema
     {
         return StudentGradeForm::configure($schema);

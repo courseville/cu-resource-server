@@ -20,6 +20,10 @@ class PersonnelEducationResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static string|\UnitEnum|null $navigationGroup = 'CU Data Gateway';
+
+    protected static ?string $navigationLabel = 'Personnel Education (DG0306)';
+
     public static function form(Schema $schema): Schema
     {
         return PersonnelEducationForm::configure($schema);

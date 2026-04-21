@@ -20,6 +20,10 @@ class PersonnelContractDetailResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static string|\UnitEnum|null $navigationGroup = 'CU Data Gateway';
+
+    protected static ?string $navigationLabel = 'Personnel Contract Detail (DG0305)';
+
     public static function form(Schema $schema): Schema
     {
         return PersonnelContractDetailForm::configure($schema);

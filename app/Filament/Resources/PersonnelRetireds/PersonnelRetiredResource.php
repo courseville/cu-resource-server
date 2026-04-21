@@ -20,6 +20,10 @@ class PersonnelRetiredResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static string|\UnitEnum|null $navigationGroup = 'CU Data Gateway';
+
+    protected static ?string $navigationLabel = 'Personnel Retired (DG0315)';
+
     public static function form(Schema $schema): Schema
     {
         return PersonnelRetiredForm::configure($schema);

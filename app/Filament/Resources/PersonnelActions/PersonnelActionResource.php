@@ -20,6 +20,10 @@ class PersonnelActionResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static string|\UnitEnum|null $navigationGroup = 'CU Data Gateway';
+
+    protected static ?string $navigationLabel = 'Personnel Action (DG0301)';
+
     public static function form(Schema $schema): Schema
     {
         return PersonnelActionForm::configure($schema);
