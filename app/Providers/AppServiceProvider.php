@@ -2,10 +2,16 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Laravel\Passport\Passport;
 use App\Models\Client;
 use App\Services\PermissionService;
+use Dedoc\Scramble\Scramble;
+use Dedoc\Scramble\Support\Generator\OpenApi;
+use Dedoc\Scramble\Support\Generator\SecurityScheme;
+use Dedoc\Scramble\Support\Generator\SecuritySchemes\OAuthFlow;
+use Gate;
+use Illuminate\Support\ServiceProvider;
+use Laravel\Passport\Passport;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -14,7 +20,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(PermissionService::class, function ($app) {
-            return new PermissionService();
+            return new PermissionService;
         });
     }
 
@@ -24,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Passport::useClientModel(Client::class);
-        Passport::personalAccessTokensExpireIn(now()->addMonths(6));
+        Passport::personalAccessTokensExpireIn(now()->addMonths(1));
         // Passport::tokensCan([
         //     'student' => 'View user profile',
         //     'admin' => 'Edit user profile',
@@ -49,12 +55,30 @@ class AppServiceProvider extends ServiceProvider
             'admin.update' => 'Modify admin resources',
             'admin.manage' => 'Manage users and system settings',
 
-            'machine' => 'View global resource'
+            'machine' => 'View global resource',
         ]);
 
         Passport::setDefaultScope([
-            'general.read', 
+            'general.read',
             'machine',
         ]);
+
+        Gate::define('viewApiDocs', function ($user) {
+            return in_array($user->email, ['admin@mail.com']);
+        });
+
+        Scramble::configure()
+            ->withDocumentTransformers(function (OpenApi $openApi) {
+                $openApi->secure(
+                    // SecurityScheme::http('bearer')
+                    SecurityScheme::oauth2()
+                        ->flow('clientCredentials', function (OAuthFlow $flow) {
+                            $flow
+                                ->authorizationUrl(config('app.url').'/oauth/authorize')
+                                ->tokenUrl(config('app.url').'/oauth/token')
+                                ->addScope('*', 'all');
+                        })
+                );
+            });
     }
 }

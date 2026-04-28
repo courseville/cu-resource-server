@@ -7,33 +7,25 @@ use App\Services\PermissionService;
 use App\Traits\Searchable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
+use Str;
 
-abstract class ResourceController extends Controller
+class ResourceController extends Controller
 {
     use Searchable;
 
     /**
-     * Get the model class for the resource.
-     */
-    abstract protected function modelClass(): string;
-
-    /**
-     * Get the resource class for the resource.
-     */
-    protected function resourceClass(): string
-    {
-        // Default fallback or should be abstract?
-        // Let's make it abstract to force child classes to define it for Scramble.
-        return \Illuminate\Http\Resources\Json\JsonResource::class;
-    }
-
-    /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request, ?string $entity = null)
     {
-        $modelClass = $this->modelClass();
-        $resourceClass = $this->resourceClass();
+        $entity = $entity ?? $request->segment(3);
+
+        // Find model class
+        $modelClass = $this->resolveModelClass($entity);
+
+        if (! $modelClass || ! class_exists($modelClass)) {
+            abort(404, 'Model not found for entity: '.$entity);
+        }
 
         // Check if the table exists
         if (! Schema::hasTable((new $modelClass)->getTable())) {
@@ -58,10 +50,9 @@ abstract class ResourceController extends Controller
         }
 
         // Apply pagination
-        $request->page = $request->integer('page', 1);
-        $data = $builder->paginate($request->integer('n', 10));
+        $data = $this->paginatableGet($builder, $request);
 
-        return $resourceClass::collection($data);
+        return response()->json($data);
     }
 
     /**
@@ -75,10 +66,18 @@ abstract class ResourceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $entity, ?string $id = null)
     {
-        $modelClass = $this->modelClass();
-        $resourceClass = $this->resourceClass();
+        // If entity looks like an ID (numeric or long string), it might be the second param redirected
+        if (is_null($id)) {
+            $id = $entity;
+            $entity = request()->segment(3);
+        }
+
+        $modelClass = $this->resolveModelClass($entity);
+        if (! $modelClass || ! class_exists($modelClass)) {
+            abort(404, 'Model not found');
+        }
 
         // Check if the table exists
         if (! Schema::hasTable((new $modelClass)->getTable())) {
@@ -97,9 +96,9 @@ abstract class ResourceController extends Controller
             abort(403, 'No permission to view any columns');
         }
 
-        $data = $modelClass::select($viewableColumns)->where($primaryKey, $id)->firstOrFail();
+        $data = $modelClass::select($viewableColumns)->where($primaryKey, $id)->first();
 
-        return new $resourceClass($data);
+        return response()->json($data);
     }
 
     /**
@@ -116,5 +115,24 @@ abstract class ResourceController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    protected function resolveModelClass(string $entity): ?string
+    {
+        $singular = Str::studly(Str::singular($entity));
+
+        $namespaces = [
+            'App\\Models\\Resources\\',
+            'App\\Models\\',
+        ];
+
+        foreach ($namespaces as $namespace) {
+            $class = $namespace.$singular;
+            if (class_exists($class)) {
+                return $class;
+            }
+        }
+
+        return null;
     }
 }

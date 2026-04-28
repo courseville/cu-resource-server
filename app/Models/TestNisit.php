@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class TestNisit extends Model
 {
     use HasFactory;
+
     protected $table = 'test_nisits';
+
     protected $fillable = [
         'student_id',
         'name',
@@ -16,7 +18,7 @@ class TestNisit extends Model
         'password',
         'bio',
         'avatar',
-        'phone_number'
+        'phone_number',
     ];
 
     // The attributes that should be cast to native types.

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\PersonnelCollection;
 use App\Http\Resources\PersonnelResource;
 use App\Models\Resources\Personnel;
@@ -11,16 +11,14 @@ use App\Services\PermissionService;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class PersonnelController extends ResourceController
+class PersonnelController extends Controller
 {
-    protected function modelClass(): string
-    {
-        return Personnel::class;
-    }
+    protected $permissionService;
 
-    protected function resourceClass(): string
-    {
-        return PersonnelResource::class;
+    public function __construct(
+        PermissionService $permissionService,
+    ) {
+        $this->permissionService = $permissionService;
     }
 
     /**
@@ -32,15 +30,13 @@ class PersonnelController extends ResourceController
     {
         // Check permission
         $client = auth('api')->client();
-        $permissionService = app(PermissionService::class);
-        $viewableColumns = $permissionService->allowedColumns($client, 'view', Personnel::class);
+        $viewableColumns = $this->permissionService->allowedColumns($client, 'view', Personnel::class);
         if (empty($viewableColumns)) {
             abort(403, 'No permission to view any columns');
         }
 
         // Initialize the query builder with viewable columns
         $builder = Personnel::query();
-        $builder->select($viewableColumns);
 
         // Apply filters if any
         $params = $request->validate([
@@ -50,7 +46,7 @@ class PersonnelController extends ResourceController
         if (isset($params['structure_id'])) {
             $structure = Structure::where('structure_id', $params['structure_id'])->first();
             if (is_null($structure)) {
-                return PersonnelResource::collection(Personnel::where('id', -1)->paginate(10));
+                return response()->json(Personnel::where('id', -1)->paginate(10));
             }
             $builder->whereHas('structureProfiles', function ($query) use ($structure) {
                 $query->where(function ($q) use ($structure) {
@@ -88,24 +84,31 @@ class PersonnelController extends ResourceController
     }
 
     /**
-     * Display the specified personnel.
-     *
-     * @response PersonnelResource
+     * Store a newly created personnel in storage.
      */
-    public function show(string $id)
+    public function store(Request $request)
     {
-        $modelClass = $this->modelClass();
-        $resourceClass = $this->resourceClass();
+        //
+    }
 
-        // Check permission
-        $client = auth('api')->client();
-        $permissionService = app(PermissionService::class);
-        $viewableColumns = $permissionService->allowedColumns($client, 'view', $modelClass);
-        if (empty($viewableColumns)) {
-            abort(403, 'No permission to view any columns');
-        }
-
-        $personnel = Personnel::select($viewableColumns)->where('personnel_id', $id)->firstOrFail();
+    /**
+     * Display the specified personnel.
+     */
+    public function show(Personnel $personnel)
+    {
+        // $personnel->load([
+        //     // relationships
+        //     'structureProfiles' => function ($query) {
+        //         // columns
+        //         $query->select('id', 'structure_level1_id', 'structure_level2_id', 'structure_level3_id', 'structure_level4_id', 'personnel_id')->with([
+        //             // relationships and columns
+        //             'structureLevel1:id,name',
+        //             'structureLevel2:id,name',
+        //             'structureLevel3:id,name',
+        //             'structureLevel4:id,name',
+        //         ]);
+        //     },
+        // ]);
 
         $personnel->load([
             'structureProfiles' => function ($query) {
@@ -119,5 +122,21 @@ class PersonnelController extends ResourceController
         ]);
 
         return new PersonnelResource($personnel);
+    }
+
+    /**
+     * Update the specified personnel in storage.
+     */
+    public function update(Request $request, Personnel $personnel)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified personnel from storage.
+     */
+    public function destroy(Personnel $personnel)
+    {
+        //
     }
 }

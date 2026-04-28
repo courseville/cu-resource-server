@@ -11,6 +11,7 @@ class DynamicModel extends Model
     public function setTableName($table)
     {
         $this->setTable($table);
+
         return $this;
     }
 }

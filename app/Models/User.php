@@ -3,15 +3,20 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Database\Factories\UserFactory;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use LdapRecord\Laravel\Auth\AuthenticatesWithLdap;
+use LdapRecord\Laravel\Auth\LdapAuthenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser, LdapAuthenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable;
+    /** @use HasFactory<UserFactory> */
+    use AuthenticatesWithLdap, HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -24,7 +29,9 @@ class User extends Authenticatable
         'password',
         'created_at',
         'data_source_id',
-        'data_id'
+        'data_id',
+        'guid',
+        'domain',
     ];
 
     /**
@@ -52,7 +59,7 @@ class User extends Authenticatable
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'role_user');
+        return $this->belongsToMany(Role::class, 'role_user')->withPivot('domain')->withTimestamps();
     }
 
     public function permissions()
@@ -61,4 +68,13 @@ class User extends Authenticatable
             ->pluck('permissions')->flatten()->unique('id');
     }
 
+    // Filament Panel Access Control
+    public function canAccessPanel(Panel $panel): bool
+    {
+        if (config('app.env') === 'local') {
+            return true; // Allow access in local environment
+        }
+
+        return $this->permissions()->contains('name', 'access_admin_panel');
+    }
 }

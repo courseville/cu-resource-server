@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'users', // ldap
+        ],
         'api' => [
             'driver' => 'passport',
             'provider' => 'users',
@@ -69,10 +73,18 @@ return [
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'ldap' => [
+            'driver' => 'ldap',
+            'model' => App\Ldap\User::class,
+            'rules' => [],
+            'database' => [
+                'model' => App\Models\User::class,
+                'sync_attributes' => [
+                    'name' => 'cn',
+                    'email' => 'mail',
+                ],
+            ],
+        ],
     ],
 
     /*

@@ -1,0 +1,76 @@
+<?php
+
+namespace App\Filament\Resources\TransformerMappings;
+
+use App\Filament\Exports\TransformerMappingExporter;
+use App\Filament\Resources\TransformerMappings\Pages\CreateTransformerMapping;
+use App\Filament\Resources\TransformerMappings\Pages\EditTransformerMapping;
+use App\Filament\Resources\TransformerMappings\Pages\ListTransformerMappings;
+use App\Models\TransformerMapping;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ExportBulkAction;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+
+class TransformerMappingResource extends Resource
+{
+    protected static ?string $model = TransformerMapping::class;
+
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-cog';
+
+    public static function form(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                TextInput::make('data_source_id')
+                    ->required()
+                    ->maxLength(255),
+                TextInput::make('model')
+                    ->required()
+                    ->maxLength(255),
+                TextInput::make('field')
+                    ->required()
+                    ->maxLength(255),
+                TextInput::make('mapping')
+                    ->required()
+                    ->maxLength(255),
+                Textarea::make('formatting')
+                    ->nullable(),
+            ]);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                TextColumn::make('data_source_id')->sortable()->searchable(),
+                TextColumn::make('model')->sortable()->searchable(),
+                TextColumn::make('field')->sortable()->searchable(),
+                TextColumn::make('mapping')->sortable()->searchable(),
+                TextColumn::make('formatting')->sortable()->searchable(),
+                TextColumn::make('created_at')->dateTime()->sortable(),
+            ])
+            ->filters([])
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                    ExportBulkAction::make()
+                        ->exporter(TransformerMappingExporter::class),
+                ]),
+            ]);
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => ListTransformerMappings::route('/'),
+            'create' => CreateTransformerMapping::route('/create'),
+            'edit' => EditTransformerMapping::route('/{record}/edit'),
+        ];
+    }
+}

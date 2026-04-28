@@ -3,11 +3,10 @@
 namespace App\Console\Commands;
 
 use App\Models\DataSource;
-use App\Models\TestUser;
 use App\Models\TestProfile;
+use App\Models\TestUser;
 use App\Transformers\DataTransformer;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
 
 class SyncDataMock extends Command
 {
@@ -61,7 +60,7 @@ class SyncDataMock extends Command
                 'registration_date' => '2025-03-25 09:00:00',
                 'about_me' => 'Loves hiking and outdoor adventures.',
                 'profile_picture' => 'bob_profile_picture.jpg',
-            ]
+            ],
         ];
 
         $source2Data = [
@@ -112,7 +111,7 @@ class SyncDataMock extends Command
             ],
         ];
 
-        $source1Id = DataSource::where("name", "=", "source1")->value('id');
+        $source1Id = DataSource::where('name', '=', 'source1')->value('id');
         // $source2Id = DataSource::where("name", "=", "source2")->value('id');
 
         $formattedData1 = DataTransformer::transformFromSource($source1Id, $source1Data);
@@ -120,9 +119,10 @@ class SyncDataMock extends Command
         $userIds = [];
         if (isset($formattedData1['App\\Models\\TestUser'])) {
             foreach ($formattedData1['App\\Models\\TestUser'] as $userData) {
-                $missing = collect($userRequiredFields)->filter(fn($field) => empty($userData[$field]));
+                $missing = collect($userRequiredFields)->filter(fn ($field) => empty($userData[$field]));
                 if ($missing->isNotEmpty()) {
-                    $this->warn("Skipping user, missing required fields: " . $missing->implode(', '));
+                    $this->warn('Skipping user, missing required fields: '.$missing->implode(', '));
+
                     continue;
                 }
 
@@ -136,10 +136,9 @@ class SyncDataMock extends Command
                     ]
                 );
 
-
                 $userIds[$userData['data_id']] = $user->id;
 
-                $this->info("Inserted user: " . json_encode($userData));
+                $this->info('Inserted user: '.json_encode($userData));
             }
         }
 
@@ -148,16 +147,18 @@ class SyncDataMock extends Command
                 $sourceUserId = $profileData['data_id'];
                 $realUserId = $userIds[$sourceUserId] ?? null;
 
-                if (!$realUserId) {
+                if (! $realUserId) {
                     $this->warn("Skipping profile, user not found for source user_id: $sourceUserId");
+
                     continue;
                 }
 
                 $profileData['test_user_id'] = $realUserId;
 
-                $missing = collect($profileRequiredFields)->filter(fn($field) => empty($profileData[$field]));
+                $missing = collect($profileRequiredFields)->filter(fn ($field) => empty($profileData[$field]));
                 if ($missing->isNotEmpty()) {
-                    $this->warn("Skipping profile, missing required fields: " . $missing->implode(', '));
+                    $this->warn('Skipping profile, missing required fields: '.$missing->implode(', '));
+
                     continue;
                 }
 

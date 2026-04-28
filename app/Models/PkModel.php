@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class PkModel extends Model
 {
     use HasFactory;
+
     protected $table = 'pk_model_fields';
+
     protected $fillable = [
         'model',
-        'primary_key'
+        'primary_key',
     ];
 
     // The attributes that should be cast to native types.

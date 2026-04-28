@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Permission extends Model
 {
@@ -21,23 +21,15 @@ class Permission extends Model
      *
      * @var array
      */
-    protected $fillable = ['name','action', 'model', 'columns'];
+    protected $fillable = ['name', 'action', 'model', 'columns'];
+
+    protected $casts = [
+        'columns' => 'array',
+    ];
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'permission_role'); 
-    }
-
-    // Convert the columns field to an array when it's retrieved from the database
-    public function getColumnsAttribute($value)
-    {
-        return json_decode($value, true); // Decode JSON into array
-    }
-
-    // Convert the array of columns into JSON when setting the attribute
-    public function setColumnsAttribute($value)
-    {
-        $this->attributes['columns'] = json_encode($value); // Encode array as JSON
+        return $this->belongsToMany(Role::class, 'permission_role');
     }
 
     // Dynamically resolve the related model based on the 'model' field

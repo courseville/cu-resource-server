@@ -4,23 +4,26 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('test_nisits', function (Blueprint $table) {
-            $table->id();
-            $table->string('student_id')->nullable();
-            $table->string('name')->nullable();
-            $table->string('email')->nullable();
-            $table->string('password')->nullable();
-            $table->text('bio')->nullable();
-            $table->string('avatar')->nullable();
-            $table->string('phone_number')->nullable();
-            $table->timestamps();
-        });
+        if (config('app.env') === 'local') {
+            Schema::create('test_nisits', function (Blueprint $table) {
+                $table->id();
+                $table->string('student_id')->nullable();
+                $table->string('name')->nullable();
+                $table->string('email')->nullable();
+                $table->string('password')->nullable();
+                $table->text('bio')->nullable();
+                $table->string('avatar')->nullable();
+                $table->string('phone_number')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

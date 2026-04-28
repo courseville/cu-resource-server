@@ -112,6 +112,20 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
+        'pi' => [
+            'driver' => 'pgsql',
+            'host' => '127.0.0.1',
+            'port' => '5432',
+            'database' => 'remote_resource_server',
+            'username' => 'postgres',
+            'password' => '',
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => 'prefer',
+        ],
+
     ],
 
     /*

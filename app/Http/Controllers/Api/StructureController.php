@@ -2,42 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\StructureResource;
 use App\Models\Resources\Structure;
 use App\Services\PermissionService;
 use Illuminate\Http\Request;
 
-class StructureController extends ResourceController
+class StructureController extends Controller
 {
-    protected function modelClass(): string
-    {
-        return Structure::class;
-    }
+    protected $permissionService;
 
-    protected function resourceClass(): string
-    {
-        return StructureResource::class;
+    public function __construct(
+        PermissionService $permissionService,
+    ) {
+        $this->permissionService = $permissionService;
     }
 
     /**
      * Display a listing of the structures.
-     *
-     * @response AnonymousResourceCollection<StructureResource>
      */
     public function index(Request $request)
     {
         // Check permission
         $client = auth('api')->client();
-        $permissionService = app(PermissionService::class);
-        $viewableColumns = $permissionService->allowedColumns($client, 'view', Structure::class);
+        $viewableColumns = $this->permissionService->allowedColumns($client, 'view', Structure::class);
         if (empty($viewableColumns)) {
             abort(403, 'No permission to view any columns');
         }
 
         // Initialize the query builder with viewable columns
         $builder = Structure::query();
-        $builder->select($viewableColumns);
 
         // Apply filters if any
         $params = $request->validate([
@@ -58,25 +52,34 @@ class StructureController extends ResourceController
     }
 
     /**
-     * Display the specified structure.
-     *
-     * @response StructureResource
+     * Store a newly created structure in storage.
      */
-    public function show(string $id)
+    public function store(Request $request)
     {
-        $modelClass = $this->modelClass();
-        $resourceClass = $this->resourceClass();
+        //
+    }
 
-        // Check permission
-        $client = auth('api')->client();
-        $permissionService = app(PermissionService::class);
-        $viewableColumns = $permissionService->allowedColumns($client, 'view', $modelClass);
-        if (empty($viewableColumns)) {
-            abort(403, 'No permission to view any columns');
-        }
-
-        $structure = Structure::select($viewableColumns)->where('structure_id', $id)->firstOrFail();
-
+    /**
+     * Display the specified structure.
+     */
+    public function show(Structure $structure)
+    {
         return new StructureResource($structure);
+    }
+
+    /**
+     * Update the specified structure in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified structure from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
     }
 }

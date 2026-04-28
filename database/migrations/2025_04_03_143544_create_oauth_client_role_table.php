@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('oauth_client_role', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('oauth_client_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('oauth_client_id')->constrained()->onDelete('cascade');
             $table->foreignId('role_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

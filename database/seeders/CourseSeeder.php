@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Course;
+use Illuminate\Database\Seeder;
 
 class CourseSeeder extends Seeder
 {
@@ -18,32 +17,32 @@ class CourseSeeder extends Seeder
                 'name' => 'Introduction to Computer Science',
                 'description' => 'An introductory course to computer science concepts.',
                 'code' => 'CSE101',
-                'credits' => 3
+                'credits' => 3,
             ],
             [
                 'name' => 'Calculus I',
                 'description' => 'A fundamental course in calculus.',
                 'code' => 'MTH101',
-                'credits' => 4
+                'credits' => 4,
             ],
             [
                 'name' => 'Database Management Systems',
                 'description' => 'Learn how to design and manage relational databases.',
                 'code' => 'CSE202',
-                'credits' => 3
+                'credits' => 3,
             ],
             [
                 'name' => 'Data Structures and Algorithms',
                 'description' => 'Study advanced data structures and algorithms.',
                 'code' => 'CSE203',
-                'credits' => 3
+                'credits' => 3,
             ],
             [
                 'name' => 'Digital Logic Design',
                 'description' => 'Learn about the fundamentals of digital circuits and logic.',
                 'code' => 'ECE101',
-                'credits' => 3
-            ]
+                'credits' => 3,
+            ],
         ];
 
         foreach ($courses as $course) {

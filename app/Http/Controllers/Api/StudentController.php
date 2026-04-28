@@ -2,56 +2,85 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ResourceController;
-use App\Http\Resources\StudentResource;
+use App\Http\Controllers\Controller;
 use App\Models\Resources\Student;
 use App\Services\PermissionService;
+use App\Traits\Searchable;
 use Illuminate\Http\Request;
 
-class StudentController extends ResourceController
+class StudentController extends Controller
 {
-    protected function modelClass(): string
-    {
-        return Student::class;
-    }
+    use Searchable;
 
-    protected function resourceClass(): string
-    {
-        return StudentResource::class;
+    protected $modelClass;
+
+    protected $permissionService;
+
+    public function __construct(
+        PermissionService $permissionService,
+    ) {
+        $this->modelClass = Student::class;
+        $this->permissionService = $permissionService;
     }
 
     /**
      * Display a listing of the students.
-     *
-     * @response AnonymousResourceCollection<StudentResource>
      */
     public function index(Request $request)
     {
-        return parent::index($request);
-    }
-
-    /**
-     * Display the specified student.
-     *
-     * @response StudentResource
-     */
-    public function show(string $id)
-    {
-        // For students, the "id" in the route is actually student_code
-        $modelClass = $this->modelClass();
-        $resourceClass = $this->resourceClass();
-
         // Check permission
         $client = auth('api')->client();
-        $permissionService = app(PermissionService::class);
-        $viewableColumns = $permissionService->allowedColumns($client, 'view', $modelClass);
+        $viewableColumns = $this->permissionService->allowedColumns($client, 'view', $this->modelClass);
         if (empty($viewableColumns)) {
             abort(403, 'No permission to view any columns');
         }
 
-        $data = Student::select($viewableColumns)->where('student_code', $id)->firstOrFail();
+        // Initialize the query builder with viewable columns
+        $builder = $this->modelClass::select($viewableColumns);
 
-        return new StudentResource($data);
+        // Search on searchable columns
+        if (method_exists($this->modelClass, 'getSearchable') && $request->has('q')) {
+            $searchableAttributes = (new $this->modelClass)->getSearchable();
+            $builder->searchByAttributes($request->query('q'), ...$searchableAttributes);
+        }
+
+        // Apply pagination
+        $request->page = $request->integer('page', 1);
+        $data = $builder->paginate($request->integer('n', 10));
+
+        return response()->json($data);
+    }
+
+    /**
+     * Store a newly created student in storage.
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified student.
+     */
+    public function show(Student $student)
+    {
+        //
+    }
+
+    /**
+     * Update the specified student in storage.
+     */
+    public function update(Request $request, Student $student)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified student from storage.
+     */
+    public function destroy(Student $student)
+    {
+        //
     }
 
     /**
@@ -61,22 +90,18 @@ class StudentController extends ResourceController
     {
         // Check permission
         $client = auth('api')->client();
-        $permissionService = app(PermissionService::class);
-        $viewableColumns = $permissionService->allowedColumns($client, 'view', Student::class);
+        $viewableColumns = $this->permissionService->allowedColumns($client, 'view', $this->modelClass);
         if (empty($viewableColumns)) {
             abort(403, 'No permission to view any columns');
         }
 
         // Initialize the query builder
-        $builder = Student::select($viewableColumns);
+        $builder = $this->modelClass::select($viewableColumns);
 
         // Search on searchable columns
-        if (method_exists(Student::class, 'getSearchable')) {
-            $searchableAttributes = (new Student)->getSearchable();
-            $queryStr = $request->string('name', $request->string('q', ''));
-            if ($queryStr !== '') {
-                $builder->searchByAttributes($queryStr, ...$searchableAttributes);
-            }
+        if (method_exists($this->modelClass, 'getSearchable') && $request->has('q')) {
+            $searchableAttributes = (new $this->modelClass)->getSearchable();
+            $builder->searchByAttributes($request->query('q'), ...$searchableAttributes);
         }
 
         $students = $builder->get();
