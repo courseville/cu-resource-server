@@ -2,40 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ResourceController;
+use App\Http\Requests\Api\BaseResourceRequest;
 use App\Http\Resources\InterviewQuotaResource;
 use App\Models\Resources\InterviewQuota;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class InterviewQuotaController extends ResourceController
+class InterviewQuotaController extends BaseResourceController
 {
-    protected function modelClass(): string
-    {
-        return InterviewQuota::class;
-    }
+    protected string $model = InterviewQuota::class;
 
-    protected function resourceClass(): string
-    {
-        return InterviewQuotaResource::class;
-    }
+    protected string $resource = InterviewQuotaResource::class;
 
     /**
      * Display a listing of the interview quotas.
-     *
-     * @response AnonymousResourceCollection<InterviewQuotaResource>
      */
-    public function index(Request $request)
+    public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        return parent::index($request);
+        $viewableColumns = $this->validatePermission('view');
+        $builder = InterviewQuota::query()->select($viewableColumns);
+        $this->applySearch($builder, $request);
+
+        return InterviewQuotaResource::collection($builder->paginate($request->integer('n', 10)));
     }
 
     /**
      * Display the specified interview quota.
-     *
-     * @response InterviewQuotaResource
      */
-    public function show(string $id)
+    public function show(InterviewQuota $interviewQuota): InterviewQuotaResource
     {
-        return parent::show($id);
+        $this->validatePermission('view');
+
+        return new InterviewQuotaResource($interviewQuota);
     }
 }

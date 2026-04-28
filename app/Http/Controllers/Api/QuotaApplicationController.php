@@ -2,40 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ResourceController;
+use App\Http\Requests\Api\BaseResourceRequest;
 use App\Http\Resources\QuotaApplicationResource;
 use App\Models\Resources\QuotaApplication;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class QuotaApplicationController extends ResourceController
+class QuotaApplicationController extends BaseResourceController
 {
-    protected function modelClass(): string
-    {
-        return QuotaApplication::class;
-    }
+    protected string $model = QuotaApplication::class;
 
-    protected function resourceClass(): string
-    {
-        return QuotaApplicationResource::class;
-    }
+    protected string $resource = QuotaApplicationResource::class;
 
     /**
      * Display a listing of the quota applications.
-     *
-     * @response AnonymousResourceCollection<QuotaApplicationResource>
      */
-    public function index(Request $request)
+    public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        return parent::index($request);
+        $viewableColumns = $this->validatePermission('view');
+        $builder = QuotaApplication::query()->select($viewableColumns);
+        $this->applySearch($builder, $request);
+
+        return QuotaApplicationResource::collection($builder->paginate($request->integer('n', 10)));
     }
 
     /**
      * Display the specified quota application.
-     *
-     * @response QuotaApplicationResource
      */
-    public function show(string $id)
+    public function show(QuotaApplication $quotaApplication): QuotaApplicationResource
     {
-        return parent::show($id);
+        $this->validatePermission('view');
+
+        return new QuotaApplicationResource($quotaApplication);
     }
 }

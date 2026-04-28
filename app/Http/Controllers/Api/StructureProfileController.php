@@ -2,40 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ResourceController;
+use App\Http\Requests\Api\BaseResourceRequest;
 use App\Http\Resources\StructureProfileResource;
 use App\Models\Resources\StructureProfile;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class StructureProfileController extends ResourceController
+class StructureProfileController extends BaseResourceController
 {
-    protected function modelClass(): string
-    {
-        return StructureProfile::class;
-    }
+    protected string $model = StructureProfile::class;
 
-    protected function resourceClass(): string
-    {
-        return StructureProfileResource::class;
-    }
+    protected string $resource = StructureProfileResource::class;
 
     /**
      * Display a listing of the structure profiles.
-     *
-     * @response AnonymousResourceCollection<StructureProfileResource>
      */
-    public function index(Request $request)
+    public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        return parent::index($request);
+        $viewableColumns = $this->validatePermission('view');
+        $builder = StructureProfile::query()->select($viewableColumns);
+        $this->applySearch($builder, $request);
+
+        return StructureProfileResource::collection($builder->paginate($request->integer('n', 10)));
     }
 
     /**
      * Display the specified structure profile.
-     *
-     * @response StructureProfileResource
      */
-    public function show(string $id)
+    public function show(StructureProfile $structureProfile): StructureProfileResource
     {
-        return parent::show($id);
+        $this->validatePermission('view');
+
+        return new StructureProfileResource($structureProfile);
     }
 }

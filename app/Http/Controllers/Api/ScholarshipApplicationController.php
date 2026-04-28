@@ -2,40 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ResourceController;
+use App\Http\Requests\Api\BaseResourceRequest;
 use App\Http\Resources\ScholarshipApplicationResource;
 use App\Models\Resources\ScholarshipApplication;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class ScholarshipApplicationController extends ResourceController
+class ScholarshipApplicationController extends BaseResourceController
 {
-    protected function modelClass(): string
-    {
-        return ScholarshipApplication::class;
-    }
+    protected string $model = ScholarshipApplication::class;
 
-    protected function resourceClass(): string
-    {
-        return ScholarshipApplicationResource::class;
-    }
+    protected string $resource = ScholarshipApplicationResource::class;
 
     /**
      * Display a listing of the scholarship applications.
-     *
-     * @response AnonymousResourceCollection<ScholarshipApplicationResource>
      */
-    public function index(Request $request)
+    public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        return parent::index($request);
+        $viewableColumns = $this->validatePermission('view');
+        $builder = ScholarshipApplication::query()->select($viewableColumns);
+        $this->applySearch($builder, $request);
+
+        return ScholarshipApplicationResource::collection($builder->paginate($request->integer('n', 10)));
     }
 
     /**
      * Display the specified scholarship application.
-     *
-     * @response ScholarshipApplicationResource
      */
-    public function show(string $id)
+    public function show(ScholarshipApplication $scholarshipApplication): ScholarshipApplicationResource
     {
-        return parent::show($id);
+        $this->validatePermission('view');
+
+        return new ScholarshipApplicationResource($scholarshipApplication);
     }
 }

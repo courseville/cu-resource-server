@@ -2,40 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ResourceController;
+use App\Http\Requests\Api\BaseResourceRequest;
 use App\Http\Resources\AdmissionApplicationResource;
 use App\Models\Resources\AdmissionApplication;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class AdmissionApplicationController extends ResourceController
+class AdmissionApplicationController extends BaseResourceController
 {
-    protected function modelClass(): string
-    {
-        return AdmissionApplication::class;
-    }
+    protected string $model = AdmissionApplication::class;
 
-    protected function resourceClass(): string
-    {
-        return AdmissionApplicationResource::class;
-    }
+    protected string $resource = AdmissionApplicationResource::class;
 
     /**
      * Display a listing of the admission applications.
-     *
-     * @response AnonymousResourceCollection<AdmissionApplicationResource>
      */
-    public function index(Request $request)
+    public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        return parent::index($request);
+        $viewableColumns = $this->validatePermission('view');
+        $builder = AdmissionApplication::query()->select($viewableColumns);
+        $this->applySearch($builder, $request);
+
+        return AdmissionApplicationResource::collection($builder->paginate($request->integer('n', 10)));
     }
 
     /**
      * Display the specified admission application.
-     *
-     * @response AdmissionApplicationResource
      */
-    public function show(string $id)
+    public function show(AdmissionApplication $admissionApplication): AdmissionApplicationResource
     {
-        return parent::show($id);
+        $this->validatePermission('view');
+
+        return new AdmissionApplicationResource($admissionApplication);
     }
 }

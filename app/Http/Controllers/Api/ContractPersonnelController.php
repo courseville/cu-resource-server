@@ -2,40 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ResourceController;
+use App\Http\Requests\Api\BaseResourceRequest;
 use App\Http\Resources\ContractPersonnelResource;
 use App\Models\Resources\ContractPersonnel;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class ContractPersonnelController extends ResourceController
+class ContractPersonnelController extends BaseResourceController
 {
-    protected function modelClass(): string
-    {
-        return ContractPersonnel::class;
-    }
+    protected string $model = ContractPersonnel::class;
 
-    protected function resourceClass(): string
-    {
-        return ContractPersonnelResource::class;
-    }
+    protected string $resource = ContractPersonnelResource::class;
 
     /**
      * Display a listing of the contract personnels.
-     *
-     * @response AnonymousResourceCollection<ContractPersonnelResource>
      */
-    public function index(Request $request)
+    public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        return parent::index($request);
+        $viewableColumns = $this->validatePermission('view');
+        $builder = ContractPersonnel::query()->select($viewableColumns);
+        $this->applySearch($builder, $request);
+
+        return ContractPersonnelResource::collection($builder->paginate($request->integer('n', 10)));
     }
 
     /**
      * Display the specified contract personnel.
-     *
-     * @response ContractPersonnelResource
      */
-    public function show(string $id)
+    public function show(ContractPersonnel $contractPersonnel): ContractPersonnelResource
     {
-        return parent::show($id);
+        $this->validatePermission('view');
+
+        return new ContractPersonnelResource($contractPersonnel);
     }
 }

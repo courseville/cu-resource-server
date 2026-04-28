@@ -2,40 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ResourceController;
+use App\Http\Requests\Api\BaseResourceRequest;
 use App\Http\Resources\ProgramCommitteeResource;
 use App\Models\Resources\ProgramCommittee;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class ProgramCommitteeController extends ResourceController
+class ProgramCommitteeController extends BaseResourceController
 {
-    protected function modelClass(): string
-    {
-        return ProgramCommittee::class;
-    }
+    protected string $model = ProgramCommittee::class;
 
-    protected function resourceClass(): string
-    {
-        return ProgramCommitteeResource::class;
-    }
+    protected string $resource = ProgramCommitteeResource::class;
 
     /**
      * Display a listing of the program committees.
-     *
-     * @response AnonymousResourceCollection<ProgramCommitteeResource>
      */
-    public function index(Request $request)
+    public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        return parent::index($request);
+        $viewableColumns = $this->validatePermission('view');
+        $builder = ProgramCommittee::query()->select($viewableColumns);
+        $this->applySearch($builder, $request);
+
+        return ProgramCommitteeResource::collection($builder->paginate($request->integer('n', 10)));
     }
 
     /**
      * Display the specified program committee.
-     *
-     * @response ProgramCommitteeResource
      */
-    public function show(string $id)
+    public function show(ProgramCommittee $programCommittee): ProgramCommitteeResource
     {
-        return parent::show($id);
+        $this->validatePermission('view');
+
+        return new ProgramCommitteeResource($programCommittee);
     }
 }

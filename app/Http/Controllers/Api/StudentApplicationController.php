@@ -2,40 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ResourceController;
+use App\Http\Requests\Api\BaseResourceRequest;
 use App\Http\Resources\StudentApplicationResource;
 use App\Models\Resources\StudentApplication;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class StudentApplicationController extends ResourceController
+class StudentApplicationController extends BaseResourceController
 {
-    protected function modelClass(): string
-    {
-        return StudentApplication::class;
-    }
+    protected string $model = StudentApplication::class;
 
-    protected function resourceClass(): string
-    {
-        return StudentApplicationResource::class;
-    }
+    protected string $resource = StudentApplicationResource::class;
 
     /**
      * Display a listing of the student applications.
-     *
-     * @response AnonymousResourceCollection<StudentApplicationResource>
      */
-    public function index(Request $request)
+    public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        return parent::index($request);
+        $viewableColumns = $this->validatePermission('view');
+        $builder = StudentApplication::query()->select($viewableColumns);
+        $this->applySearch($builder, $request);
+
+        return StudentApplicationResource::collection($builder->paginate($request->integer('n', 10)));
     }
 
     /**
      * Display the specified student application.
-     *
-     * @response StudentApplicationResource
      */
-    public function show(string $id)
+    public function show(StudentApplication $studentApplication): StudentApplicationResource
     {
-        return parent::show($id);
+        $this->validatePermission('view');
+
+        return new StudentApplicationResource($studentApplication);
     }
 }

@@ -2,59 +2,38 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\BaseResourceRequest;
+use App\Http\Resources\StudentResource;
 use App\Models\Resources\Student;
-use App\Services\PermissionService;
-use App\Traits\Searchable;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class StudentController extends Controller
+class StudentController extends BaseResourceController
 {
-    use Searchable;
+    protected string $model = Student::class;
 
-    protected $modelClass;
-
-    protected $permissionService;
-
-    public function __construct(
-        PermissionService $permissionService,
-    ) {
-        $this->modelClass = Student::class;
-        $this->permissionService = $permissionService;
-    }
+    protected string $resource = StudentResource::class;
 
     /**
      * Display a listing of the students.
      */
-    public function index(Request $request)
+    public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        // Check permission
-        $client = auth('api')->client();
-        $viewableColumns = $this->permissionService->allowedColumns($client, 'view', $this->modelClass);
-        if (empty($viewableColumns)) {
-            abort(403, 'No permission to view any columns');
-        }
+        $viewableColumns = $this->validatePermission('view');
 
         // Initialize the query builder with viewable columns
-        $builder = $this->modelClass::select($viewableColumns);
+        $builder = Student::query()->select($viewableColumns);
 
         // Search on searchable columns
-        if (method_exists($this->modelClass, 'getSearchable') && $request->has('q')) {
-            $searchableAttributes = (new $this->modelClass)->getSearchable();
-            $builder->searchByAttributes($request->query('q'), ...$searchableAttributes);
-        }
+        $this->applySearch($builder, $request);
 
-        // Apply pagination
-        $request->page = $request->integer('page', 1);
-        $data = $builder->paginate($request->integer('n', 10));
-
-        return response()->json($data);
+        return StudentResource::collection($builder->paginate($request->integer('n', 10)));
     }
 
     /**
      * Store a newly created student in storage.
      */
-    public function store(Request $request)
+    public function store()
     {
         //
     }
@@ -62,15 +41,17 @@ class StudentController extends Controller
     /**
      * Display the specified student.
      */
-    public function show(Student $student)
+    public function show(Student $student): StudentResource
     {
-        //
+        $this->validatePermission('view');
+
+        return new StudentResource($student);
     }
 
     /**
      * Update the specified student in storage.
      */
-    public function update(Request $request, Student $student)
+    public function update(Student $student)
     {
         //
     }
@@ -86,23 +67,16 @@ class StudentController extends Controller
     /**
      * Export students to CSV or XLSX.
      */
-    public function export(Request $request)
+    public function export(BaseResourceRequest $request)
     {
         // Check permission
-        $client = auth('api')->client();
-        $viewableColumns = $this->permissionService->allowedColumns($client, 'view', $this->modelClass);
-        if (empty($viewableColumns)) {
-            abort(403, 'No permission to view any columns');
-        }
+        $viewableColumns = $this->validatePermission('view');
 
         // Initialize the query builder
-        $builder = $this->modelClass::select($viewableColumns);
+        $builder = Student::query()->select($viewableColumns);
 
         // Search on searchable columns
-        if (method_exists($this->modelClass, 'getSearchable') && $request->has('q')) {
-            $searchableAttributes = (new $this->modelClass)->getSearchable();
-            $builder->searchByAttributes($request->query('q'), ...$searchableAttributes);
-        }
+        $this->applySearch($builder, $request);
 
         $students = $builder->get();
         $format = $request->query('format', 'csv');

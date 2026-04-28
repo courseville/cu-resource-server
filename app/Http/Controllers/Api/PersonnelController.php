@@ -2,51 +2,32 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\PersonnelCollection;
+use App\Http\Requests\Api\Personnel\IndexPersonnelRequest;
 use App\Http\Resources\PersonnelResource;
 use App\Models\Resources\Personnel;
 use App\Models\Resources\Structure;
-use App\Services\PermissionService;
-use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class PersonnelController extends Controller
+class PersonnelController extends BaseResourceController
 {
-    protected $permissionService;
+    protected string $model = Personnel::class;
 
-    public function __construct(
-        PermissionService $permissionService,
-    ) {
-        $this->permissionService = $permissionService;
-    }
+    protected string $resource = PersonnelResource::class;
 
     /**
      * Display a listing of the personnel.
-     *
-     * @response PersonnelCollection<LengthAwarePaginator<PersonnelResource>>
      */
-    public function index(Request $request)
+    public function index(IndexPersonnelRequest $request): AnonymousResourceCollection
     {
-        // Check permission
-        $client = auth('api')->client();
-        $viewableColumns = $this->permissionService->allowedColumns($client, 'view', Personnel::class);
-        if (empty($viewableColumns)) {
-            abort(403, 'No permission to view any columns');
-        }
+        $viewableColumns = $this->validatePermission('view');
 
         // Initialize the query builder with viewable columns
-        $builder = Personnel::query();
+        $builder = Personnel::query()->select($viewableColumns);
 
-        // Apply filters if any
-        $params = $request->validate([
-            'structure_id' => 'string',
-        ]);
-
-        if (isset($params['structure_id'])) {
-            $structure = Structure::where('structure_id', $params['structure_id'])->first();
+        if ($request->filled('structure_id')) {
+            $structure = Structure::where('structure_id', $request->structure_id)->first();
             if (is_null($structure)) {
-                return response()->json(Personnel::where('id', -1)->paginate(10));
+                return PersonnelResource::collection(Personnel::where('id', -1)->paginate($request->integer('n', 10)));
             }
             $builder->whereHas('structureProfiles', function ($query) use ($structure) {
                 $query->where(function ($q) use ($structure) {
@@ -59,11 +40,7 @@ class PersonnelController extends Controller
         }
 
         // Search on searchable columns
-        $searchableAttributes = (new Personnel)->getSearchable();
-        $builder->searchByAttributes(
-            $request->string('name', ''),
-            ...$searchableAttributes
-        );
+        $this->applySearch($builder, $request);
 
         // With relationships
         $builder->with([
@@ -77,16 +54,13 @@ class PersonnelController extends Controller
             },
         ]);
 
-        $request->page = $request->integer('page', 1);
-        $data = $builder->paginate($request->integer('n', 10));
-
-        return PersonnelResource::collection($data);
+        return PersonnelResource::collection($builder->paginate($request->integer('n', 10)));
     }
 
     /**
      * Store a newly created personnel in storage.
      */
-    public function store(Request $request)
+    public function store()
     {
         //
     }
@@ -94,21 +68,9 @@ class PersonnelController extends Controller
     /**
      * Display the specified personnel.
      */
-    public function show(Personnel $personnel)
+    public function show(Personnel $personnel): PersonnelResource
     {
-        // $personnel->load([
-        //     // relationships
-        //     'structureProfiles' => function ($query) {
-        //         // columns
-        //         $query->select('id', 'structure_level1_id', 'structure_level2_id', 'structure_level3_id', 'structure_level4_id', 'personnel_id')->with([
-        //             // relationships and columns
-        //             'structureLevel1:id,name',
-        //             'structureLevel2:id,name',
-        //             'structureLevel3:id,name',
-        //             'structureLevel4:id,name',
-        //         ]);
-        //     },
-        // ]);
+        $this->validatePermission('view');
 
         $personnel->load([
             'structureProfiles' => function ($query) {
@@ -127,7 +89,7 @@ class PersonnelController extends Controller
     /**
      * Update the specified personnel in storage.
      */
-    public function update(Request $request, Personnel $personnel)
+    public function update(Personnel $personnel)
     {
         //
     }

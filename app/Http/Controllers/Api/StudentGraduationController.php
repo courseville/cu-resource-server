@@ -2,40 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ResourceController;
+use App\Http\Requests\Api\BaseResourceRequest;
 use App\Http\Resources\StudentGraduationResource;
 use App\Models\Resources\StudentGraduation;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class StudentGraduationController extends ResourceController
+class StudentGraduationController extends BaseResourceController
 {
-    protected function modelClass(): string
-    {
-        return StudentGraduation::class;
-    }
+    protected string $model = StudentGraduation::class;
 
-    protected function resourceClass(): string
-    {
-        return StudentGraduationResource::class;
-    }
+    protected string $resource = StudentGraduationResource::class;
 
     /**
      * Display a listing of the student graduations.
-     *
-     * @response AnonymousResourceCollection<StudentGraduationResource>
      */
-    public function index(Request $request)
+    public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        return parent::index($request);
+        $viewableColumns = $this->validatePermission('view');
+        $builder = StudentGraduation::query()->select($viewableColumns);
+        $this->applySearch($builder, $request);
+
+        return StudentGraduationResource::collection($builder->paginate($request->integer('n', 10)));
     }
 
     /**
      * Display the specified student graduation.
-     *
-     * @response StudentGraduationResource
      */
-    public function show(string $id)
+    public function show(StudentGraduation $studentGraduation): StudentGraduationResource
     {
-        return parent::show($id);
+        $this->validatePermission('view');
+
+        return new StudentGraduationResource($studentGraduation);
     }
 }

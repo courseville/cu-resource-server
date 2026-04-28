@@ -2,40 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ResourceController;
+use App\Http\Requests\Api\BaseResourceRequest;
 use App\Http\Resources\CurriculumResource;
 use App\Models\Resources\Curriculum;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class CurriculumController extends ResourceController
+class CurriculumController extends BaseResourceController
 {
-    protected function modelClass(): string
-    {
-        return Curriculum::class;
-    }
+    protected string $model = Curriculum::class;
 
-    protected function resourceClass(): string
-    {
-        return CurriculumResource::class;
-    }
+    protected string $resource = CurriculumResource::class;
 
     /**
      * Display a listing of the curriculums.
-     *
-     * @response AnonymousResourceCollection<CurriculumResource>
      */
-    public function index(Request $request)
+    public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        return parent::index($request);
+        $viewableColumns = $this->validatePermission('view');
+        $builder = Curriculum::query()->select($viewableColumns);
+        $this->applySearch($builder, $request);
+
+        return CurriculumResource::collection($builder->paginate($request->integer('n', 10)));
     }
 
     /**
      * Display the specified curriculum.
-     *
-     * @response CurriculumResource
      */
-    public function show(string $id)
+    public function show(Curriculum $curriculum): CurriculumResource
     {
-        return parent::show($id);
+        $this->validatePermission('view');
+
+        return new CurriculumResource($curriculum);
     }
 }

@@ -2,40 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ResourceController;
+use App\Http\Requests\Api\BaseResourceRequest;
 use App\Http\Resources\RetiredPersonnelResource;
 use App\Models\Resources\RetiredPersonnel;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class RetiredPersonnelController extends ResourceController
+class RetiredPersonnelController extends BaseResourceController
 {
-    protected function modelClass(): string
-    {
-        return RetiredPersonnel::class;
-    }
+    protected string $model = RetiredPersonnel::class;
 
-    protected function resourceClass(): string
-    {
-        return RetiredPersonnelResource::class;
-    }
+    protected string $resource = RetiredPersonnelResource::class;
 
     /**
      * Display a listing of the retired personnels.
-     *
-     * @response AnonymousResourceCollection<RetiredPersonnelResource>
      */
-    public function index(Request $request)
+    public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        return parent::index($request);
+        $viewableColumns = $this->validatePermission('view');
+        $builder = RetiredPersonnel::query()->select($viewableColumns);
+        $this->applySearch($builder, $request);
+
+        return RetiredPersonnelResource::collection($builder->paginate($request->integer('n', 10)));
     }
 
     /**
      * Display the specified retired personnel.
-     *
-     * @response RetiredPersonnelResource
      */
-    public function show(string $id)
+    public function show(RetiredPersonnel $retiredPersonnel): RetiredPersonnelResource
     {
-        return parent::show($id);
+        $this->validatePermission('view');
+
+        return new RetiredPersonnelResource($retiredPersonnel);
     }
 }

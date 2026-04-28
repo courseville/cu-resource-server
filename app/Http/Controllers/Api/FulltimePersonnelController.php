@@ -2,40 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ResourceController;
+use App\Http\Requests\Api\BaseResourceRequest;
 use App\Http\Resources\FulltimePersonnelResource;
 use App\Models\Resources\FulltimePersonnel;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class FulltimePersonnelController extends ResourceController
+class FulltimePersonnelController extends BaseResourceController
 {
-    protected function modelClass(): string
-    {
-        return FulltimePersonnel::class;
-    }
+    protected string $model = FulltimePersonnel::class;
 
-    protected function resourceClass(): string
-    {
-        return FulltimePersonnelResource::class;
-    }
+    protected string $resource = FulltimePersonnelResource::class;
 
     /**
      * Display a listing of the fulltime personnels.
-     *
-     * @response AnonymousResourceCollection<FulltimePersonnelResource>
      */
-    public function index(Request $request)
+    public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        return parent::index($request);
+        $viewableColumns = $this->validatePermission('view');
+        $builder = FulltimePersonnel::query()->select($viewableColumns);
+        $this->applySearch($builder, $request);
+
+        return FulltimePersonnelResource::collection($builder->paginate($request->integer('n', 10)));
     }
 
     /**
      * Display the specified fulltime personnel.
-     *
-     * @response FulltimePersonnelResource
      */
-    public function show(string $id)
+    public function show(FulltimePersonnel $fulltimePersonnel): FulltimePersonnelResource
     {
-        return parent::show($id);
+        $this->validatePermission('view');
+
+        return new FulltimePersonnelResource($fulltimePersonnel);
     }
 }

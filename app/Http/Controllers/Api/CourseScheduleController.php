@@ -2,40 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ResourceController;
+use App\Http\Requests\Api\BaseResourceRequest;
 use App\Http\Resources\CourseScheduleResource;
 use App\Models\Resources\CourseSchedule;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class CourseScheduleController extends ResourceController
+class CourseScheduleController extends BaseResourceController
 {
-    protected function modelClass(): string
-    {
-        return CourseSchedule::class;
-    }
+    protected string $model = CourseSchedule::class;
 
-    protected function resourceClass(): string
-    {
-        return CourseScheduleResource::class;
-    }
+    protected string $resource = CourseScheduleResource::class;
 
     /**
      * Display a listing of the course schedules.
-     *
-     * @response AnonymousResourceCollection<CourseScheduleResource>
      */
-    public function index(Request $request)
+    public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        return parent::index($request);
+        $viewableColumns = $this->validatePermission('view');
+        $builder = CourseSchedule::query()->select($viewableColumns);
+        $this->applySearch($builder, $request);
+
+        return CourseScheduleResource::collection($builder->paginate($request->integer('n', 10)));
     }
 
     /**
      * Display the specified course schedule.
-     *
-     * @response CourseScheduleResource
      */
-    public function show(string $id)
+    public function show(CourseSchedule $courseSchedule): CourseScheduleResource
     {
-        return parent::show($id);
+        $this->validatePermission('view');
+
+        return new CourseScheduleResource($courseSchedule);
     }
 }

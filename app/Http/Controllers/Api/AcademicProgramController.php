@@ -2,65 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ResourceController;
+use App\Http\Requests\Api\BaseResourceRequest;
 use App\Http\Resources\AcademicProgramResource;
 use App\Models\Resources\AcademicProgram;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class AcademicProgramController extends ResourceController
+class AcademicProgramController extends BaseResourceController
 {
-    protected function modelClass(): string
-    {
-        return AcademicProgram::class;
-    }
+    protected string $model = AcademicProgram::class;
 
-    protected function resourceClass(): string
-    {
-        return AcademicProgramResource::class;
-    }
+    protected string $resource = AcademicProgramResource::class;
 
     /**
      * Display a listing of the academic programs.
-     *
-     * @response AnonymousResourceCollection<AcademicProgramResource>
      */
-    public function index(Request $request)
+    public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        // return parent::index($request);
-        $modelClass = $this->modelClass();
-        $resourceClass = $this->resourceClass();
+        $viewableColumns = $this->validatePermission('view');
+        $builder = AcademicProgram::query()->select($viewableColumns);
+        $this->applySearch($builder, $request);
 
-        // Check permission
-        $permissionService = app(PermissionService::class);
-        $client = auth('api')->client();
-        $viewableColumns = $permissionService->allowedColumns($client, 'view', $modelClass);
-        if (empty($viewableColumns)) {
-            abort(403, 'No permission to view any columns');
-        }
-
-        // Initialize the query builder with viewable columns
-        $builder = $modelClass::select($viewableColumns);
-
-        // Search on searchable columns
-        if (method_exists($modelClass, 'getSearchable')) {
-            $searchableAttributes = (new $modelClass)->getSearchable();
-            $builder = $this->searchByAttributes($request, $builder, ...$searchableAttributes);
-        }
-
-        // Apply pagination
-        $request->page = $request->integer('page', 1);
-        $data = $builder->paginate($request->integer('n', 10));
-
-        return AcademicProgramResource::collection($data);
+        return AcademicProgramResource::collection($builder->paginate($request->integer('n', 10)));
     }
 
     /**
      * Display the specified academic program.
-     *
-     * @response AcademicProgramResource
      */
-    public function show(string $id)
+    public function show(AcademicProgram $academicProgram): AcademicProgramResource
     {
-        return parent::show($id);
+        $this->validatePermission('view');
+
+        return new AcademicProgramResource($academicProgram);
     }
 }

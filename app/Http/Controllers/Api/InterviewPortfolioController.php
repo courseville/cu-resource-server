@@ -2,40 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ResourceController;
+use App\Http\Requests\Api\BaseResourceRequest;
 use App\Http\Resources\InterviewPortfolioResource;
 use App\Models\Resources\InterviewPortfolio;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class InterviewPortfolioController extends ResourceController
+class InterviewPortfolioController extends BaseResourceController
 {
-    protected function modelClass(): string
-    {
-        return InterviewPortfolio::class;
-    }
+    protected string $model = InterviewPortfolio::class;
 
-    protected function resourceClass(): string
-    {
-        return InterviewPortfolioResource::class;
-    }
+    protected string $resource = InterviewPortfolioResource::class;
 
     /**
      * Display a listing of the interview portfolios.
-     *
-     * @response AnonymousResourceCollection<InterviewPortfolioResource>
      */
-    public function index(Request $request)
+    public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        return parent::index($request);
+        $viewableColumns = $this->validatePermission('view');
+        $builder = InterviewPortfolio::query()->select($viewableColumns);
+        $this->applySearch($builder, $request);
+
+        return InterviewPortfolioResource::collection($builder->paginate($request->integer('n', 10)));
     }
 
     /**
      * Display the specified interview portfolio.
-     *
-     * @response InterviewPortfolioResource
      */
-    public function show(string $id)
+    public function show(InterviewPortfolio $interviewPortfolio): InterviewPortfolioResource
     {
-        return parent::show($id);
+        $this->validatePermission('view');
+
+        return new InterviewPortfolioResource($interviewPortfolio);
     }
 }

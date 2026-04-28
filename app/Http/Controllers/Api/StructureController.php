@@ -2,59 +2,41 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Structure\IndexStructureRequest;
 use App\Http\Resources\StructureResource;
 use App\Models\Resources\Structure;
-use App\Services\PermissionService;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class StructureController extends Controller
+class StructureController extends BaseResourceController
 {
-    protected $permissionService;
+    protected string $model = Structure::class;
 
-    public function __construct(
-        PermissionService $permissionService,
-    ) {
-        $this->permissionService = $permissionService;
-    }
+    protected string $resource = StructureResource::class;
 
     /**
      * Display a listing of the structures.
      */
-    public function index(Request $request)
+    public function index(IndexStructureRequest $request): AnonymousResourceCollection
     {
-        // Check permission
-        $client = auth('api')->client();
-        $viewableColumns = $this->permissionService->allowedColumns($client, 'view', Structure::class);
-        if (empty($viewableColumns)) {
-            abort(403, 'No permission to view any columns');
-        }
+        $viewableColumns = $this->validatePermission('view');
 
         // Initialize the query builder with viewable columns
-        $builder = Structure::query();
+        $builder = Structure::query()->select($viewableColumns);
 
-        // Apply filters if any
-        $params = $request->validate([
-            'structure_id' => 'string',
-        ]);
+        if ($request->filled('structure_id')) {
+            $builder->where('structure_id', $request->structure_id);
+        }
 
         // Search on searchable columns
-        $searchableAttributes = (new Structure)->getSearchable();
-        $builder->searchByAttributes(
-            $request->string('name', ''),
-            ...$searchableAttributes
-        );
+        $this->applySearch($builder, $request);
 
-        $request->page = $request->integer('page', 1);
-        $data = $builder->paginate($request->integer('n', 10));
-
-        return StructureResource::collection($data);
+        return StructureResource::collection($builder->paginate($request->integer('n', 10)));
     }
 
     /**
      * Store a newly created structure in storage.
      */
-    public function store(Request $request)
+    public function store()
     {
         //
     }
@@ -62,15 +44,17 @@ class StructureController extends Controller
     /**
      * Display the specified structure.
      */
-    public function show(Structure $structure)
+    public function show(Structure $structure): StructureResource
     {
+        $this->validatePermission('view');
+
         return new StructureResource($structure);
     }
 
     /**
      * Update the specified structure in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Structure $structure)
     {
         //
     }
@@ -78,7 +62,7 @@ class StructureController extends Controller
     /**
      * Remove the specified structure from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Structure $structure)
     {
         //
     }

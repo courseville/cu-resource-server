@@ -2,40 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ResourceController;
+use App\Http\Requests\Api\BaseResourceRequest;
 use App\Http\Resources\InterviewerResource;
 use App\Models\Resources\Interviewer;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class InterviewerController extends ResourceController
+class InterviewerController extends BaseResourceController
 {
-    protected function modelClass(): string
-    {
-        return Interviewer::class;
-    }
+    protected string $model = Interviewer::class;
 
-    protected function resourceClass(): string
-    {
-        return InterviewerResource::class;
-    }
+    protected string $resource = InterviewerResource::class;
 
     /**
      * Display a listing of the interviewers.
-     *
-     * @response AnonymousResourceCollection<InterviewerResource>
      */
-    public function index(Request $request)
+    public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        return parent::index($request);
+        $viewableColumns = $this->validatePermission('view');
+        $builder = Interviewer::query()->select($viewableColumns);
+        $this->applySearch($builder, $request);
+
+        return InterviewerResource::collection($builder->paginate($request->integer('n', 10)));
     }
 
     /**
      * Display the specified interviewer.
-     *
-     * @response InterviewerResource
      */
-    public function show(string $id)
+    public function show(Interviewer $interviewer): InterviewerResource
     {
-        return parent::show($id);
+        $this->validatePermission('view');
+
+        return new InterviewerResource($interviewer);
     }
 }

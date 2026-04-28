@@ -2,40 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ResourceController;
+use App\Http\Requests\Api\BaseResourceRequest;
 use App\Http\Resources\CourseInstructorResource;
 use App\Models\Resources\CourseInstructor;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class CourseInstructorController extends ResourceController
+class CourseInstructorController extends BaseResourceController
 {
-    protected function modelClass(): string
-    {
-        return CourseInstructor::class;
-    }
+    protected string $model = CourseInstructor::class;
 
-    protected function resourceClass(): string
-    {
-        return CourseInstructorResource::class;
-    }
+    protected string $resource = CourseInstructorResource::class;
 
     /**
      * Display a listing of the course instructors.
-     *
-     * @response AnonymousResourceCollection<CourseInstructorResource>
      */
-    public function index(Request $request)
+    public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        return parent::index($request);
+        $viewableColumns = $this->validatePermission('view');
+        $builder = CourseInstructor::query()->select($viewableColumns);
+        $this->applySearch($builder, $request);
+
+        return CourseInstructorResource::collection($builder->paginate($request->integer('n', 10)));
     }
 
     /**
      * Display the specified course instructor.
-     *
-     * @response CourseInstructorResource
      */
-    public function show(string $id)
+    public function show(CourseInstructor $courseInstructor): CourseInstructorResource
     {
-        return parent::show($id);
+        $this->validatePermission('view');
+
+        return new CourseInstructorResource($courseInstructor);
     }
 }

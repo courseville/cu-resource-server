@@ -2,40 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ResourceController;
+use App\Http\Requests\Api\BaseResourceRequest;
 use App\Http\Resources\PortfolioResource;
 use App\Models\Resources\Portfolio;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class PortfolioController extends ResourceController
+class PortfolioController extends BaseResourceController
 {
-    protected function modelClass(): string
-    {
-        return Portfolio::class;
-    }
+    protected string $model = Portfolio::class;
 
-    protected function resourceClass(): string
-    {
-        return PortfolioResource::class;
-    }
+    protected string $resource = PortfolioResource::class;
 
     /**
      * Display a listing of the portfolios.
-     *
-     * @response AnonymousResourceCollection<PortfolioResource>
      */
-    public function index(Request $request)
+    public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        return parent::index($request);
+        $viewableColumns = $this->validatePermission('view');
+        $builder = Portfolio::query()->select($viewableColumns);
+        $this->applySearch($builder, $request);
+
+        return PortfolioResource::collection($builder->paginate($request->integer('n', 10)));
     }
 
     /**
      * Display the specified portfolio.
-     *
-     * @response PortfolioResource
      */
-    public function show(string $id)
+    public function show(Portfolio $portfolio): PortfolioResource
     {
-        return parent::show($id);
+        $this->validatePermission('view');
+
+        return new PortfolioResource($portfolio);
     }
 }

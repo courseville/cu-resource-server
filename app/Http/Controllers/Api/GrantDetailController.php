@@ -2,40 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ResourceController;
+use App\Http\Requests\Api\BaseResourceRequest;
 use App\Http\Resources\GrantDetailResource;
 use App\Models\Resources\GrantDetail;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class GrantDetailController extends ResourceController
+class GrantDetailController extends BaseResourceController
 {
-    protected function modelClass(): string
-    {
-        return GrantDetail::class;
-    }
+    protected string $model = GrantDetail::class;
 
-    protected function resourceClass(): string
-    {
-        return GrantDetailResource::class;
-    }
+    protected string $resource = GrantDetailResource::class;
 
     /**
      * Display a listing of the grant details.
-     *
-     * @response AnonymousResourceCollection<GrantDetailResource>
      */
-    public function index(Request $request)
+    public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        return parent::index($request);
+        $viewableColumns = $this->validatePermission('view');
+        $builder = GrantDetail::query()->select($viewableColumns);
+        $this->applySearch($builder, $request);
+
+        return GrantDetailResource::collection($builder->paginate($request->integer('n', 10)));
     }
 
     /**
      * Display the specified grant detail.
-     *
-     * @response GrantDetailResource
      */
-    public function show(string $id)
+    public function show(GrantDetail $grantDetail): GrantDetailResource
     {
-        return parent::show($id);
+        $this->validatePermission('view');
+
+        return new GrantDetailResource($grantDetail);
     }
 }
