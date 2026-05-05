@@ -2,15 +2,14 @@
 
 namespace App\Filament\Resources\PersonnelPositions\Tables;
 
+use App\Filament\Exports\PersonnelPositionExporter;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
-use Filament\Actions\DeleteAction;
-
-use Filament\Tables\Columns\TextColumn;
 use Filament\Actions\ExportBulkAction;
-use App\Filament\Exports\PersonnelPositionExporter;
+use Filament\Actions\ViewAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class PersonnelPositionsTable
@@ -22,27 +21,27 @@ class PersonnelPositionsTable
                 TextColumn::make('personnel_id')
                     ->searchable(),
                 TextColumn::make('begin_date')
+                    ->date()
                     ->searchable(),
                 TextColumn::make('end_date')
+                    ->date()
                     ->searchable(),
-                TextColumn::make('positiontype_id')
-                    ->searchable(),
-                TextColumn::make('positiontype_name')
-                    ->searchable(),
+                // TextColumn::make('positiontype_name')
+                //     ->searchable(),
                 TextColumn::make('positiontype_text')
                     ->searchable(),
-                TextColumn::make('fieldstudy')
-                    ->searchable(),
-                TextColumn::make('subdiscipline_1')
-                    ->searchable(),
-                TextColumn::make('subdiscipline_2')
-                    ->searchable(),
-                TextColumn::make('subdiscipline_3')
-                    ->searchable(),
-                TextColumn::make('subdiscipline_4')
-                    ->searchable(),
-                TextColumn::make('subdiscipline_5')
-                    ->searchable(),
+                // TextColumn::make('fieldstudy')
+                //     ->searchable(),
+                // TextColumn::make('subdiscipline_1')
+                //     ->searchable(),
+                // TextColumn::make('subdiscipline_2')
+                //     ->searchable(),
+                // TextColumn::make('subdiscipline_3')
+                //     ->searchable(),
+                // TextColumn::make('subdiscipline_4')
+                //     ->searchable(),
+                // TextColumn::make('subdiscipline_5')
+                //     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

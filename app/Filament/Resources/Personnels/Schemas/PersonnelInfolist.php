@@ -12,7 +12,7 @@ class PersonnelInfolist
     {
         return $schema
             ->components([
-                Section::make('Personal Information')
+                Section::make('Profile')
                     ->schema([
                         TextEntry::make('personnel_id')
                             ->label('Personnel ID'),

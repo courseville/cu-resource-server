@@ -21,6 +21,8 @@ class PersonnelsTable
                     ->label('ID')
                     ->sortable()
                     ->searchable(),
+                TextColumn::make('full_title')
+                    ->label('Full Title'),
                 TextColumn::make('first_name_th')
                     ->label('First Name (TH)')
                     ->sortable()

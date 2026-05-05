@@ -40,8 +40,41 @@ class Personnel extends Model implements Auditable
         'current_province',
         'current_postal_code',
         'passport_no',
+        'rank_title',
+        'doctoral_title',
+        'acad_title_1',
+        'acad_title_2',
+        'title_by_the_king',
+        'full_title',
         'faccode',
         'depcode',
+        'academic_position',
+        'citizen_id',
+        'birth_date',
+        'marital_status',
+        'department',
+        'personnel_status',
+        'personnel_type',
+        'status_change_date',
+        'personnel_group',
+        'personnel_subgroup',
+        'position_name',
+        'position_number',
+        'position_appointment_date',
+        'start_date',
+        'transformation_date',
+        'structure_level1_name',
+        'structure_level2_name',
+        'structure_level3_name',
+        'structure_level4_name',
+    ];
+
+    protected $casts = [
+        'birth_date' => 'date',
+        'status_change_date' => 'date',
+        'position_appointment_date' => 'date',
+        'start_date' => 'date',
+        'transformation_date' => 'date',
     ];
 
     protected $searchable = [
@@ -59,5 +92,15 @@ class Personnel extends Model implements Auditable
     public function fulltime(): HasMany
     {
         return $this->hasMany(FulltimePersonnel::class, 'personnel_id', 'id');
+    }
+
+    public function educations(): HasMany
+    {
+        return $this->hasMany(PersonnelEducation::class, 'personnel_id', 'personnel_id');
+    }
+
+    public function positions(): HasMany
+    {
+        return $this->hasMany(PersonnelPosition::class, 'personnel_id', 'personnel_id');
     }
 }

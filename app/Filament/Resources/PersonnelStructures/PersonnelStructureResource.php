@@ -19,6 +19,8 @@ use Filament\Tables\Table;
 
 class PersonnelStructureResource extends Resource
 {
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static ?string $model = Structure::class;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Resources';

@@ -22,6 +22,8 @@ use Filament\Tables\Table;
 
 class PersonnelSalaryResource extends Resource
 {
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static ?string $model = PersonnelSalary::class;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Personnel';

@@ -17,6 +17,8 @@ use Filament\Tables\Table;
 
 class ContractPersonnelResource extends Resource
 {
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static ?string $model = ContractPersonnel::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;

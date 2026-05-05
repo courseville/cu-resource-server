@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->string('code')->unique(); // e.g., CSE101, MTH102
+            $table->string('code')->nullable(); // e.g., CSE101, MTH102
             $table->integer('credits')->default(3); // Number of credits
             $table->timestamps();
         });

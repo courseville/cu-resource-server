@@ -341,6 +341,7 @@ class SyncData extends Command
 
             $model::updateOrCreate($search, $transformedItem);
             // $this->info("Synced {$model} item: ".implode(', ', $search));
+            // $this->info('Transformed item: '.implode(', ', $transformedItem));
 
             return true;
         } catch (\Exception $e) {
