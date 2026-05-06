@@ -223,7 +223,7 @@ class ScholarshipApplicationResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('student.student_id')->label('Student ID')->searchable()->sortable(),
+                TextColumn::make('student_id')->label('Student ID')->searchable()->sortable(),
                 TextColumn::make('job_code')->label('Job Code')->searchable()->sortable(),
                 TextColumn::make('scholarship.scholarship_name')->label('Scholarship Name')->searchable(),
                 TextColumn::make('status')->label('Status')->badge()
