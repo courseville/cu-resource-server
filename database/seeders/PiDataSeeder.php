@@ -171,7 +171,7 @@ class PiDataSeeder extends Seeder
                 // 1. Create or update the DataSource
                 $dataSource = DataSource::updateOrCreate(
                     ['name' => $name],
-                    ['url' => $configs['url'], 'type' => 'mysql']
+                    ['url' => $configs['url'], 'type' => 'mysql', 'order' => 10]
                 );
 
                 // Determine if it's a single configuration or multiple

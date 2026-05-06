@@ -605,7 +605,7 @@ class DgDataSeeder extends Seeder
                 // 1. Create or update the DataSource
                 $dataSource = DataSource::updateOrCreate(
                     ['name' => $dgCode],
-                    ['url' => "storage:local:dg/{$dgCode}.csv"]
+                    ['url' => "storage:local:dg/{$dgCode}.csv", 'order' => 100]
                 );
 
                 // Determine if it's a single configuration or multiple

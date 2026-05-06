@@ -36,7 +36,7 @@ class SyncData extends Command
         DB::disableQueryLog();
 
         // 1. Iterate over active DataSource and transform/sync data
-        $sources = DataSource::where('is_active', true)->get();
+        $sources = DataSource::where('is_active', true)->orderBy('order', 'desc')->get();
 
         foreach ($sources as $source) {
             $this->info("Processing data source: {$source->name} (Type: {$source->type}, URL: {$source->url})");
