@@ -68,6 +68,11 @@ class DataTransformer
                     $field,
                     $mapping[$field]['formatting']
                 );
+
+                // Convert empty strings to null (PostgreSQL compatibility)
+                if ($transformed[$field] === '') {
+                    $transformed[$field] = null;
+                }
             }
         }
 
@@ -106,6 +111,10 @@ class DataTransformer
         }
 
         $formattingRules = json_decode($formatting, true);
+
+        if (empty($formattingRules)) {
+            return $value;
+        }
 
         $str = Str::of($value);
 
