@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('student_internships', function (Blueprint $table) {
+            $table->decimal('allowance', 15, 2)->nullable()->change();
+        });
+
+        Schema::table('grant_detail', function (Blueprint $table) {
+            $table->decimal('travel_cost', 15, 2)->nullable()->change();
+            $table->decimal('accommodation_cost', 15, 2)->nullable()->change();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('student_internships', function (Blueprint $table) {
+            $table->decimal('allowance', 10, 2)->nullable()->change();
+        });
+
+        Schema::table('grant_detail', function (Blueprint $table) {
+            $table->decimal('travel_cost', 10, 2)->nullable()->change();
+            $table->decimal('accommodation_cost', 10, 2)->nullable()->change();
+        });
+    }
+};
