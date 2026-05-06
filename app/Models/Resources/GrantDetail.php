@@ -23,6 +23,6 @@ class GrantDetail extends Model implements Auditable
 
     public function student()
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Student::class, 'student_id', 'student_id');
     }
 }
