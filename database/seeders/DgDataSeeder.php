@@ -569,7 +569,7 @@ class DgDataSeeder extends Seeder
                     'program_no' => 'PROGRAMNO',
                     'active_year' => 'ACTIVEYEAR',
                     'committee_tag' => 'COMMITTEETAG',
-                    'effective_date' => ['mapping' => 'EFFECTIVEDATE', 'formatting' => $dateFmt],
+                    'effective_date' => 'EFFECTIVEDATE',
                     'personal_id' => 'PERSONALID',
                 ],
                 'pks' => 'program_no,active_year,personal_id',
