@@ -8,7 +8,7 @@ use Dedoc\Scramble\Scramble;
 use Dedoc\Scramble\Support\Generator\OpenApi;
 use Dedoc\Scramble\Support\Generator\SecurityScheme;
 use Dedoc\Scramble\Support\Generator\SecuritySchemes\OAuthFlow;
-use Gate;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Passport\Passport;
 
@@ -63,9 +63,8 @@ class AppServiceProvider extends ServiceProvider
             'machine',
         ]);
 
-        Gate::define('viewApiDocs', function ($user) {
+        Gate::define('viewApiDocs', function ($user = null) {
             return true;
-            // return in_array($user->email, ['admin@mail.com']);
         });
 
         Scramble::configure()
