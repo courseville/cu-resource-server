@@ -2,26 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\BaseResourceRequest;
+use App\Http\Resources\StudentCurriculumResource;
 use App\Models\Resources\StudentCurriculum;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class StudentCurriculumController extends Controller
+class StudentCurriculumController extends BaseResourceController
 {
+    protected string $model = StudentCurriculum::class;
+
+    protected string $resource = StudentCurriculumResource::class;
+
     /**
-     * Display a listing of student curriculums.
+     * Display a listing of the student curriculums.
      */
-    public function index(Request $request)
+    public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        // Global scope 'DataDomainScope' is automatically applied via 'HasDomainScope' trait
-        return StudentCurriculum::paginate();
+        $viewableColumns = $this->validatePermission('view');
+        $builder = StudentCurriculum::query()->select($viewableColumns);
+        $this->applySearch($builder, $request);
+
+        return StudentCurriculumResource::collection($builder->paginate($request->integer('n', 10)));
     }
 
     /**
      * Display the specified student curriculum.
      */
-    public function show(StudentCurriculum $studentCurriculum)
+    public function show(StudentCurriculum $studentCurriculum): StudentCurriculumResource
     {
-        return $studentCurriculum;
+        $this->validatePermission('view');
+
+        return new StudentCurriculumResource($studentCurriculum);
     }
 }

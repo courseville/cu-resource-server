@@ -11,6 +11,11 @@ class PersonnelEducation extends Model implements Auditable
 
     protected $table = 'personnel_education';
 
+    protected $casts = [
+        'begin_date' => 'date',
+        'end_date' => 'date',
+        'graduate_date' => 'date',
+    ];
     protected $fillable = [
         'personnel_id',
         'begin_date',

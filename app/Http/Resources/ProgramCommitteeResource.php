@@ -8,15 +8,15 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProgramCommitteeResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @property ProgramCommittee $resource
-     *
-     * @return array<string, mixed>
-     */
+    /** @property ProgramCommittee $resource */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'program_no' => $this->program_no,
+            'active_year' => $this->active_year,
+            'committee_tag' => $this->committee_tag,
+            'effective_date' => $this->effective_date,
+            'personal_id' => $this->personal_id,
+        ];
     }
 }

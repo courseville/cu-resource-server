@@ -9,6 +9,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('student_internships', function (Blueprint $table) {
+            $table->string('process_step')->nullable()->change();
+
             $table->integer('intern_year')->nullable()->after('student_id');
             $table->string('comp_addr')->nullable();
             $table->string('comp_admin')->nullable();

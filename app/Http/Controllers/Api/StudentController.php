@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\Api\BaseResourceRequest;
 use App\Http\Resources\StudentResource;
 use App\Models\Resources\Student;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class StudentController extends BaseResourceController
 {
@@ -67,7 +67,7 @@ class StudentController extends BaseResourceController
     /**
      * Export students to CSV or XLSX.
      */
-    public function export(BaseResourceRequest $request)
+    public function export(BaseResourceRequest $request): StreamedResponse
     {
         // Check permission
         $viewableColumns = $this->validatePermission('view');
@@ -88,7 +88,7 @@ class StudentController extends BaseResourceController
         return $this->exportCsv($students, $viewableColumns);
     }
 
-    protected function exportCsv($data, $columns)
+    protected function exportCsv($data, $columns): StreamedResponse
     {
         $filename = 'students_'.date('Ymd_His').'.csv';
         $headers = [
@@ -113,7 +113,7 @@ class StudentController extends BaseResourceController
         return response()->stream($callback, 200, $headers);
     }
 
-    protected function exportXlsx($data, $columns)
+    protected function exportXlsx($data, $columns): StreamedResponse
     {
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet;
         $sheet = $spreadsheet->getActiveSheet();

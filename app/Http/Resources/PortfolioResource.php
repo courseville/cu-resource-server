@@ -8,15 +8,17 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class PortfolioResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @property Portfolio $resource
-     *
-     * @return array<string, mixed>
-     */
+    /** @property Portfolio $resource */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'application_id' => $this->application_id,
+            'signature' => $this->signature,
+            'email' => $this->email,
+            'phone_number' => $this->phone_number,
+            'picture' => $this->picture,
+            'intro_video' => $this->intro_video,
+            'work' => $this->work,
+        ];
     }
 }

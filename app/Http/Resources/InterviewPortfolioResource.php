@@ -8,15 +8,12 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class InterviewPortfolioResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @property InterviewPortfolio $resource
-     *
-     * @return array<string, mixed>
-     */
+    /** @property InterviewPortfolio $resource */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'application_id' => $this->application_id,
+            'interviewer_id' => $this->interviewer_id,
+        ];
     }
 }

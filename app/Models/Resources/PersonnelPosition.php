@@ -9,6 +9,11 @@ class PersonnelPosition extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
 
+    protected $casts = [
+        'begin_date' => 'date',
+        'end_date' => 'date',
+    ];
+
     protected $fillable = [
         'personnel_id',
         'begin_date',

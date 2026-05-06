@@ -8,15 +8,18 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class QuotaApplicationResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @property QuotaApplication $resource
-     *
-     * @return array<string, mixed>
-     */
+    /** @property QuotaApplication $resource */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'application_id' => $this->application_id,
+            'portfolio' => $this->portfolio,
+            'signature' => $this->signature,
+            'email' => $this->email,
+            'phone_number' => $this->phone_number,
+            'picture' => $this->picture,
+            'intro_video' => $this->intro_video,
+            'house_reg' => $this->house_reg,
+        ];
     }
 }

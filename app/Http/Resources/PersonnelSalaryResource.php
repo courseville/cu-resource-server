@@ -8,15 +8,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class PersonnelSalaryResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @property PersonnelSalary $resource
-     *
-     * @return array<string, mixed>
-     */
+    /** @property PersonnelSalary $resource */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'personnel_id' => $this->personnel_id,
+            'amount' => $this->amount,
+            'date' => $this->date,
+        ];
     }
 }

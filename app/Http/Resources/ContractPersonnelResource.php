@@ -8,15 +8,15 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ContractPersonnelResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @property ContractPersonnel $resource
-     *
-     * @return array<string, mixed>
-     */
+    /** @property ContractPersonnel $resource */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'personnel_id' => $this->personnel_id,
+            'contract_id' => $this->contract_id,
+            'start_date' => $this->start_date,
+            'end_date' => $this->end_date,
+            'detail' => $this->detail,
+        ];
     }
 }

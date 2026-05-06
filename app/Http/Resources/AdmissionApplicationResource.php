@@ -8,15 +8,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class AdmissionApplicationResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @property AdmissionApplication $resource
-     *
-     * @return array<string, mixed>
-     */
+    /** @property AdmissionApplication $resource */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'application_id' => $this->application_id,
+            'school' => $this->school,
+            'score' => $this->score,
+        ];
     }
 }
