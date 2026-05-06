@@ -86,8 +86,6 @@ class PiDataSeeder extends Seeder
                     'money_b' => 'money_b',
                     'money_b_m' => 'money_b_m',
                     'money_c' => 'money_c',
-                    'date_create' => 'date_create',
-                    'date_update' => 'date_update',
                 ],
             ],
             'PI mx_student_advisor' => [
@@ -164,7 +162,6 @@ class PiDataSeeder extends Seeder
                     'flag_last_reportw' => 'flag_last_reportw',
                     'blacklist' => 'blacklist',
                     'grade' => 'grade',
-                    'date_create' => 'date_create',
                 ],
             ],
         ];
