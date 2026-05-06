@@ -241,19 +241,20 @@ class SyncData extends Command
      */
     protected function processMysqlSource(DataSource $source)
     {
-        $parts = explode(':', $source->url, 2);
+        $parts = explode(':', $source->url, 3);
 
         if (count($parts) < 2) {
-            $this->error("Invalid MySQL URL format for source: {$source->name}. Expected: connection_name:table_name");
+            $this->error("Invalid MySQL URL format for source: {$source->name}. Expected: connection_name:table_name[:order_by_column]");
 
             return;
         }
 
         $connectionName = $parts[0];
         $tableName = $parts[1];
+        $orderBy = $parts[2] ?? 'id';
 
         try {
-            $this->info("Connecting to remote MySQL (Connection: {$connectionName}, Table: {$tableName})...");
+            $this->info("Connecting to remote MySQL (Connection: {$connectionName}, Table: {$tableName}, OrderBy: {$orderBy})...");
 
             $query = DB::connection($connectionName)->table($tableName);
             $totalRows = $query->count();
@@ -276,7 +277,7 @@ class SyncData extends Command
             $successfulRows = 0;
             $mappings = DataTransformer::getMappings($source->id);
 
-            $query->orderBy('id')->chunk(500, function ($rows) use ($source, $import, $mappings, &$successfulRows) {
+            $query->orderBy($orderBy)->chunk(500, function ($rows) use ($source, $import, $mappings, &$successfulRows) {
                 foreach ($rows as $row) {
                     $item = (array) $row;
                     foreach ($mappings as $model => $mapping) {

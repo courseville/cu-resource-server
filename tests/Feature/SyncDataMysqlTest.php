@@ -96,4 +96,64 @@ class SyncDataMysqlTest extends TestCase
             'successful_rows' => 2,
         ]);
     }
+
+    public function test_mysql_data_sync_with_custom_orderby()
+    {
+        // 0. Setup User
+        \App\Models\User::factory()->create(['id' => 1]);
+
+        // 1. Setup DataSource connection
+        $tempDb = tempnam(sys_get_temp_dir(), 'sync_test_custom_');
+        config(['database.connections.sync_test_custom' => [
+            'driver' => 'sqlite',
+            'database' => $tempDb,
+            'prefix' => '',
+        ]]);
+
+        // 2. Prepare "remote" table without 'id' column, using 'custom_id' instead
+        Schema::connection('sync_test_custom')->create('remote_students', function (Blueprint $table) {
+            $table->string('custom_id')->primary();
+            $table->string('sid');
+            $table->string('name_th');
+        });
+
+        DB::connection('sync_test_custom')->table('remote_students')->insert([
+            ['custom_id' => 'A', 'sid' => '60300001', 'name_th' => 'สมชาย'],
+            ['custom_id' => 'B', 'sid' => '60300002', 'name_th' => 'สมศรี'],
+        ]);
+
+        $source = DataSource::create([
+            'name' => 'MySQL Custom OrderBy',
+            'type' => 'mysql',
+            'url' => 'sync_test_custom:remote_students:custom_id', // custom_id instead of id
+            'is_active' => true,
+        ]);
+
+        // 3. Setup Mappings
+        DB::table('transformer_mappings')->insert([
+            [
+                'data_source_id' => $source->id,
+                'model' => Student::class,
+                'field' => 'student_id',
+                'mapping' => 'sid',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
+
+        // 4. Setup PkModel
+        PkModel::create([
+            'model' => Student::class,
+            'primary_key' => 'student_id',
+        ]);
+
+        // 5. Run Sync and check output for the custom OrderBy
+        $this->artisan('app:sync-data')
+            ->expectsOutputToContain('Connecting to remote MySQL (Connection: sync_test_custom, Table: remote_students, OrderBy: custom_id)...')
+            ->assertExitCode(0);
+
+        // 6. Verify data
+        $this->assertDatabaseHas('students', ['student_id' => '60300001']);
+        $this->assertDatabaseHas('students', ['student_id' => '60300002']);
+    }
 }

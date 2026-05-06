@@ -23,7 +23,8 @@ class DataSourceForm
                     ->default('file'),
                 Forms\Components\TextInput::make('url')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->hint('For MySQL: connection:table[:order_by_column]'),
                 Forms\Components\Toggle::make('is_active')
                     ->required()
                     ->default(true),

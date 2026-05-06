@@ -23,7 +23,7 @@ class PiDataSeeder extends Seeder
          */
         $dgMappings = [
             'PI regcode' => [
-                'url' => 'pi:mx_student_regcode',
+                'url' => 'pi:mx_student_regcode:student_id',
                 'model' => \App\Models\Resources\Student::class,
                 'fields' => [
                     'student_id' => 'student_id',
@@ -31,7 +31,7 @@ class PiDataSeeder extends Seeder
                 ],
             ],
             'PI ujob_scholarship' => [
-                'url' => 'pi:ujob_scholarship',
+                'url' => 'pi:ujob_scholarship:job_code',
                 'model' => \App\Models\Resources\Scholarship::class,
                 'pks' => 'job_code',
                 'fields' => [
@@ -52,7 +52,7 @@ class PiDataSeeder extends Seeder
                 ],
             ],
             'PI scholarship' => [
-                'url' => 'pi:scholarship',
+                'url' => 'pi:scholarship:student_id',
                 'model' => \App\Models\Resources\ScholarshipApplication::class,
                 'pks' => 'student_id,job_code',
                 'fields' => [
@@ -89,7 +89,7 @@ class PiDataSeeder extends Seeder
                 ],
             ],
             'PI mx_student_advisor' => [
-                'url' => 'pi:mx_student_advisor',
+                'url' => 'pi:mx_student_advisor:student_id',
                 'model' => \App\Models\Resources\StudentAdvisor::class,
                 'pks' => 'student_id,staff_id',
                 'fields' => [
@@ -98,7 +98,7 @@ class PiDataSeeder extends Seeder
                 ],
             ],
             'PI intern_student' => [
-                'url' => 'pi:intern_student',
+                'url' => 'pi:intern_student:student_id',
                 'model' => \App\Models\Resources\StudentInternship::class,
                 'pks' => 'student_id,intern_year',
                 'fields' => [
