@@ -76,12 +76,29 @@ class ScholarshipApplicationImporter extends Importer
             ImportColumn::make('guardian_monthly_income')
                 ->numeric()
                 ->rules(['integer']),
+            ImportColumn::make('job_code'),
+            ImportColumn::make('status'),
+            ImportColumn::make('confirm')
+                ->boolean(),
+            ImportColumn::make('money_a')
+                ->numeric(),
+            ImportColumn::make('money_b')
+                ->numeric(),
+            ImportColumn::make('money_b_m')
+                ->numeric(),
+            ImportColumn::make('money_c')
+                ->numeric(),
+            ImportColumn::make('has_house')
+                ->boolean(),
         ];
     }
 
     public function resolveRecord(): ScholarshipApplication
     {
-        return new ScholarshipApplication;
+        return ScholarshipApplication::firstOrNew([
+            'student_id' => $this->data['student_id'],
+            'scholarship_id' => $this->data['scholarship_id'],
+        ]);
     }
 
     public static function getCompletedNotificationBody(Import $import): string

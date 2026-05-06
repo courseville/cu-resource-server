@@ -103,4 +103,9 @@ class Personnel extends Model implements Auditable
     {
         return $this->hasMany(PersonnelPosition::class, 'personnel_id', 'personnel_id');
     }
+
+    public function studentAdvisors(): HasMany
+    {
+        return $this->hasMany(StudentAdvisor::class, 'staff_id', 'personnel_id');
+    }
 }

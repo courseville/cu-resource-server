@@ -60,7 +60,11 @@ class PersonnelEducationImporter extends Importer
 
     public function resolveRecord(): PersonnelEducation
     {
-        return new PersonnelEducation();
+        return PersonnelEducation::firstOrNew([
+            'personnel_id' => $this->data['personnel_id'],
+            'degree_name' => $this->data['degree_name'],
+            'institution_name' => $this->data['institution_name'],
+        ]);
     }
 
     public static function getCompletedNotificationBody(Import $import): string

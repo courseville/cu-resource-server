@@ -67,6 +67,20 @@ class StudentExporter extends Exporter
             ExportColumn::make('full_name_th'),
             ExportColumn::make('full_name_en'),
             ExportColumn::make('reg_code'),
+            ExportColumn::make('faccode'),
+            ExportColumn::make('depcode'),
+            ExportColumn::make('course_code_no'),
+            ExportColumn::make('faculty_group'),
+            ExportColumn::make('major_code'),
+            ExportColumn::make('program_code'),
+            ExportColumn::make('study_program_system'),
+            ExportColumn::make('project_code'),
+            ExportColumn::make('start_acad_year'),
+            ExportColumn::make('start_semester'),
+            ExportColumn::make('credit_tot'),
+            ExportColumn::make('fac_name'),
+            ExportColumn::make('dep_name'),
+            ExportColumn::make('major_name'),
         ];
     }
 

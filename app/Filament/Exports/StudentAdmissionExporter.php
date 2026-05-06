@@ -16,10 +16,16 @@ class StudentAdmissionExporter extends Exporter
         return [
             ExportColumn::make('id')->label('ID'),
             ExportColumn::make('student_code'),
-            ExportColumn::make('name_thai'),
+            ExportColumn::make('name_thai')->label('Name (Thai)'),
+            ExportColumn::make('name_english')->label('Name (English)'),
             ExportColumn::make('admission_type'),
             ExportColumn::make('apply_year'),
+            ExportColumn::make('apply_semester'),
+            ExportColumn::make('apply_date'),
             ExportColumn::make('apply_status'),
+            ExportColumn::make('faccode')->label('Faculty Code'),
+            ExportColumn::make('depcode')->label('Department Code'),
+            ExportColumn::make('majorcode')->label('Major Code'),
             ExportColumn::make('created_at'),
             ExportColumn::make('updated_at'),
         ];

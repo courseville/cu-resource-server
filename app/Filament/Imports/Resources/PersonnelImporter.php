@@ -70,12 +70,32 @@ class PersonnelImporter extends Importer
                 ->rules(['max:255']),
             ImportColumn::make('depcode')
                 ->rules(['max:255']),
+            ImportColumn::make('rank_title'),
+            ImportColumn::make('doctoral_title'),
+            ImportColumn::make('acad_title_1'),
+            ImportColumn::make('acad_title_2'),
+            ImportColumn::make('title_by_the_king'),
+            ImportColumn::make('citizen_id'),
+            ImportColumn::make('birth_date'),
+            ImportColumn::make('marital_status'),
+            ImportColumn::make('personnel_type'),
+            ImportColumn::make('personnel_status'),
+            ImportColumn::make('personnel_subgroup'),
+            ImportColumn::make('position_name'),
+            ImportColumn::make('position_number'),
+            ImportColumn::make('start_date'),
+            ImportColumn::make('structure_level1_name'),
+            ImportColumn::make('structure_level2_name'),
+            ImportColumn::make('structure_level3_name'),
+            ImportColumn::make('structure_level4_name'),
         ];
     }
 
     public function resolveRecord(): Personnel
     {
-        return new Personnel;
+        return Personnel::firstOrNew([
+            'personnel_id' => $this->data['personnel_id'],
+        ]);
     }
 
     public static function getCompletedNotificationBody(Import $import): string

@@ -40,7 +40,12 @@ class StudentGradeImporter extends Importer
 
     public function resolveRecord(): StudentGrade
     {
-        return new StudentGrade();
+        return StudentGrade::firstOrNew([
+            'student_code' => $this->data['student_code'],
+            'year' => $this->data['year'],
+            'semester' => $this->data['semester'],
+            'course_code' => $this->data['course_code'],
+        ]);
     }
 
     public static function getCompletedNotificationBody(Import $import): string

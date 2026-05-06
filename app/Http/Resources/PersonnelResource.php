@@ -26,6 +26,9 @@ class PersonnelResource extends JsonResource
             'first_name_en' => $this->first_name_en,
             'last_name_en' => $this->last_name_en,
             'structure_profiles' => StructureProfileResource::collection($this->whenLoaded('structureProfiles')),
+            'student_advisors' => $this->whenLoaded('studentAdvisors', fn () =>
+                $this->studentAdvisors->pluck('student_id')
+            ),
         ];
     }
 }

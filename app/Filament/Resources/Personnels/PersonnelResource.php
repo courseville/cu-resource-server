@@ -8,6 +8,7 @@ use App\Filament\Resources\Personnels\Pages\ListPersonnels;
 use App\Filament\Resources\Personnels\Pages\ViewPersonnel;
 use App\Filament\Resources\Personnels\RelationManagers\PersonnelEducationRelationManager;
 use App\Filament\Resources\Personnels\RelationManagers\PositionsRelationManager;
+use App\Filament\Resources\Personnels\RelationManagers\StudentAdvisorsRelationManager;
 use App\Filament\Resources\Personnels\Schemas\PersonnelForm;
 use App\Filament\Resources\Personnels\Schemas\PersonnelInfolist;
 use App\Filament\Resources\Personnels\Tables\PersonnelsTable;
@@ -48,6 +49,7 @@ class PersonnelResource extends Resource
         return [
             PersonnelEducationRelationManager::class,
             PositionsRelationManager::class,
+            StudentAdvisorsRelationManager::class,
         ];
     }
 
