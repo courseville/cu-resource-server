@@ -18,6 +18,8 @@ use Filament\Tables\Table;
 
 class StudentAdmissionResource extends Resource
 {
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static ?string $model = StudentAdmission::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;

@@ -20,6 +20,8 @@ use Filament\Tables\Table;
 
 class InterviewerResource extends Resource
 {
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static ?string $model = Interviewer::class;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Academic';

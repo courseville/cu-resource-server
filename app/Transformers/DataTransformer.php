@@ -121,11 +121,108 @@ class DataTransformer
             [$method, $args] = array_pad(explode(':', $rule, 2), 2, null);
             $args = $args ? explode(',', $args) : [];
 
+            // Handle custom parsing rules
+            if (in_array($method, ['title_th', 'first_name_th', 'last_name_th'])) {
+                $parts = self::parseThName($value);
+                $value = $parts[$method] ?? '';
+                $str = Str::of($value);
+
+                continue;
+            }
+
+            if (in_array($method, ['title_en', 'first_name_en', 'last_name_en'])) {
+                $parts = self::parseEnName($value);
+                $value = $parts[$method] ?? '';
+                $str = Str::of($value);
+
+                continue;
+            }
+
             if (method_exists($str, $method)) {
                 $str = call_user_func_array([$str, $method], $args);
             }
         }
 
         return $str->toString();
+    }
+
+    /**
+     * Parse Thai name into title, first_name, and last_name.
+     */
+    private static function parseThName(string $fullName): array
+    {
+        $fullName = trim($fullName);
+        $titles = [
+            'นางสาว', 'นาย', 'นาง', 'น.ส.', 'ดร.', 'ศ.', 'รศ.', 'ผศ.',
+            'พล.อ.', 'พล.ท.', 'พล.ต.', 'พ.อ.', 'พ.ท.', 'พ.ต.',
+            'ร.อ.', 'ร.ท.', 'ร.ต.', 'ม.ล.', 'ม.ร.ว.', 'ม.จ.',
+        ];
+
+        $title = '';
+        foreach ($titles as $t) {
+            if (str_starts_with($fullName, $t)) {
+                $title = $t;
+                $fullName = trim(substr($fullName, strlen($t)));
+                break;
+            }
+        }
+
+        $parts = explode(' ', $fullName, 2);
+        $firstName = $parts[0] ?? '';
+        $lastName = trim($parts[1] ?? '');
+
+        return [
+            'title_th' => $title,
+            'first_name_th' => $firstName,
+            'last_name_th' => $lastName,
+        ];
+    }
+
+    /**
+     * Parse English name into title, first_name, and last_name.
+     */
+    private static function parseEnName(string $fullName): array
+    {
+        $fullName = trim($fullName);
+
+        // First, split by double space for last name if possible
+        if (str_contains($fullName, '  ')) {
+            $parts = explode('  ', $fullName, 2);
+            $firstPart = trim($parts[0]);
+            $lastName = trim($parts[1]);
+        } else {
+            // Fallback: split by last space if no double space
+            $lastSpacePos = strrpos($fullName, ' ');
+            if ($lastSpacePos !== false) {
+                $firstPart = trim(substr($fullName, 0, $lastSpacePos));
+                $lastName = trim(substr($fullName, $lastSpacePos + 1));
+            } else {
+                $firstPart = $fullName;
+                $lastName = '';
+            }
+        }
+
+        $titles = [
+            '1st Lt.', '2nd Lt.', 'Lt. Col.', 'Mr.', 'Mrs.', 'Ms.', 'Miss', 'Dr.', 'Prof.', 'Capt.', 'Maj.', 'Col.',
+        ];
+
+        $title = '';
+        foreach ($titles as $t) {
+            if (str_starts_with($firstPart, $t)) {
+                $title = $t;
+                $firstName = trim(substr($firstPart, strlen($t)));
+                break;
+            }
+        }
+
+        if ($title === '') {
+            $firstName = $firstPart;
+        }
+
+        return [
+            'title_en' => $title,
+            'first_name_en' => $firstName,
+            'last_name_en' => $lastName,
+        ];
     }
 }

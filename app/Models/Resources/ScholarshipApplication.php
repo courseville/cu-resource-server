@@ -13,6 +13,7 @@ class ScholarshipApplication extends Model implements Auditable
 
     protected $fillable = [
         'scholarship_id',
+        'job_code',
         'student_id',
         'gpa',
         'gpax',
@@ -21,11 +22,18 @@ class ScholarshipApplication extends Model implements Auditable
         'reason_for_scholarship',
         'financial_self_support_plan',
         'bank_account_number',
+        'confirm',
+        'status',
+        'money_a',
+        'money_b',
+        'money_b_m',
+        'money_c',
         'account_book_pdf',
         'application_document_pdf',
         'total_family_debt',
         'debt_details',
         'house_description',
+        'has_house',
         'house_and_surroundings_image',
         'house_interior_image',
         'number_of_cars',
@@ -40,6 +48,15 @@ class ScholarshipApplication extends Model implements Auditable
         'father_monthly_income',
         'guardian_occupation',
         'guardian_monthly_income',
+        'date_create',
+        'date_update',
+    ];
+
+    protected $casts = [
+        'has_house' => 'boolean',
+        'confirm' => 'boolean',
+        'date_create' => 'datetime',
+        'date_update' => 'datetime',
     ];
 
     public function student()

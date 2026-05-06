@@ -23,6 +23,8 @@ use Filament\Tables\Table;
 
 class GrantDetailResource extends Resource
 {
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static ?string $model = GrantDetail::class;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Student Affair';

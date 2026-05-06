@@ -2,13 +2,10 @@
 
 namespace App\Filament\Resources\StudentInternships\Tables;
 
-use App\Filament\Actions\ExcelImportAction;
 use App\Filament\Exports\StudentInternshipExporter;
-use App\Filament\Imports\Resources\StudentInternshipImporter;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ExportAction;
 use Filament\Actions\ExportBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
@@ -20,38 +17,43 @@ class StudentInternshipsTable
     {
         return $table
             ->columns([
-                TextColumn::make('student_code')
-                    ->label('Student Code')
+                TextColumn::make('student_id')
+                    ->label('Student ID')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('company_name')
+                TextColumn::make('intern_year')
+                    ->label('Year')
+                    ->sortable(),
+                TextColumn::make('company')
                     ->label('Company')
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('status')
                     ->label('Status')
-                    ->sortable()
-                    ->searchable(),
+                    ->badge()
+                    ->color(fn ($state) => match ($state) {
+                        'finish' => 'success',
+                        'cancel' => 'danger',
+                        default => 'warning',
+                    })
+                    ->sortable(),
                 TextColumn::make('start_date')
-                    ->label('Start Date')
+                    ->label('Start')
                     ->date()
                     ->sortable(),
                 TextColumn::make('end_date')
-                    ->label('End Date')
+                    ->label('End')
                     ->date()
                     ->sortable(),
-                TextColumn::make('acad_year')
-                    ->label('Year')
+                TextColumn::make('prac_score')
+                    ->label('Score')
+                    ->sortable(),
+                TextColumn::make('grade')
+                    ->label('Grade')
                     ->sortable(),
             ])
             ->filters([
                 //
-            ])
-            ->headerActions([
-                // ExcelImportAction::make()
-                //     ->importer(StudentInternshipImporter::class),
-                // ExportAction::make()
-                //     ->exporter(StudentInternshipExporter::class),
             ])
             ->recordActions([
                 ViewAction::make(),

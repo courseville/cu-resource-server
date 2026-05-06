@@ -4,6 +4,7 @@ namespace App\Models\Resources;
 
 use App\Traits\HasDomainScope;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Student extends Model implements Auditable
@@ -54,5 +55,10 @@ class Student extends Model implements Auditable
     public function getSearchable(): array
     {
         return $this->searchable ?? [];
+    }
+
+    public function advisors(): HasMany
+    {
+        return $this->hasMany(StudentAdvisor::class, 'student_id', 'student_id');
     }
 }

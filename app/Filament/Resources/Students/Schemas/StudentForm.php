@@ -16,6 +16,7 @@ class StudentForm
         return $schema
             ->components([
                 Section::make('Personal Information')
+                    ->columnSpanFull()
                     ->schema([
                         TextInput::make('student_id')
                             ->label('Student ID')
@@ -54,6 +55,7 @@ class StudentForm
                     ])->columns(2),
 
                 Section::make('Additional Personal Information')
+                    ->columnSpanFull()
                     ->schema([
                         TextInput::make('nationality')
                             ->label('Nationality')
@@ -67,6 +69,7 @@ class StudentForm
                     ])->columns(3),
 
                 Section::make('Contact Information')
+                    ->columnSpanFull()
                     ->schema([
                         TextInput::make('phone')
                             ->label('Phone Number')
@@ -79,6 +82,7 @@ class StudentForm
                     ])->columns(2),
 
                 Section::make('Addresses')
+                    ->columnSpanFull()
                     ->schema([
                         Textarea::make('current_address')
                             ->label('Current Address')
@@ -101,6 +105,7 @@ class StudentForm
                     ])->columns(3),
 
                 Section::make('Parents Information')
+                    ->columnSpanFull()
                     ->schema([
                         TextInput::make('father_first_name')
                             ->label('Father First Name'),
@@ -117,6 +122,7 @@ class StudentForm
                     ])->columns(3),
 
                 Section::make('Enrollment & Academic Information')
+                    ->columnSpanFull()
                     ->schema([
                         TextInput::make('faccode')
                             ->label('Faculty Code'),

@@ -52,7 +52,10 @@ class ScholarshipApplicationResource extends Resource
                             ->relationship('scholarship', 'scholarship_name')
                             ->searchable()
                             ->preload()
-                            ->required()
+                            ->columnSpanFull(),
+                        TextInput::make('job_code')
+                            ->label('Job Code')
+                            ->maxLength(255)
                             ->columnSpanFull(),
                         Grid::make(2)
                             ->schema([
@@ -93,6 +96,18 @@ class ScholarshipApplicationResource extends Resource
                             ->nullable()
                             ->columnSpanFull(),
                     ]),
+                Section::make('Application Status')
+                    ->schema([
+                        Select::make('status')
+                            ->label('Status')
+                            ->options([
+                                'pending' => 'Pending',
+                                'accepted' => 'Accepted',
+                                'rejected' => 'Rejected',
+                            ])
+                            ->default('pending'),
+                        \Filament\Forms\Components\Toggle::make('confirm')->label('Confirmed'),
+                    ])->columns(2),
                 Section::make('Financial Details')
                     ->schema([
                         TextInput::make('bank_account_number')
@@ -109,6 +124,10 @@ class ScholarshipApplicationResource extends Resource
                             ->rows(3)
                             ->nullable()
                             ->columnSpanFull(),
+                        TextInput::make('money_a')->label('เงินทุน ก')->numeric()->prefix('฿')->nullable(),
+                        TextInput::make('money_b')->label('เงินทุน ข')->numeric()->prefix('฿')->nullable(),
+                        TextInput::make('money_b_m')->label('เงินทุน ข (รายเดือน)')->numeric()->nullable(),
+                        TextInput::make('money_c')->label('เงินทุน ค')->numeric()->prefix('฿')->nullable(),
                     ]),
                 Section::make('Family Composition')
                     ->schema([
@@ -163,6 +182,7 @@ class ScholarshipApplicationResource extends Resource
                     ]),
                 Section::make('Housing and Assets')
                     ->schema([
+                        \Filament\Forms\Components\Toggle::make('has_house')->label('Has House')->columnSpanFull(),
                         Textarea::make('house_description')
                             ->label('House Description')
                             ->rows(3)
@@ -207,16 +227,17 @@ class ScholarshipApplicationResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('student.student_id')
-                    ->label('Student ID')
-                    ->searchable(),
-                TextColumn::make('scholarship.scholarship_name')
-                    ->label('Scholarship Name')
-                    ->searchable(),
-                TextColumn::make('gpa'),
-                TextColumn::make('gpax'),
-                TextColumn::make('phone_brand_model'),
-                TextColumn::make('phone_monthly_cost'),
+                TextColumn::make('student.student_id')->label('Student ID')->searchable()->sortable(),
+                TextColumn::make('job_code')->label('Job Code')->searchable()->sortable(),
+                TextColumn::make('scholarship.scholarship_name')->label('Scholarship')->searchable(),
+                TextColumn::make('status')->label('Status')->badge()
+                    ->color(fn ($state) => match ($state) {
+                        'accepted' => 'success',
+                        'rejected' => 'danger',
+                        default => 'warning',
+                    }),
+                TextColumn::make('gpa')->label('GPA'),
+                TextColumn::make('gpax')->label('GPAX'),
             ])
             ->filters([
                 //
