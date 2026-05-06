@@ -89,8 +89,8 @@ class ScholarshipResource extends Resource
             ->columns([
                 TextColumn::make('job_code')->label('Job Code')->searchable()->sortable(),
                 TextColumn::make('scholarship_name')->label('ชื่อทุน')->searchable()->sortable(),
-                TextColumn::make('name_en')->label('Name (EN)')->searchable(),
-                TextColumn::make('academic_year')->label('ปีการศึกษา')->sortable(),
+                // TextColumn::make('name_en')->label('Name (EN)')->searchable(),
+                // TextColumn::make('academic_year')->label('ปีการศึกษา')->sortable(),
                 TextColumn::make('isactive')->label('Active')->badge()
                     ->formatStateUsing(fn ($state) => $state ? 'Active' : 'Inactive')
                     ->color(fn ($state) => $state ? 'success' : 'gray'),

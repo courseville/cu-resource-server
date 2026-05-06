@@ -45,12 +45,12 @@ class StudentInternshipsTable
                     ->label('End')
                     ->date()
                     ->sortable(),
-                TextColumn::make('prac_score')
-                    ->label('Score')
-                    ->sortable(),
-                TextColumn::make('grade')
-                    ->label('Grade')
-                    ->sortable(),
+                // TextColumn::make('prac_score')
+                //     ->label('Score')
+                //     ->sortable(),
+                // TextColumn::make('grade')
+                //     ->label('Grade')
+                //     ->sortable(),
             ])
             ->filters([
                 //
