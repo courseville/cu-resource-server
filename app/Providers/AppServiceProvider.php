@@ -64,7 +64,8 @@ class AppServiceProvider extends ServiceProvider
         ]);
 
         Gate::define('viewApiDocs', function ($user) {
-            return in_array($user->email, ['admin@mail.com']);
+            return true;
+            // return in_array($user->email, ['admin@mail.com']);
         });
 
         Scramble::configure()
