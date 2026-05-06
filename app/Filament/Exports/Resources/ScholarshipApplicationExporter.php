@@ -18,7 +18,7 @@ class ScholarshipApplicationExporter extends Exporter
             ExportColumn::make('id')
                 ->label('ID'),
             ExportColumn::make('student_id'),
-            ExportColumn::make('scholarship_id'),
+            ExportColumn::make('job_code'),
             ExportColumn::make('gpa'),
             ExportColumn::make('gpax'),
             ExportColumn::make('phone_brand_model'),

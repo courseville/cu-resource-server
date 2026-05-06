@@ -12,7 +12,6 @@ class ScholarshipApplicationResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'scholarship_id' => $this->scholarship_id,
             'job_code' => $this->job_code,
             'student_id' => $this->student_id,
             'gpa' => $this->gpa,

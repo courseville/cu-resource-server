@@ -38,6 +38,6 @@ class Scholarship extends Model implements Auditable
 
     public function applications()
     {
-        return $this->hasMany(ScholarshipApplication::class);
+        return $this->hasMany(ScholarshipApplication::class, 'job_code', 'job_code');
     }
 }

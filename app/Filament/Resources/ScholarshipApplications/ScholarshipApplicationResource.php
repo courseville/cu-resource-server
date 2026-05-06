@@ -47,15 +47,11 @@ class ScholarshipApplicationResource extends Resource
                             ->preload()
                             ->required()
                             ->columnSpanFull(),
-                        Select::make('scholarship_id')
+                        Select::make('job_code')
                             ->label('Scholarship')
                             ->relationship('scholarship', 'scholarship_name')
                             ->searchable()
                             ->preload()
-                            ->columnSpanFull(),
-                        TextInput::make('job_code')
-                            ->label('Job Code')
-                            ->maxLength(255)
                             ->columnSpanFull(),
                         Grid::make(2)
                             ->schema([
@@ -229,7 +225,7 @@ class ScholarshipApplicationResource extends Resource
             ->columns([
                 TextColumn::make('student.student_id')->label('Student ID')->searchable()->sortable(),
                 TextColumn::make('job_code')->label('Job Code')->searchable()->sortable(),
-                TextColumn::make('scholarship.scholarship_name')->label('Scholarship')->searchable(),
+                TextColumn::make('scholarship.scholarship_name')->label('Scholarship Name')->searchable(),
                 TextColumn::make('status')->label('Status')->badge()
                     ->color(fn ($state) => match ($state) {
                         'accepted' => 'success',

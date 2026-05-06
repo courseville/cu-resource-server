@@ -16,11 +16,9 @@ class ScholarshipApplicationImporter extends Importer
     {
         return [
             ImportColumn::make('student_id')
-                ->numeric()
-                ->rules(['integer']),
-            ImportColumn::make('scholarship_id')
-                ->numeric()
-                ->rules(['integer']),
+                ->rules(['max:255']),
+            ImportColumn::make('job_code')
+                ->rules(['max:255']),
             ImportColumn::make('gpa')
                 ->numeric()
                 ->rules(['integer']),
@@ -97,7 +95,7 @@ class ScholarshipApplicationImporter extends Importer
     {
         return ScholarshipApplication::firstOrNew([
             'student_id' => $this->data['student_id'],
-            'scholarship_id' => $this->data['scholarship_id'],
+            'job_code' => $this->data['job_code'],
         ]);
     }
 
