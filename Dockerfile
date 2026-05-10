@@ -57,5 +57,10 @@ RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 # PHP Configuration
 COPY docker/php/local.ini /usr/local/etc/php/conf.d/local.ini
 
+# Entrypoint: loads Docker secrets, places Passport keys, primes caches.
+COPY docker/app-entrypoint.sh /usr/local/bin/app-entrypoint
+RUN chmod +x /usr/local/bin/app-entrypoint
+
 EXPOSE 9000
+ENTRYPOINT ["app-entrypoint"]
 CMD ["php-fpm"]

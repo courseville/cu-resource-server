@@ -22,10 +22,8 @@ class PermissionService
             return []; // No access to this model with the specified action
         }
 
-        $viewableColumns = $filteredPermissions->pluck('columns')->flatten()->map(function ($column) {
-            return json_decode($column, true); // Decode JSON string to array
-        })->flatten()->unique()->toArray();
-
-        return $viewableColumns;
+        // Permission's `columns` attribute is cast to array by the Permission model,
+        // so flatten the collection of column lists into a unique flat list.
+        return $filteredPermissions->pluck('columns')->flatten()->filter()->unique()->values()->toArray();
     }
 }

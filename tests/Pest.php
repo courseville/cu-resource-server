@@ -45,3 +45,66 @@ function something()
 {
     // ..
 }
+
+/*
+|--------------------------------------------------------------------------
+| RBAC test helpers
+|--------------------------------------------------------------------------
+|
+| Helpers for building Passport OAuth clients with Roles + Permissions for
+| API endpoint tests. Use `actingAsApiClient()` to authenticate the request
+| as a Passport client carrying the supplied column-level permissions.
+|
+*/
+
+use App\Models\Client;
+use App\Models\Permission;
+use App\Models\Role;
+use Illuminate\Support\Str;
+use Laravel\Passport\Passport;
+
+function makeOauthClient(string $name = 'Test Client'): Client
+{
+    return Client::create([
+        'id' => (string) Str::uuid(),
+        'name' => $name,
+        'secret' => bcrypt(Str::random(40)),
+        'redirect' => 'http://localhost',
+        'personal_access_client' => false,
+        'password_client' => false,
+        'revoked' => false,
+        'user_id' => null,
+    ]);
+}
+
+function makePermission(string $modelClass, array $columns, string $action = 'view'): Permission
+{
+    return Permission::create([
+        'name' => $action.'_'.class_basename($modelClass).'_'.Str::random(6),
+        'action' => $action,
+        'model' => $modelClass,
+        'columns' => $columns,
+    ]);
+}
+
+function attachPermissionsToClient(Client $client, array $permissions, string $domain = 'TEST'): Client
+{
+    $role = Role::create([
+        'name' => 'role_'.Str::random(8),
+        'description' => 'Test role',
+    ]);
+    foreach ($permissions as $permission) {
+        $role->permissions()->attach($permission->id);
+    }
+    $client->roles()->attach($role->id, ['domain' => $domain]);
+
+    return $client;
+}
+
+/**
+ * Authenticate the test request as the given Passport client with the given scopes.
+ */
+function actingAsApiClient(Client $client, array $scopes = ['*']): void
+{
+    Passport::actingAsClient($client, $scopes);
+}

@@ -3,14 +3,16 @@
 namespace App\Models\Resources;
 
 use App\Traits\HasDomainScope;
-use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasSyncMeta;
+use App\Traits\Searchable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Student extends Model implements Auditable
 {
     use HasDomainScope, HasSyncMeta, \OwenIt\Auditing\Auditable;
+    use Searchable;
 
     protected $fillable = [
         'student_id',
