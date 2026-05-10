@@ -3,6 +3,7 @@
 namespace App\Models\Resources;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasSyncMeta;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class QuotaApplication extends Model implements Auditable
@@ -12,6 +13,7 @@ class QuotaApplication extends Model implements Auditable
     protected $table = 'quota_application';
 
     protected $fillable = [
+        'sync_meta',
         'application_id',
         'portfolio',
         'signature',
@@ -20,6 +22,10 @@ class QuotaApplication extends Model implements Auditable
         'picture',
         'intro_video',
         'house_reg',
+    ];
+
+    protected $casts = [
+        'sync_meta' => 'json',
     ];
 
     public function application()

@@ -3,6 +3,7 @@
 namespace App\Models\Resources;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasSyncMeta;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class StudentInternship extends Model implements Auditable
@@ -10,6 +11,7 @@ class StudentInternship extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
+        'sync_meta',
         'student_id',
         'intern_year',
         'process_step',
@@ -79,6 +81,7 @@ class StudentInternship extends Model implements Auditable
     ];
 
     protected $casts = [
+        'sync_meta' => 'json',
         'flag_req_change' => 'boolean',
         'blacklist' => 'boolean',
         'grant' => 'boolean',

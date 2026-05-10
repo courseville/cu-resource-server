@@ -4,11 +4,12 @@ namespace App\Models\Resources;
 
 use App\Traits\HasDomainScope;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasSyncMeta;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Course extends Model implements Auditable
 {
-    use HasDomainScope, \OwenIt\Auditing\Auditable;
+    use HasDomainScope, HasSyncMeta, \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
         'name',
@@ -33,6 +34,11 @@ class Course extends Model implements Auditable
         'description_en',
         'faccode',
         'data_source_id',
+        'sync_meta',
         'data_id',
+    ];
+
+    protected $casts = [
+        'sync_meta' => 'json',
     ];
 }

@@ -3,6 +3,7 @@
 namespace App\Models\Resources;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasSyncMeta;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class GrantDetail extends Model implements Auditable
@@ -12,6 +13,7 @@ class GrantDetail extends Model implements Auditable
     protected $table = 'grant_detail';
 
     protected $fillable = [
+        'sync_meta',
         'student_id',
         'type',
         'travel_cost',
@@ -19,6 +21,10 @@ class GrantDetail extends Model implements Auditable
         'lump_sum_allowance',
         'first_student_id',
         'second_student_id',
+    ];
+
+    protected $casts = [
+        'sync_meta' => 'json',
     ];
 
     public function student()

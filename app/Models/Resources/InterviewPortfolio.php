@@ -3,6 +3,7 @@
 namespace App\Models\Resources;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasSyncMeta;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class InterviewPortfolio extends Model implements Auditable
@@ -12,8 +13,13 @@ class InterviewPortfolio extends Model implements Auditable
     protected $table = 'interview_portfolio';
 
     protected $fillable = [
+        'sync_meta',
         'application_id',
         'interviewer_id',
+    ];
+
+    protected $casts = [
+        'sync_meta' => 'json',
     ];
 
     public function application()

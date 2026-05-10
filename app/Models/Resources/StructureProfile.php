@@ -3,6 +3,7 @@
 namespace App\Models\Resources;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasSyncMeta;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -11,11 +12,16 @@ class StructureProfile extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
+        'sync_meta',
         'structure_level1_id',
         'structure_level2_id',
         'structure_level3_id',
         'structure_level4_id',
         'personnel_id',
+    ];
+
+    protected $casts = [
+        'sync_meta' => 'json',
     ];
 
     public function structureLevel1(): BelongsTo

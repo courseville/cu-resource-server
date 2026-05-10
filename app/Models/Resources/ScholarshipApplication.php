@@ -3,6 +3,7 @@
 namespace App\Models\Resources;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasSyncMeta;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class ScholarshipApplication extends Model implements Auditable
@@ -12,6 +13,7 @@ class ScholarshipApplication extends Model implements Auditable
     protected $table = 'scholarship_application';
 
     protected $fillable = [
+        'sync_meta',
         'job_code',
         'student_id',
         'gpa',
@@ -52,6 +54,7 @@ class ScholarshipApplication extends Model implements Auditable
     ];
 
     protected $casts = [
+        'sync_meta' => 'json',
         'has_house' => 'boolean',
         'confirm' => 'boolean',
         'date_create' => 'datetime',

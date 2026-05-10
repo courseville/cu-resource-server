@@ -5,15 +5,17 @@ namespace App\Models\Resources;
 use App\Traits\HasDomainScope;
 use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasSyncMeta;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Personnel extends Model implements Auditable
 {
-    use HasDomainScope, \OwenIt\Auditing\Auditable;
+    use HasDomainScope, HasSyncMeta, \OwenIt\Auditing\Auditable;
     use Searchable;
 
     protected $fillable = [
+        'sync_meta',
         'personnel_id',
         'title_th',
         'first_name_th',
@@ -70,6 +72,7 @@ class Personnel extends Model implements Auditable
     ];
 
     protected $casts = [
+        'sync_meta' => 'json',
         'birth_date' => 'date',
         'status_change_date' => 'date',
         'position_appointment_date' => 'date',

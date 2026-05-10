@@ -6,6 +6,7 @@ use App\Models\DataSource;
 use App\Models\FailedImportRow;
 use App\Models\Import;
 use App\Models\PkModel;
+use App\Sync\SyncContext;
 use App\Transformers\DataTransformer;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Auth;
@@ -39,6 +40,7 @@ class SyncData extends Command
         $sources = DataSource::where('is_active', true)->orderBy('order', 'desc')->get();
 
         foreach ($sources as $source) {
+            SyncContext::setSourceId($source->id);
             $this->info("Processing data source: {$source->name} (Type: {$source->type}, URL: {$source->url})");
 
             switch ($source->type) {
@@ -60,6 +62,7 @@ class SyncData extends Command
             }
         }
 
+        SyncContext::setSourceId(null);
         $this->info('Data sync completed.');
     }
 

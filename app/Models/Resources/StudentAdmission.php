@@ -4,11 +4,12 @@ namespace App\Models\Resources;
 
 use App\Traits\HasDomainScope;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasSyncMeta;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class StudentAdmission extends Model implements Auditable
 {
-    use HasDomainScope, \OwenIt\Auditing\Auditable;
+    use HasDomainScope, HasSyncMeta, \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
         'student_code',
@@ -23,6 +24,11 @@ class StudentAdmission extends Model implements Auditable
         'apply_date',
         'apply_status',
         'data_source_id',
+        'sync_meta',
         'data_id',
+    ];
+
+    protected $casts = [
+        'sync_meta' => 'json',
     ];
 }

@@ -3,6 +3,7 @@
 namespace App\Models\Resources;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasSyncMeta;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class ContractPersonnel extends Model implements Auditable
@@ -12,6 +13,7 @@ class ContractPersonnel extends Model implements Auditable
     protected $table = 'contract_personnel';
 
     protected $fillable = [
+        'sync_meta',
         'personnel_id',
         'contract_id',
         'start_date',
@@ -20,6 +22,7 @@ class ContractPersonnel extends Model implements Auditable
     ];
 
     protected $casts = [
+        'sync_meta' => 'json',
         'start_date' => 'datetime',
         'end_date' => 'datetime',
     ];

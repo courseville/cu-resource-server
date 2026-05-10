@@ -20,11 +20,13 @@ class DataSource extends Model
         'url',
         'is_active',
         'last_synced_at',
+        'order',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
         'last_synced_at' => 'datetime',
+        'order' => 'integer',
     ];
 
     public function imports()
