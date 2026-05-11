@@ -35,10 +35,10 @@ class PassportClientResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return $table->columns([
+        return $table->defaultSort('id', 'desc')->columns([
             TextColumn::make('id')->sortable(),
-            TextColumn::make('name')->sortable(),
-            TextColumn::make('redirect')->limit(30),
+            TextColumn::make('name')->sortable()->searchable(),
+            TextColumn::make('redirect')->limit(30)->searchable(),
             TextColumn::make('personal_access_client')
                 ->badge()
                 ->color(fn ($state) => $state ? 'success' : 'danger')
@@ -68,11 +68,6 @@ class PassportClientResource extends Resource
             'create' => CreatePassportClient::route('/create'),
             'edit' => EditPassportClient::route('/{record}/edit'),
         ];
-    }
-
-    public static function canCreate(): bool
-    {
-        return false; // Disable the Create button
     }
 
     public static function getRelations(): array

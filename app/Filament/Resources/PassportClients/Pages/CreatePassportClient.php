@@ -3,9 +3,9 @@
 namespace App\Filament\Resources\PassportClients\Pages;
 
 use App\Filament\Resources\PassportClients\PassportClientResource;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Str;
-use Laravel\Passport\Client;
 
 class CreatePassportClient extends CreateRecord
 {
@@ -13,11 +13,24 @@ class CreatePassportClient extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        // Generate a random client secret
-        $clientSecret = Str::random(40);
-        // Store generated secret in data (optional for UI display)
-        $data['secret'] = $clientSecret;
+        $data['secret'] = Str::random(40);
 
         return $data;
+    }
+
+    protected function afterCreate(): void
+    {
+        $plainSecret = $this->record->plainSecret;
+
+        if (! $plainSecret) {
+            return;
+        }
+
+        Notification::make()
+            ->title('Client secret generated')
+            ->body("Copy this secret now — it will not be shown again:\n\n{$plainSecret}")
+            ->success()
+            ->persistent()
+            ->send();
     }
 }
