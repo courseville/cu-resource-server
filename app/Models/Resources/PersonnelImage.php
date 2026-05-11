@@ -3,7 +3,6 @@
 namespace App\Models\Resources;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasSyncMeta;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class PersonnelImage extends Model implements Auditable
@@ -16,7 +15,7 @@ class PersonnelImage extends Model implements Auditable
         'citizen_id',
         'passport_number',
         'image_name',
-        'begin_date'
+        'begin_date',
     ];
 
     protected $casts = [

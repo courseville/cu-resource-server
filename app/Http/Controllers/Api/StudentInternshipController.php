@@ -14,13 +14,11 @@ class StudentInternshipController extends BaseResourceController
     protected string $resource = StudentInternshipResource::class;
 
     /**
-     * Display a listing of the student internships.
+     * Display a listing of the studentinternship.
      */
     public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        $viewableColumns = $this->validatePermission('view');
-        $builder = StudentInternship::query()->select($viewableColumns);
-        $this->applySearch($builder, $request);
+        $builder = $this->getBuilder($request);
 
         return StudentInternshipResource::collection($builder->paginate($request->integer('n', 10)));
     }

@@ -3,7 +3,6 @@
 namespace App\Models\Resources;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasSyncMeta;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class FulltimePersonnel extends Model implements Auditable

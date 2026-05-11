@@ -3,7 +3,6 @@
 namespace App\Models\Resources;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasSyncMeta;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class StudentGrade extends Model implements Auditable
@@ -21,7 +20,7 @@ class StudentGrade extends Model implements Auditable
         'last_update',
         'faccode',
         'depcode',
-        'majorcode'
+        'majorcode',
     ];
 
     protected $casts = [

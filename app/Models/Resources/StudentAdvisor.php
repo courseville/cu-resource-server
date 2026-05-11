@@ -3,7 +3,6 @@
 namespace App\Models\Resources;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasSyncMeta;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Contracts\Auditable;
 

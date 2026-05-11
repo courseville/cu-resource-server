@@ -14,13 +14,11 @@ class StudentAdmissionController extends BaseResourceController
     protected string $resource = StudentAdmissionResource::class;
 
     /**
-     * Display a listing of the student admissions.
+     * Display a listing of the studentadmission.
      */
     public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        $viewableColumns = $this->validatePermission('view');
-        $builder = StudentAdmission::query()->select($viewableColumns);
-        $this->applySearch($builder, $request);
+        $builder = $this->getBuilder($request);
 
         return StudentAdmissionResource::collection($builder->paginate($request->integer('n', 10)));
     }

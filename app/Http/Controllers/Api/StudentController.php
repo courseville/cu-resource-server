@@ -6,7 +6,6 @@ use App\Http\Requests\Api\BaseResourceRequest;
 use App\Http\Resources\StudentResource;
 use App\Models\Resources\Student;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class StudentController extends BaseResourceController
 {
@@ -19,13 +18,7 @@ class StudentController extends BaseResourceController
      */
     public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        $viewableColumns = $this->validatePermission('view');
-
-        // Initialize the query builder with viewable columns
-        $builder = Student::query()->select($viewableColumns);
-
-        // Search on searchable columns
-        $this->applySearch($builder, $request);
+        $builder = $this->getBuilder($request);
 
         return StudentResource::collection($builder->paginate($request->integer('n', 10)));
     }
@@ -62,81 +55,5 @@ class StudentController extends BaseResourceController
     public function destroy(Student $student)
     {
         //
-    }
-
-    /**
-     * Export students to CSV or XLSX.
-     */
-    public function export(BaseResourceRequest $request): StreamedResponse
-    {
-        // Check permission
-        $viewableColumns = $this->validatePermission('view');
-
-        // Initialize the query builder
-        $builder = Student::query()->select($viewableColumns);
-
-        // Search on searchable columns
-        $this->applySearch($builder, $request);
-
-        $students = $builder->get();
-        $format = $request->query('format', 'csv');
-
-        if ($format === 'xlsx') {
-            return $this->exportXlsx($students, $viewableColumns);
-        }
-
-        return $this->exportCsv($students, $viewableColumns);
-    }
-
-    protected function exportCsv($data, $columns): StreamedResponse
-    {
-        $filename = 'students_'.date('Ymd_His').'.csv';
-        $headers = [
-            'Content-Type' => 'text/csv',
-            'Content-Disposition' => "attachment; filename=\"$filename\"",
-        ];
-
-        $callback = function () use ($data, $columns) {
-            $file = fopen('php://output', 'w');
-            fputcsv($file, $columns);
-
-            foreach ($data as $row) {
-                $rowData = [];
-                foreach ($columns as $column) {
-                    $rowData[] = $row->{$column};
-                }
-                fputcsv($file, $rowData);
-            }
-            fclose($file);
-        };
-
-        return response()->stream($callback, 200, $headers);
-    }
-
-    protected function exportXlsx($data, $columns): StreamedResponse
-    {
-        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet;
-        $sheet = $spreadsheet->getActiveSheet();
-
-        // Add headers
-        foreach ($columns as $index => $column) {
-            $sheet->setCellValue([$index + 1, 1], $column);
-        }
-
-        // Add data
-        foreach ($data as $rowIndex => $row) {
-            foreach ($columns as $colIndex => $column) {
-                $sheet->setCellValue([$colIndex + 1, $rowIndex + 2], $row->{$column});
-            }
-        }
-
-        $filename = 'students_'.date('Ymd_His').'.xlsx';
-        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-
-        return response()->streamDownload(function () use ($writer) {
-            $writer->save('php://output');
-        }, $filename, [
-            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        ]);
     }
 }

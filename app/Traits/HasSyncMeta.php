@@ -22,7 +22,7 @@ trait HasSyncMeta
     public function updateSyncMeta(): void
     {
         $dirty = $this->getDirty();
-        
+
         // Remove internal fields from tracking
         unset($dirty['sync_meta']);
         unset($dirty['updated_at']);
@@ -36,8 +36,8 @@ trait HasSyncMeta
         if (is_string($meta)) {
             $meta = json_decode($meta, true);
         }
-        
-        if (!isset($meta['fields'])) {
+
+        if (! isset($meta['fields'])) {
             $meta['fields'] = [];
         }
 

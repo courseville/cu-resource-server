@@ -3,7 +3,6 @@
 namespace App\Models\Resources;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasSyncMeta;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class PersonnelProfile extends Model implements Auditable
@@ -35,7 +34,7 @@ class PersonnelProfile extends Model implements Auditable
         'citizen_id',
         'passport_number',
         'office_phonenumber',
-        'full_title'
+        'full_title',
     ];
 
     protected $casts = [

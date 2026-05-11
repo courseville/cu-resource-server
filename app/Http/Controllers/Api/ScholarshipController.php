@@ -14,13 +14,11 @@ class ScholarshipController extends BaseResourceController
     protected string $resource = ScholarshipResource::class;
 
     /**
-     * Display a listing of the scholarships.
+     * Display a listing of the scholarship.
      */
     public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        $viewableColumns = $this->validatePermission('view');
-        $builder = Scholarship::query()->select($viewableColumns);
-        $this->applySearch($builder, $request);
+        $builder = $this->getBuilder($request);
 
         return ScholarshipResource::collection($builder->paginate($request->integer('n', 10)));
     }

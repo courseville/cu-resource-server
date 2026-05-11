@@ -14,13 +14,11 @@ class StudentGraduationController extends BaseResourceController
     protected string $resource = StudentGraduationResource::class;
 
     /**
-     * Display a listing of the student graduations.
+     * Display a listing of the studentgraduation.
      */
     public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        $viewableColumns = $this->validatePermission('view');
-        $builder = StudentGraduation::query()->select($viewableColumns);
-        $this->applySearch($builder, $request);
+        $builder = $this->getBuilder($request);
 
         return StudentGraduationResource::collection($builder->paginate($request->integer('n', 10)));
     }

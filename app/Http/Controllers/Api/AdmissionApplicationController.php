@@ -14,13 +14,11 @@ class AdmissionApplicationController extends BaseResourceController
     protected string $resource = AdmissionApplicationResource::class;
 
     /**
-     * Display a listing of the admission applications.
+     * Display a listing of the admissionapplication.
      */
     public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        $viewableColumns = $this->validatePermission('view');
-        $builder = AdmissionApplication::query()->select($viewableColumns);
-        $this->applySearch($builder, $request);
+        $builder = $this->getBuilder($request);
 
         return AdmissionApplicationResource::collection($builder->paginate($request->integer('n', 10)));
     }

@@ -14,13 +14,11 @@ class CourseScheduleController extends BaseResourceController
     protected string $resource = CourseScheduleResource::class;
 
     /**
-     * Display a listing of the course schedules.
+     * Display a listing of the courseschedule.
      */
     public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        $viewableColumns = $this->validatePermission('view');
-        $builder = CourseSchedule::query()->select($viewableColumns);
-        $this->applySearch($builder, $request);
+        $builder = $this->getBuilder($request);
 
         return CourseScheduleResource::collection($builder->paginate($request->integer('n', 10)));
     }

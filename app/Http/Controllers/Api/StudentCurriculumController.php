@@ -14,13 +14,11 @@ class StudentCurriculumController extends BaseResourceController
     protected string $resource = StudentCurriculumResource::class;
 
     /**
-     * Display a listing of the student curriculums.
+     * Display a listing of the studentcurriculum.
      */
     public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        $viewableColumns = $this->validatePermission('view');
-        $builder = StudentCurriculum::query()->select($viewableColumns);
-        $this->applySearch($builder, $request);
+        $builder = $this->getBuilder($request);
 
         return StudentCurriculumResource::collection($builder->paginate($request->integer('n', 10)));
     }

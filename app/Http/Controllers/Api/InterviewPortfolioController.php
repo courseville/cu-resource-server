@@ -14,13 +14,11 @@ class InterviewPortfolioController extends BaseResourceController
     protected string $resource = InterviewPortfolioResource::class;
 
     /**
-     * Display a listing of the interview portfolios.
+     * Display a listing of the interviewportfolio.
      */
     public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        $viewableColumns = $this->validatePermission('view');
-        $builder = InterviewPortfolio::query()->select($viewableColumns);
-        $this->applySearch($builder, $request);
+        $builder = $this->getBuilder($request);
 
         return InterviewPortfolioResource::collection($builder->paginate($request->integer('n', 10)));
     }

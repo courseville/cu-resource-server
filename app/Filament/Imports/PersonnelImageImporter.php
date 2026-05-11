@@ -30,15 +30,15 @@ class PersonnelImageImporter extends Importer
 
     public function resolveRecord(): PersonnelImage
     {
-        return new PersonnelImage();
+        return new PersonnelImage;
     }
 
     public static function getCompletedNotificationBody(Import $import): string
     {
-        $body = 'Your personnel image import has completed and ' . Number::format($import->successful_rows) . ' ' . str('row')->plural($import->successful_rows) . ' imported.';
+        $body = 'Your personnel image import has completed and '.Number::format($import->successful_rows).' '.str('row')->plural($import->successful_rows).' imported.';
 
         if ($failedRowsCount = $import->getFailedRowsCount()) {
-            $body .= ' ' . Number::format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' failed to import.';
+            $body .= ' '.Number::format($failedRowsCount).' '.str('row')->plural($failedRowsCount).' failed to import.';
         }
 
         return $body;

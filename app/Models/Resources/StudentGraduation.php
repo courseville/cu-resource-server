@@ -3,8 +3,8 @@
 namespace App\Models\Resources;
 
 use App\Traits\HasDomainScope;
-use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasSyncMeta;
+use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class StudentGraduation extends Model implements Auditable

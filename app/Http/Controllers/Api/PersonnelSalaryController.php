@@ -14,13 +14,11 @@ class PersonnelSalaryController extends BaseResourceController
     protected string $resource = PersonnelSalaryResource::class;
 
     /**
-     * Display a listing of the personnel salaries.
+     * Display a listing of the personnelsalary.
      */
     public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        $viewableColumns = $this->validatePermission('view');
-        $builder = PersonnelSalary::query()->select($viewableColumns);
-        $this->applySearch($builder, $request);
+        $builder = $this->getBuilder($request);
 
         return PersonnelSalaryResource::collection($builder->paginate($request->integer('n', 10)));
     }

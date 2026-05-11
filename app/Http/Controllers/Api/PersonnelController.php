@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\Api\BaseResourceRequest;
 use App\Http\Requests\Api\Personnel\IndexPersonnelRequest;
 use App\Http\Resources\PersonnelResource;
 use App\Models\Resources\Personnel;
 use App\Models\Resources\Structure;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class PersonnelController extends BaseResourceController
@@ -15,9 +17,9 @@ class PersonnelController extends BaseResourceController
     protected string $resource = PersonnelResource::class;
 
     /**
-     * Display a listing of the personnel.
+     * Get the query builder for the personnel.
      */
-    public function index(IndexPersonnelRequest $request): AnonymousResourceCollection
+    protected function getBuilder(BaseResourceRequest $request): Builder
     {
         $viewableColumns = $this->validatePermission('view');
 
@@ -27,20 +29,31 @@ class PersonnelController extends BaseResourceController
         if ($request->filled('structure_id')) {
             $structure = Structure::where('structure_id', $request->structure_id)->first();
             if (is_null($structure)) {
-                return PersonnelResource::collection(Personnel::where('id', -1)->paginate($request->integer('n', 10)));
-            }
-            $builder->whereHas('structureProfiles', function ($query) use ($structure) {
-                $query->where(function ($q) use ($structure) {
-                    $q->where('structure_level1_id', $structure->id);
-                    $q->orWhere('structure_level2_id', $structure->id);
-                    $q->orWhere('structure_level3_id', $structure->id);
-                    $q->orWhere('structure_level4_id', $structure->id);
+                $builder->where('id', -1);
+            } else {
+                $builder->whereHas('structureProfiles', function ($query) use ($structure) {
+                    $query->where(function ($q) use ($structure) {
+                        $q->where('structure_level1_id', $structure->id);
+                        $q->orWhere('structure_level2_id', $structure->id);
+                        $q->orWhere('structure_level3_id', $structure->id);
+                        $q->orWhere('structure_level4_id', $structure->id);
+                    });
                 });
-            });
+            }
         }
 
         // Search on searchable columns
         $this->applySearch($builder, $request);
+
+        return $builder;
+    }
+
+    /**
+     * Display a listing of the personnel.
+     */
+    public function index(IndexPersonnelRequest $request): AnonymousResourceCollection
+    {
+        $builder = $this->getBuilder($request);
 
         // With relationships
         $builder->with([

@@ -3,7 +3,6 @@
 namespace App\Models\Resources;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasSyncMeta;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class PersonnelContractDetail extends Model implements Auditable
@@ -21,7 +20,7 @@ class PersonnelContractDetail extends Model implements Auditable
         'probation_unit',
         'contract_end_date',
         'disemploy_employer',
-        'disemploy_employee'
+        'disemploy_employee',
     ];
 
     protected $casts = [

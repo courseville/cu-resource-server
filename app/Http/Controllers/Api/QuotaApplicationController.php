@@ -14,13 +14,11 @@ class QuotaApplicationController extends BaseResourceController
     protected string $resource = QuotaApplicationResource::class;
 
     /**
-     * Display a listing of the quota applications.
+     * Display a listing of the quotaapplication.
      */
     public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        $viewableColumns = $this->validatePermission('view');
-        $builder = QuotaApplication::query()->select($viewableColumns);
-        $this->applySearch($builder, $request);
+        $builder = $this->getBuilder($request);
 
         return QuotaApplicationResource::collection($builder->paginate($request->integer('n', 10)));
     }

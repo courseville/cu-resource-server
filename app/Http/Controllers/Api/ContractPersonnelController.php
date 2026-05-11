@@ -14,13 +14,11 @@ class ContractPersonnelController extends BaseResourceController
     protected string $resource = ContractPersonnelResource::class;
 
     /**
-     * Display a listing of the contract personnels.
+     * Display a listing of the contractpersonnel.
      */
     public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        $viewableColumns = $this->validatePermission('view');
-        $builder = ContractPersonnel::query()->select($viewableColumns);
-        $this->applySearch($builder, $request);
+        $builder = $this->getBuilder($request);
 
         return ContractPersonnelResource::collection($builder->paginate($request->integer('n', 10)));
     }

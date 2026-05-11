@@ -18,9 +18,7 @@ class AcademicProgramController extends BaseResourceController
      */
     public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        $viewableColumns = $this->validatePermission('view');
-        $builder = AcademicProgram::query()->select($viewableColumns);
-        $this->applySearch($builder, $request);
+        $builder = $this->getBuilder($request);
 
         return AcademicProgramResource::collection($builder->paginate($request->integer('n', 10)));
     }

@@ -3,9 +3,9 @@
 namespace App\Models\Resources;
 
 use App\Traits\HasDomainScope;
+use App\Traits\HasSyncMeta;
 use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasSyncMeta;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use OwenIt\Auditing\Contracts\Auditable;
 

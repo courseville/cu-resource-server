@@ -2,12 +2,12 @@
 
 namespace App\Filament\Resources\PersonnelEducation\Pages;
 
-use App\Filament\Resources\PersonnelEducation\PersonnelEducationResource;
 use App\Filament\Actions\ExcelImportAction;
 use App\Filament\Exports\PersonnelEducationExporter;
 use App\Filament\Imports\PersonnelEducationImporter;
-use Filament\Actions\ExportAction;
+use App\Filament\Resources\PersonnelEducation\PersonnelEducationResource;
 use Filament\Actions\CreateAction;
+use Filament\Actions\ExportAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListPersonnelEducation extends ListRecords

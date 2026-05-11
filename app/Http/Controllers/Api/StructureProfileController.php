@@ -14,13 +14,11 @@ class StructureProfileController extends BaseResourceController
     protected string $resource = StructureProfileResource::class;
 
     /**
-     * Display a listing of the structure profiles.
+     * Display a listing of the structureprofile.
      */
     public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        $viewableColumns = $this->validatePermission('view');
-        $builder = StructureProfile::query()->select($viewableColumns);
-        $this->applySearch($builder, $request);
+        $builder = $this->getBuilder($request);
 
         return StructureProfileResource::collection($builder->paginate($request->integer('n', 10)));
     }

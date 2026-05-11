@@ -3,7 +3,6 @@
 namespace App\Models\Resources;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasSyncMeta;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class PersonnelEducation extends Model implements Auditable
@@ -18,6 +17,7 @@ class PersonnelEducation extends Model implements Auditable
         'end_date' => 'date',
         'graduate_date' => 'date',
     ];
+
     protected $fillable = [
         'sync_meta',
         'personnel_id',
@@ -39,6 +39,6 @@ class PersonnelEducation extends Model implements Auditable
         'highest_education_th',
         'employ_education_id',
         'employ_education_name',
-        'graduate_date'
+        'graduate_date',
     ];
 }

@@ -14,13 +14,11 @@ class PortfolioController extends BaseResourceController
     protected string $resource = PortfolioResource::class;
 
     /**
-     * Display a listing of the portfolios.
+     * Display a listing of the portfolio.
      */
     public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        $viewableColumns = $this->validatePermission('view');
-        $builder = Portfolio::query()->select($viewableColumns);
-        $this->applySearch($builder, $request);
+        $builder = $this->getBuilder($request);
 
         return PortfolioResource::collection($builder->paginate($request->integer('n', 10)));
     }

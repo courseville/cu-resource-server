@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\Api\Structure\IndexStructureRequest;
 use App\Http\Resources\StructureResource;
 use App\Models\Resources\Structure;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -16,7 +15,7 @@ class StructureController extends BaseResourceController
     /**
      * Display a listing of the structures.
      */
-    public function index(IndexStructureRequest $request): AnonymousResourceCollection
+    public function index(\Illuminate\Http\Request $request): AnonymousResourceCollection
     {
         $viewableColumns = $this->validatePermission('view');
 

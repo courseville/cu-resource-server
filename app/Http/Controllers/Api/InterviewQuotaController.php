@@ -14,13 +14,11 @@ class InterviewQuotaController extends BaseResourceController
     protected string $resource = InterviewQuotaResource::class;
 
     /**
-     * Display a listing of the interview quotas.
+     * Display a listing of the interviewquota.
      */
     public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        $viewableColumns = $this->validatePermission('view');
-        $builder = InterviewQuota::query()->select($viewableColumns);
-        $this->applySearch($builder, $request);
+        $builder = $this->getBuilder($request);
 
         return InterviewQuotaResource::collection($builder->paginate($request->integer('n', 10)));
     }

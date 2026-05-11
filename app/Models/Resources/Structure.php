@@ -4,7 +4,6 @@ namespace App\Models\Resources;
 
 use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasSyncMeta;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Structure extends Model implements Auditable

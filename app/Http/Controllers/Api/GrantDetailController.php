@@ -14,13 +14,11 @@ class GrantDetailController extends BaseResourceController
     protected string $resource = GrantDetailResource::class;
 
     /**
-     * Display a listing of the grant details.
+     * Display a listing of the grantdetail.
      */
     public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        $viewableColumns = $this->validatePermission('view');
-        $builder = GrantDetail::query()->select($viewableColumns);
-        $this->applySearch($builder, $request);
+        $builder = $this->getBuilder($request);
 
         return GrantDetailResource::collection($builder->paginate($request->integer('n', 10)));
     }

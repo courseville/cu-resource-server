@@ -14,13 +14,11 @@ class InterviewerController extends BaseResourceController
     protected string $resource = InterviewerResource::class;
 
     /**
-     * Display a listing of the interviewers.
+     * Display a listing of the interviewer.
      */
     public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        $viewableColumns = $this->validatePermission('view');
-        $builder = Interviewer::query()->select($viewableColumns);
-        $this->applySearch($builder, $request);
+        $builder = $this->getBuilder($request);
 
         return InterviewerResource::collection($builder->paginate($request->integer('n', 10)));
     }

@@ -14,13 +14,11 @@ class StudentStatusHistoryController extends BaseResourceController
     protected string $resource = StudentStatusHistoryResource::class;
 
     /**
-     * Display a listing of the student status histories.
+     * Display a listing of the studentstatushistory.
      */
     public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        $viewableColumns = $this->validatePermission('view');
-        $builder = StudentStatusHistory::query()->select($viewableColumns);
-        $this->applySearch($builder, $request);
+        $builder = $this->getBuilder($request);
 
         return StudentStatusHistoryResource::collection($builder->paginate($request->integer('n', 10)));
     }

@@ -14,13 +14,11 @@ class ProgramCommitteeController extends BaseResourceController
     protected string $resource = ProgramCommitteeResource::class;
 
     /**
-     * Display a listing of the program committees.
+     * Display a listing of the programcommittee.
      */
     public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        $viewableColumns = $this->validatePermission('view');
-        $builder = ProgramCommittee::query()->select($viewableColumns);
-        $this->applySearch($builder, $request);
+        $builder = $this->getBuilder($request);
 
         return ProgramCommitteeResource::collection($builder->paginate($request->integer('n', 10)));
     }

@@ -3,7 +3,6 @@
 namespace App\Models\Resources;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasSyncMeta;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class PersonnelAction extends Model implements Auditable
@@ -21,7 +20,7 @@ class PersonnelAction extends Model implements Auditable
         'action_name',
         'reason_id',
         'reason_name',
-        'modify_user'
+        'modify_user',
     ];
 
     protected $casts = [

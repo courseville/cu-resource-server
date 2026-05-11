@@ -3,7 +3,6 @@
 namespace App\Models\Resources;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasSyncMeta;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class PersonnelRetired extends Model implements Auditable
@@ -41,7 +40,7 @@ class PersonnelRetired extends Model implements Auditable
         'structure_level1_name',
         'structure_level2_name',
         'structure_level3_name',
-        'structure_level4_name'
+        'structure_level4_name',
     ];
 
     protected $casts = [

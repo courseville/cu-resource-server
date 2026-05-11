@@ -14,13 +14,11 @@ class CourseInstructorController extends BaseResourceController
     protected string $resource = CourseInstructorResource::class;
 
     /**
-     * Display a listing of the course instructors.
+     * Display a listing of the courseinstructor.
      */
     public function index(BaseResourceRequest $request): AnonymousResourceCollection
     {
-        $viewableColumns = $this->validatePermission('view');
-        $builder = CourseInstructor::query()->select($viewableColumns);
-        $this->applySearch($builder, $request);
+        $builder = $this->getBuilder($request);
 
         return CourseInstructorResource::collection($builder->paginate($request->integer('n', 10)));
     }

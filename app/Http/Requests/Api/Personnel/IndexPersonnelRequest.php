@@ -16,6 +16,7 @@ class IndexPersonnelRequest extends BaseResourceRequest
         return array_merge(parent::rules(), [
             /**
              * Filter personnel by structure ID.
+             *
              * @example STR001
              */
             'structure_id' => 'string|nullable',

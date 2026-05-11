@@ -3,7 +3,6 @@
 namespace App\Models\Resources;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasSyncMeta;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class PersonnelPosition extends Model implements Auditable
@@ -29,6 +28,6 @@ class PersonnelPosition extends Model implements Auditable
         'subdiscipline_2',
         'subdiscipline_3',
         'subdiscipline_4',
-        'subdiscipline_5'
+        'subdiscipline_5',
     ];
 }
