@@ -15,6 +15,9 @@ class CreatePassportClient extends CreateRecord
     {
         $data['secret'] = Str::random(40);
         $data['redirect'] ??= '';
+        $data['personal_access_client'] ??= false;
+        $data['password_client'] ??= false;
+        $data['revoked'] ??= false;
 
         return $data;
     }
