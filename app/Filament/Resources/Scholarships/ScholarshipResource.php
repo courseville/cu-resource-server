@@ -56,10 +56,10 @@ class ScholarshipResource extends Resource
                             ->nullable()
                             ->rows(5)
                             ->columnSpanFull(),
-                        FileUpload::make('file')
-                            ->nullable()
-                            ->disk('public')
-                            ->directory('scholarship-files'),
+                        // FileUpload::make('file')
+                        //     ->nullable()
+                        //     ->disk('public')
+                        //     ->directory('scholarship-files'),
                         Textarea::make('file_description')
                             ->label('เอกสารที่ต้องใช้')
                             ->nullable()
@@ -68,9 +68,9 @@ class ScholarshipResource extends Resource
                             ->label('ปีการศึกษา')
                             ->nullable()
                             ->numeric(),
-                        TextInput::make('update_by')
-                            ->label('อัปเดตโดย')
-                            ->maxLength(255),
+                        // TextInput::make('update_by')
+                        //     ->label('อัปเดตโดย')
+                        //     ->maxLength(255),
                     ])->columns(2),
                 Section::make('Settings')
                     ->schema([

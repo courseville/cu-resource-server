@@ -15,8 +15,8 @@ class PersonnelImageForm
                 TextInput::make('personnel_id'),
                 TextInput::make('citizen_id'),
                 TextInput::make('passport_number'),
-                FileUpload::make('image_name')
-                    ->image(),
+                // FileUpload::make('image_name')
+                //     ->image(),
                 TextInput::make('begin_date'),
             ]);
     }

@@ -48,10 +48,10 @@ class StudentForm
                             ->maxLength(255),
                         DateTimePicker::make('birth')
                             ->label('Birth Date'),
-                        FileUpload::make('image')
-                            ->label('Student Image')
-                            ->image()
-                            ->directory('student-images'),
+                        // FileUpload::make('image')
+                        //     ->label('Student Image')
+                        //     ->image()
+                        //     ->directory('student-images'),
                     ])->columns(2),
 
                 Section::make('Additional Personal Information')

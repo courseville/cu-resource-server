@@ -184,29 +184,29 @@ class ScholarshipApplicationResource extends Resource
                             ->rows(3)
                             ->nullable()
                             ->columnSpanFull(),
-                        Grid::make(2)
-                            ->schema([
-                                FileUpload::make('house_and_surroundings_image')
-                                    ->label('House and Surroundings Image')
-                                    ->image()
-                                    ->directory('scholarship-applications/house-images')
-                                    ->nullable(),
-                                FileUpload::make('house_interior_image')
-                                    ->label('House Interior Image')
-                                    ->image()
-                                    ->directory('scholarship-applications/house-images')
-                                    ->nullable(),
-                                FileUpload::make('application_document_pdf')
-                                    ->label('Application Document (PDF)')
-                                    ->acceptedFileTypes(['application/pdf'])
-                                    ->directory('scholarship-applications/documents')
-                                    ->nullable(),
-                                FileUpload::make('account_book_pdf')
-                                    ->label('Bank Account Book (PDF)')
-                                    ->acceptedFileTypes(['application/pdf'])
-                                    ->directory('scholarship-applications/documents')
-                                    ->nullable(),
-                            ]),
+                        // Grid::make(2)
+                        //     ->schema([
+                        //         FileUpload::make('house_and_surroundings_image')
+                        //             ->label('House and Surroundings Image')
+                        //             ->image()
+                        //             ->directory('scholarship-applications/house-images')
+                        //             ->nullable(),
+                        //         FileUpload::make('house_interior_image')
+                        //             ->label('House Interior Image')
+                        //             ->image()
+                        //             ->directory('scholarship-applications/house-images')
+                        //             ->nullable(),
+                        //         FileUpload::make('application_document_pdf')
+                        //             ->label('Application Document (PDF)')
+                        //             ->acceptedFileTypes(['application/pdf'])
+                        //             ->directory('scholarship-applications/documents')
+                        //             ->nullable(),
+                        //         FileUpload::make('account_book_pdf')
+                        //             ->label('Bank Account Book (PDF)')
+                        //             ->acceptedFileTypes(['application/pdf'])
+                        //             ->directory('scholarship-applications/documents')
+                        //             ->nullable(),
+                        //     ]),
                         TextInput::make('number_of_cars')
                             ->label('Number of Cars')
                             ->nullable(),
