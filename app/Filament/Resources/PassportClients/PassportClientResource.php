@@ -15,6 +15,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Laravel\Passport\Passport;
 
 class PassportClientResource extends Resource
 {
@@ -26,11 +27,37 @@ class PassportClientResource extends Resource
     {
         return $schema->components([
             TextInput::make('name')->required(),
-            TextInput::make('redirect')->required(),
-            Toggle::make('personal_access_client'),
-            Toggle::make('password_client'),
-            Toggle::make('revoked'),
+            TextInput::make('redirect')
+                ->url()
+                ->helperText('Required for Authorization Code grant. Leave blank for Client Credentials or Personal Access clients.')
+                ->dehydrateStateUsing(fn ($state) => $state ?? ''),
+            Toggle::make('personal_access_client')
+                ->helperText('Enable to allow this client to issue personal access tokens.'),
+            // Toggle::make('password_client')
+            //     ->helperText('Enable for the password grant. Leave both toggles off for a Client Credentials client.'),
+            Toggle::make('revoked')->columnSpanFull(),
         ]);
+    }
+
+    public static function syncPersonalAccessClient(Client $client): void
+    {
+        $exists = Passport::personalAccessClient()
+            ->where('client_id', $client->getKey())
+            ->exists();
+
+        if ($client->personal_access_client && ! $exists) {
+            $pac = Passport::personalAccessClient();
+            $pac->client_id = $client->getKey();
+            $pac->save();
+
+            return;
+        }
+
+        if (! $client->personal_access_client && $exists) {
+            Passport::personalAccessClient()
+                ->where('client_id', $client->getKey())
+                ->delete();
+        }
     }
 
     public static function table(Table $table): Table
@@ -43,10 +70,10 @@ class PassportClientResource extends Resource
                 ->badge()
                 ->color(fn ($state) => $state ? 'success' : 'danger')
                 ->formatStateUsing(fn ($state) => $state ? 'Yes' : 'No'),
-            TextColumn::make('password_client')
-                ->badge()
-                ->color(fn ($state) => $state ? 'success' : 'danger')
-                ->formatStateUsing(fn ($state) => $state ? 'Yes' : 'No'),
+            // TextColumn::make('password_client')
+            //     ->badge()
+            //     ->color(fn ($state) => $state ? 'success' : 'danger')
+            //     ->formatStateUsing(fn ($state) => $state ? 'Yes' : 'No'),
 
             TextColumn::make('revoked')
                 ->badge()

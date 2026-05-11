@@ -14,12 +14,15 @@ class CreatePassportClient extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['secret'] = Str::random(40);
+        $data['redirect'] ??= '';
 
         return $data;
     }
 
     protected function afterCreate(): void
     {
+        PassportClientResource::syncPersonalAccessClient($this->record);
+
         $plainSecret = $this->record->plainSecret;
 
         if (! $plainSecret) {
