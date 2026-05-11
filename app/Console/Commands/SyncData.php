@@ -94,7 +94,7 @@ class SyncData extends Command
             'file_path' => $source->url,
             'importer' => static::class,
             'total_rows' => count($dataArray),
-            'user_id' => optional(Auth::user())->id ?? 1, // Fallback to system user
+            'user_id' => optional(Auth::user())->id, // Null if not logged in
         ]);
 
         $transformedData = DataTransformer::transformFromSource($source->id, $dataArray);
@@ -145,7 +145,7 @@ class SyncData extends Command
             'file_path' => $source->url,
             'importer' => static::class,
             'total_rows' => $totalRows,
-            'user_id' => optional(Auth::user())->id ?? 1,
+            'user_id' => optional(Auth::user())->id,
         ]);
 
         $successfulRows = 0;
@@ -274,7 +274,7 @@ class SyncData extends Command
                 'file_path' => $source->url,
                 'importer' => static::class,
                 'total_rows' => $totalRows,
-                'user_id' => optional(Auth::user())->id ?? 1,
+                'user_id' => optional(Auth::user())->id,
             ]);
 
             $successfulRows = 0;
