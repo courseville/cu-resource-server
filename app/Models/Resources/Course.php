@@ -41,4 +41,15 @@ class Course extends Model implements Auditable
     protected $casts = [
         'sync_meta' => 'json',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($model) {
+            if (empty($model->name)) {
+                $model->name = $model->name_en ?: $model->name_th ?: $model->code ?: 'Unknown Course';
+            }
+        });
+    }
 }
