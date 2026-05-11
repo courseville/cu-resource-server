@@ -108,3 +108,136 @@ function actingAsApiClient(Client $client, array $scopes = ['*']): void
 {
     Passport::actingAsClient($client, $scopes);
 }
+
+/*
+|--------------------------------------------------------------------------
+| Filament panel test helpers
+|--------------------------------------------------------------------------
+|
+| `actAsAdminPanelUser()` boots a user that is treated as super-admin by
+| DataDomainScope so panel tests can see all records, and bypasses
+| User::canAccessPanel() by switching the env to 'local'.
+|
+*/
+
+use App\Models\User;
+use App\Models\Resources\Student;
+use App\Models\Resources\Personnel;
+use App\Models\Resources\Scholarship;
+use App\Models\Resources\ScholarshipApplication;
+use App\Models\Resources\StudentInternship;
+use App\Models\DataSource;
+use App\Models\TransformerMapping;
+
+function actAsAdminPanelUser(): User
+{
+    // canAccessPanel() short-circuits when env is local.
+    config(['app.env' => 'local']);
+
+    $user = User::factory()->create();
+
+    // DataDomainScope treats a user as super-admin when they have a role
+    // named 'admin' with no domain set in the pivot. This unblocks queries
+    // against models that use HasDomainScope (Student, Personnel).
+    $role = Role::firstOrCreate(['name' => 'admin'], ['description' => 'Super admin']);
+    $user->roles()->attach($role->id, ['domain' => null]);
+
+    test()->actingAs($user, 'admin');
+
+    return $user;
+}
+
+function makeStudent(array $overrides = []): Student
+{
+    // forceFill so non-fillable columns (e.g. national_id) used by the form
+    // are still persisted when the helper builds a record for Edit/View tests.
+    $student = new Student;
+    $student->forceFill(array_merge([
+        'student_id' => 'S'.Str::random(8),
+        'first_name_th' => 'สมชาย',
+        'last_name_th' => 'ใจดี',
+        'first_name_en' => 'Somchai',
+        'last_name_en' => 'Jaidee',
+        'national_id' => '1'.fake()->numerify('############'),
+    ], $overrides));
+    $student->save();
+
+    return $student;
+}
+
+function makePersonnel(array $overrides = []): Personnel
+{
+    return Personnel::create(array_merge([
+        'personnel_id' => 'P'.Str::random(8),
+        'first_name_th' => 'อาจารย์',
+        'last_name_th' => 'ทดสอบ',
+        'first_name_en' => 'Test',
+        'last_name_en' => 'Instructor',
+    ], $overrides));
+}
+
+function makeScholarship(array $overrides = []): Scholarship
+{
+    return Scholarship::create(array_merge([
+        'job_code' => 'JOB-'.Str::random(6),
+        'scholarship_name' => 'ทุนทดสอบ',
+        'name_en' => 'Test Scholarship',
+        'academic_year' => 2026,
+        'isactive' => true,
+    ], $overrides));
+}
+
+function makeScholarshipApplication(array $overrides = []): ScholarshipApplication
+{
+    $student = $overrides['student'] ?? makeStudent();
+    $scholarship = $overrides['scholarship'] ?? makeScholarship();
+    unset($overrides['student'], $overrides['scholarship']);
+
+    return ScholarshipApplication::create(array_merge([
+        'student_id' => $student->student_id,
+        'job_code' => $scholarship->job_code,
+        'status' => 'pending',
+        'confirm' => false,
+    ], $overrides));
+}
+
+function makeStudentInternship(array $overrides = []): StudentInternship
+{
+    $student = $overrides['student'] ?? makeStudent();
+    unset($overrides['student']);
+
+    return StudentInternship::create(array_merge([
+        'student_id' => $student->student_id,
+        'intern_year' => 2026,
+        'status' => 'pending',
+        'company' => 'Acme Co',
+    ], $overrides));
+}
+
+function makeDataSource(array $overrides = []): DataSource
+{
+    return DataSource::create(array_merge([
+        'name' => 'Source '.Str::random(6),
+        'type' => 'file',
+        'url' => '/tmp/source-'.Str::random(6).'.csv',
+        'is_active' => true,
+    ], $overrides));
+}
+
+function makeTransformerMapping(array $overrides = []): TransformerMapping
+{
+    $dataSource = $overrides['data_source'] ?? makeDataSource();
+    unset($overrides['data_source']);
+
+    // data_source_id is not in the model's $fillable, so forceFill it.
+    $mapping = new TransformerMapping;
+    $mapping->forceFill(array_merge([
+        'data_source_id' => $dataSource->id,
+        'model' => 'App\\Models\\Resources\\Student',
+        'field' => 'first_name_th',
+        'mapping' => 'fname_th',
+    ], $overrides));
+    $mapping->save();
+
+    return $mapping;
+}
