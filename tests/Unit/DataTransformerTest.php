@@ -16,7 +16,7 @@ class DataTransformerTest extends TestCase
         // Formatting is an empty JSON array
         $formatting = '[]';
         $value = null;
-        
+
         $method = new \ReflectionMethod(DataTransformer::class, 'applyFormatting');
         $method->setAccessible(true);
         $result = $method->invoke(null, $value, 'any_field', $formatting);
@@ -42,8 +42,8 @@ class DataTransformerTest extends TestCase
             ],
         ];
 
-        $model = new ScholarshipApplication();
-        
+        $model = new ScholarshipApplication;
+
         $result = DataTransformer::transform($data, $model, $mapping);
 
         $this->assertArrayHasKey('total_family_debt', $result);
@@ -64,8 +64,8 @@ class DataTransformerTest extends TestCase
             ],
         ];
 
-        $model = new ScholarshipApplication();
-        
+        $model = new ScholarshipApplication;
+
         $result = DataTransformer::transform($data, $model, $mapping);
 
         $this->assertArrayHasKey('total_family_debt', $result);

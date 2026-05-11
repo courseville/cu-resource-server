@@ -26,7 +26,7 @@ class StudentExporter extends Exporter
             ExportColumn::make('last_name_en'),
             ExportColumn::make('created_at'),
             ExportColumn::make('updated_at'),
-            ExportColumn::make('national_id'),
+            ExportColumn::make('citizen_id'),
             ExportColumn::make('birth'),
             ExportColumn::make('image'),
             ExportColumn::make('nationality'),

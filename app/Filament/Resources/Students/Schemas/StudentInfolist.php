@@ -20,8 +20,8 @@ class StudentInfolist
                             ->label('Full Name (Thai)'),
                         TextEntry::make('full_name_en')
                             ->label('Full Name (English)'),
-                        TextEntry::make('national_id')
-                            ->label('National ID'),
+                        TextEntry::make('citizen_id')
+                            ->label('Citizen ID'),
                         TextEntry::make('birth')
                             ->date(),
                     ])->columns(2),

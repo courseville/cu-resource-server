@@ -30,7 +30,7 @@ class StudentImporter extends Importer
                 ->rules(['max:255']),
             ImportColumn::make('last_name_en')
                 ->rules(['max:255']),
-            ImportColumn::make('national_id')
+            ImportColumn::make('citizen_id')
                 ->rules(['required', 'min:13', 'max:13']),
             ImportColumn::make('birth'),
             ImportColumn::make('image'),

@@ -24,7 +24,7 @@ class Student extends Model implements Auditable
         'first_name_en',
         'last_name_en',
         'full_name_en',
-        'national_id',
+        'citizen_id',
         'birth',
         'image',
         'nationality',

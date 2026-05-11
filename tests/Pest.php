@@ -120,14 +120,14 @@ function actingAsApiClient(Client $client, array $scopes = ['*']): void
 |
 */
 
-use App\Models\User;
-use App\Models\Resources\Student;
+use App\Models\DataSource;
 use App\Models\Resources\Personnel;
 use App\Models\Resources\Scholarship;
 use App\Models\Resources\ScholarshipApplication;
+use App\Models\Resources\Student;
 use App\Models\Resources\StudentInternship;
-use App\Models\DataSource;
 use App\Models\TransformerMapping;
+use App\Models\User;
 
 function actAsAdminPanelUser(): User
 {
@@ -149,7 +149,7 @@ function actAsAdminPanelUser(): User
 
 function makeStudent(array $overrides = []): Student
 {
-    // forceFill so non-fillable columns (e.g. national_id) used by the form
+    // forceFill so non-fillable columns (e.g. citizen_id) used by the form
     // are still persisted when the helper builds a record for Edit/View tests.
     $student = new Student;
     $student->forceFill(array_merge([
@@ -158,7 +158,7 @@ function makeStudent(array $overrides = []): Student
         'last_name_th' => 'ใจดี',
         'first_name_en' => 'Somchai',
         'last_name_en' => 'Jaidee',
-        'national_id' => '1'.fake()->numerify('############'),
+        'citizen_id' => '1'.fake()->numerify('############'),
     ], $overrides));
     $student->save();
 

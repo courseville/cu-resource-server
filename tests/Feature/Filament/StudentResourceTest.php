@@ -35,7 +35,7 @@ it('creates a Student via the form', function () {
             'last_name_th' => 'นักศึกษา',
             'first_name_en' => 'Test',
             'last_name_en' => 'Student',
-            'national_id' => '1234567890123',
+            'citizen_id' => '1234567890123',
             'email' => 'test.student@example.com',
             'fac_name' => 'Engineering',
             'start_acad_year' => '2026',
@@ -48,7 +48,7 @@ it('creates a Student via the form', function () {
     expect($student)->not->toBeNull()
         ->and($student->first_name_th)->toBe('ทดสอบ')
         ->and($student->last_name_th)->toBe('นักศึกษา')
-        ->and($student->national_id)->toBe('1234567890123')
+        ->and($student->citizen_id)->toBe('1234567890123')
         ->and($student->email)->toBe('test.student@example.com')
         ->and($student->fac_name)->toBe('Engineering')
         ->and($student->start_acad_year)->toBe('2026');
@@ -60,14 +60,14 @@ it('flags required fields on create when missing', function () {
             'student_id' => null,
             'first_name_th' => null,
             'last_name_th' => null,
-            'national_id' => null,
+            'citizen_id' => null,
         ])
         ->call('create')
         ->assertHasFormErrors([
             'student_id' => 'required',
             'first_name_th' => 'required',
             'last_name_th' => 'required',
-            'national_id' => 'required',
+            'citizen_id' => 'required',
         ]);
 });
 
@@ -98,7 +98,7 @@ it('updates a student via the edit form', function () {
         'student_id' => '6500000002',
         'first_name_th' => 'เก่า',
         'last_name_th' => 'ทดสอบ',
-        'national_id' => '0000000000000',
+        'citizen_id' => '0000000000000',
     ]);
 
     Livewire::test(EditStudent::class, ['record' => $student->getRouteKey()])

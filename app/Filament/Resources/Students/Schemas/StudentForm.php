@@ -42,8 +42,8 @@ class StudentForm
                         TextInput::make('last_name_en')
                             ->label('Last Name (EN)')
                             ->maxLength(255),
-                        TextInput::make('national_id')
-                            ->label('National ID')
+                        TextInput::make('citizen_id')
+                            ->label('Citizen ID')
                             ->required()
                             ->maxLength(255),
                         DateTimePicker::make('birth')
