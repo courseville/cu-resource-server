@@ -7,8 +7,8 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class PersonnelEducation extends Model implements Auditable
 {
-    use \OwenIt\Auditing\Auditable;
     use \App\Traits\HasSyncMeta;
+    use \OwenIt\Auditing\Auditable;
 
     protected $table = 'personnel_education';
 

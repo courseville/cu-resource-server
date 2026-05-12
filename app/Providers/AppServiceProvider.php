@@ -8,11 +8,11 @@ use Dedoc\Scramble\Scramble;
 use Dedoc\Scramble\Support\Generator\OpenApi;
 use Dedoc\Scramble\Support\Generator\SecurityScheme;
 use Dedoc\Scramble\Support\Generator\SecuritySchemes\OAuthFlow;
+use Filament\Infolists\Components\Entry;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Passport\Passport;
-use Filament\Infolists\Components\Entry;
-use Illuminate\Database\Eloquent\Model;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -36,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
                 $field = $component->getName();
                 $meta = $record->sync_meta['fields'][$field] ?? null;
 
-                if (!$meta) {
+                if (! $meta) {
                     return null;
                 }
 

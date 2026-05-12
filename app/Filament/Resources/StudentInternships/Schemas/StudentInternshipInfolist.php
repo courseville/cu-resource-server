@@ -43,7 +43,7 @@ class StudentInternshipInfolist
                         TextEntry::make('location_name')->label('Practice Place')->withSyncMeta(),
                         TextEntry::make('location_address')->label('Practice Address')->withSyncMeta(),
                         Grid::make(4)->schema([
-                             TextEntry::make('prac_lon')->label('Longitude')->withSyncMeta(),
+                            TextEntry::make('prac_lon')->label('Longitude')->withSyncMeta(),
                             TextEntry::make('prac_lat')->label('Latitude')->withSyncMeta(),
                             TextEntry::make('prac_loc1')->label('Location 1')->withSyncMeta(),
                             TextEntry::make('prac_loc2')->label('Location 2')->withSyncMeta(),
