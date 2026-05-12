@@ -9,8 +9,10 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -44,6 +46,48 @@ class PositionsRelationManager extends RelationManager
                     ->label('สาขาวิชาย่อย 4'),
                 TextInput::make('subdiscipline_5')
                     ->label('สาขาวิชาย่อย 5'),
+            ]);
+    }
+
+    public function infolist(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                TextEntry::make('positiontype_id')
+                    ->label('รหัสประเภทตำแหน่ง')
+                    ->withSyncMeta(),
+                TextEntry::make('positiontype_name')
+                    ->label('ประเภทตำแหน่ง')
+                    ->withSyncMeta(),
+                TextEntry::make('positiontype_text')
+                    ->label('ชื่อตำแหน่ง')
+                    ->withSyncMeta(),
+                TextEntry::make('fieldstudy')
+                    ->label('สาขาวิชา')
+                    ->withSyncMeta(),
+                TextEntry::make('begin_date')
+                    ->label('วันที่เริ่ม')
+                    ->date()
+                    ->withSyncMeta(),
+                TextEntry::make('end_date')
+                    ->label('วันที่สิ้นสุด')
+                    ->date()
+                    ->withSyncMeta(),
+                TextEntry::make('subdiscipline_1')
+                    ->label('สาขาวิชาย่อย 1')
+                    ->withSyncMeta(),
+                TextEntry::make('subdiscipline_2')
+                    ->label('สาขาวิชาย่อย 2')
+                    ->withSyncMeta(),
+                TextEntry::make('subdiscipline_3')
+                    ->label('สาขาวิชาย่อย 3')
+                    ->withSyncMeta(),
+                TextEntry::make('subdiscipline_4')
+                    ->label('สาขาวิชาย่อย 4')
+                    ->withSyncMeta(),
+                TextEntry::make('subdiscipline_5')
+                    ->label('สาขาวิชาย่อย 5')
+                    ->withSyncMeta(),
             ]);
     }
 
@@ -81,6 +125,7 @@ class PositionsRelationManager extends RelationManager
                 CreateAction::make(),
             ])
             ->recordActions([
+                ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),
             ])

@@ -15,47 +15,62 @@ class StudentGraduationInfolist
                 Section::make('Student Identification')
                     ->schema([
                         TextEntry::make('student_code')
-                            ->label('Student Code'),
+                            ->label('Student Code')
+                            ->withSyncMeta(),
                         TextEntry::make('name_thai')
-                            ->label('Name (Thai)'),
+                            ->label('Name (Thai)')
+                            ->withSyncMeta(),
                         TextEntry::make('name_english')
-                            ->label('Name (English)'),
+                            ->label('Name (English)')
+                            ->withSyncMeta(),
                     ])->columns(2),
 
                 Section::make('Academic Achievement')
                     ->schema([
                         TextEntry::make('acad_year')
-                            ->label('Academic Year'),
+                            ->label('Academic Year')
+                            ->withSyncMeta(),
                         TextEntry::make('semester')
-                            ->label('Semester'),
+                            ->label('Semester')
+                            ->withSyncMeta(),
                         TextEntry::make('major_thai')
-                            ->label('Major (Thai)'),
+                            ->label('Major (Thai)')
+                            ->withSyncMeta(),
                         TextEntry::make('major_english')
-                            ->label('Major (English)'),
+                            ->label('Major (English)')
+                            ->withSyncMeta(),
                         TextEntry::make('degree_thai')
-                            ->label('Degree (Thai)'),
+                            ->label('Degree (Thai)')
+                            ->withSyncMeta(),
                         TextEntry::make('degree_english')
-                            ->label('Degree (English)'),
+                            ->label('Degree (English)')
+                            ->withSyncMeta(),
                     ])->columns(2),
 
                 Section::make('Graduation Dates')
                     ->schema([
                         TextEntry::make('graduate_date')
-                            ->label('Graduate Date'),
+                            ->label('Graduate Date')
+                            ->withSyncMeta(),
                         TextEntry::make('concil_date')
-                            ->label('Council Date'),
+                            ->label('Council Date')
+                            ->withSyncMeta(),
                         TextEntry::make('distinction')
-                            ->label('Distinction'),
+                            ->label('Distinction')
+                            ->withSyncMeta(),
                     ])->columns(3),
 
                 Section::make('Institutional Hierarchy')
                     ->schema([
                         TextEntry::make('faccode')
-                            ->label('Faculty Code'),
+                            ->label('Faculty Code')
+                            ->withSyncMeta(),
                         TextEntry::make('depcode')
-                            ->label('Department Code'),
+                            ->label('Department Code')
+                            ->withSyncMeta(),
                         TextEntry::make('majorcode')
-                            ->label('Major Code'),
+                            ->label('Major Code')
+                            ->withSyncMeta(),
                     ])->columns(3),
             ]);
     }

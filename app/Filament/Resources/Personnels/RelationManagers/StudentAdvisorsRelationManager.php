@@ -8,8 +8,10 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -29,6 +31,19 @@ class StudentAdvisorsRelationManager extends RelationManager
                     ->label('Staff ID')
                     ->required()
                     ->maxLength(255),
+            ]);
+    }
+
+    public function infolist(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                TextEntry::make('student_id')
+                    ->label('Student ID')
+                    ->withSyncMeta(),
+                TextEntry::make('staff_id')
+                    ->label('Staff ID')
+                    ->withSyncMeta(),
             ]);
     }
 
@@ -53,6 +68,7 @@ class StudentAdvisorsRelationManager extends RelationManager
                 CreateAction::make(),
             ])
             ->recordActions([
+                ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),
             ])

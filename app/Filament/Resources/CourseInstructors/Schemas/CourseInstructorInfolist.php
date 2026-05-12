@@ -15,33 +15,43 @@ class CourseInstructorInfolist
                 Section::make('Course Assignment')
                     ->schema([
                         TextEntry::make('acad_year')
-                            ->label('Academic Year'),
+                            ->label('Academic Year')
+                            ->withSyncMeta(),
                         TextEntry::make('semester')
-                            ->label('Semester'),
+                            ->label('Semester')
+                            ->withSyncMeta(),
                         TextEntry::make('course_code')
-                            ->label('Course Code'),
+                            ->label('Course Code')
+                            ->withSyncMeta(),
                         TextEntry::make('section')
-                            ->label('Section'),
+                            ->label('Section')
+                            ->withSyncMeta(),
                     ])->columns(2),
 
                 Section::make('Instructor Details')
                     ->schema([
                         TextEntry::make('instructor_no')
-                            ->label('Instructor No.'),
+                            ->label('Instructor No.')
+                            ->withSyncMeta(),
                         TextEntry::make('instructor_name')
-                            ->label('Instructor Name (Thai)'),
+                            ->label('Instructor Name (Thai)')
+                            ->withSyncMeta(),
                         TextEntry::make('instructor_name_en')
-                            ->label('Instructor Name (English)'),
+                            ->label('Instructor Name (English)')
+                            ->withSyncMeta(),
                         TextEntry::make('row_seq')
-                            ->label('Row Seq'),
+                            ->label('Row Seq')
+                            ->withSyncMeta(),
                     ])->columns(2),
 
                 Section::make('Institutional Hierarchy')
                     ->schema([
                         TextEntry::make('faccode')
-                            ->label('Faculty Code'),
+                            ->label('Faculty Code')
+                            ->withSyncMeta(),
                         TextEntry::make('depcode')
-                            ->label('Department Code'),
+                            ->label('Department Code')
+                            ->withSyncMeta(),
                     ])->columns(2),
             ]);
     }

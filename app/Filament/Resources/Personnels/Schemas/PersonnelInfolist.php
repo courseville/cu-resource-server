@@ -17,43 +17,59 @@ class PersonnelInfolist
                     ->schema([
                         TextEntry::make('personnel_id')
                             ->label('Personnel ID')
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+                            ->withSyncMeta(),
                         TextEntry::make('rank_title')
-                            ->label('ยศ'),
+                            ->label('ยศ')
+                            ->withSyncMeta(),
                         TextEntry::make('doctoral_title')
-                            ->label('คำนำหน้า ดร.'),
+                            ->label('คำนำหน้า ดร.')
+                            ->withSyncMeta(),
                         TextEntry::make('acad_title_1')
-                            ->label('ตำแหน่งวิชาการ 1'),
+                            ->label('ตำแหน่งวิชาการ 1')
+                            ->withSyncMeta(),
                         TextEntry::make('acad_title_2')
-                            ->label('ตำแหน่งวิชาการ 2'),
+                            ->label('ตำแหน่งวิชาการ 2')
+                            ->withSyncMeta(),
                         TextEntry::make('title_by_the_king')
-                            ->label('ยศ/ฉายาที่ได้รับพระราชทาน'),
+                            ->label('ยศ/ฉายาที่ได้รับพระราชทาน')
+                            ->withSyncMeta(),
                         TextEntry::make('title_th')
-                            ->label('คำนำหน้า'),
+                            ->label('คำนำหน้า')
+                            ->withSyncMeta(),
                         TextEntry::make('first_name_th')
-                            ->label('ชื่อ'),
+                            ->label('ชื่อ')
+                            ->withSyncMeta(),
                         TextEntry::make('last_name_th')
-                            ->label('นามสกุล'),
+                            ->label('นามสกุล')
+                            ->withSyncMeta(),
                         TextEntry::make('first_name_en')
-                            ->label('ชื่อ (อังกฤษ)'),
+                            ->label('ชื่อ (อังกฤษ)')
+                            ->withSyncMeta(),
                         TextEntry::make('last_name_en')
-                            ->label('นามสกุล (อังกฤษ)'),
+                            ->label('นามสกุล (อังกฤษ)')
+                            ->withSyncMeta(),
                         TextEntry::make('citizen_id')
-                            ->label('เลขบัตรประชาชน'),
+                            ->label('เลขบัตรประชาชน')
+                            ->withSyncMeta(),
                         TextEntry::make('passport_no')
-                            ->label('เลข Passport'),
+                            ->label('เลข Passport')
+                            ->withSyncMeta(),
                         TextEntry::make('birth_date')
                             ->label('วันเกิด')
-                            ->date(),
+                            ->date()
+                            ->withSyncMeta(),
                         TextEntry::make('marital_status')
-                            ->label('สถานภาพสมรส'),
+                            ->label('สถานภาพสมรส')
+                            ->withSyncMeta(),
                     ])->columns(2),
 
                 Section::make('Personnel Information')
                     ->columnSpanFull()
                     ->schema([
                         TextEntry::make('personnel_type')
-                            ->label('ประเภทบุคลากร'),
+                            ->label('ประเภทบุคลากร')
+                            ->withSyncMeta(),
                         TextEntry::make('personnel_status')
                             ->label('สถานภาพบุคลากร')
                             ->formatStateUsing(fn (string $state): string => match ($state) {
@@ -62,41 +78,56 @@ class PersonnelInfolist
                                 '2' => 'พนักงานเกษียณอายุ',
                                 '3' => 'พนักงานปกติ',
                                 default => $state,
-                            }),
+                            })
+                            ->withSyncMeta(),
                         TextEntry::make('personnel_type')
-                            ->label('สายงาน'),
+                            ->label('สายงาน')
+                            ->withSyncMeta(),
                         TextEntry::make('personnel_subgroup')
-                            ->label('ระดับตำแหน่ง'),
+                            ->label('ระดับตำแหน่ง')
+                            ->withSyncMeta(),
                         TextEntry::make('position_name')
-                            ->label('ตำแหน่งตามสายงาน'),
+                            ->label('ตำแหน่งตามสายงาน')
+                            ->withSyncMeta(),
                         TextEntry::make('position_number')
-                            ->label('อัตราเลขที่'),
+                            ->label('อัตราเลขที่')
+                            ->withSyncMeta(),
                         TextEntry::make('start_date')
                             ->label('วันที่เริ่มปฏิบัติงาน')
-                            ->date(),
+                            ->date()
+                            ->withSyncMeta(),
                         TextEntry::make('structure_level1_name')
-                            ->label('หน่วยงานระดับ 1'),
+                            ->label('หน่วยงานระดับ 1')
+                            ->withSyncMeta(),
                         TextEntry::make('structure_level2_name')
-                            ->label('หน่วยงานระดับ 2'),
+                            ->label('หน่วยงานระดับ 2')
+                            ->withSyncMeta(),
                         TextEntry::make('structure_level3_name')
-                            ->label('หน่วยงานระดับ 3'),
+                            ->label('หน่วยงานระดับ 3')
+                            ->withSyncMeta(),
                         TextEntry::make('structure_level4_name')
-                            ->label('หน่วยงานระดับ 4'),
+                            ->label('หน่วยงานระดับ 4')
+                            ->withSyncMeta(),
                     ])->columns(2),
 
                 Section::make('Contact Information')
                     ->columnSpanFull()
                     ->schema([
                         TextEntry::make('public_email')
-                            ->label('อีเมล'),
+                            ->label('อีเมล')
+                            ->withSyncMeta(),
                         TextEntry::make('phone_no')
-                            ->label('เบอร์ติดต่อ'),
+                            ->label('เบอร์ติดต่อ')
+                            ->withSyncMeta(),
                         TextEntry::make('room')
-                            ->label('ห้องทำงาน'),
+                            ->label('ห้องทำงาน')
+                            ->withSyncMeta(),
                         TextEntry::make('floor')
-                            ->label('ชั้น'),
+                            ->label('ชั้น')
+                            ->withSyncMeta(),
                         TextEntry::make('building')
-                            ->label('อาคาร'),
+                            ->label('อาคาร')
+                            ->withSyncMeta(),
                     ])->columns(2),
             ]);
     }

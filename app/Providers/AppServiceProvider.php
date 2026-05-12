@@ -11,6 +11,8 @@ use Dedoc\Scramble\Support\Generator\SecuritySchemes\OAuthFlow;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Passport\Passport;
+use Filament\Infolists\Components\Entry;
+use Illuminate\Database\Eloquent\Model;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,6 +31,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Entry::macro('withSyncMeta', function () {
+            return $this->hint(function (Model $record, Entry $component) {
+                $field = $component->getName();
+                $meta = $record->sync_meta['fields'][$field] ?? null;
+
+                if (!$meta) {
+                    return null;
+                }
+
+                return view('infolists.components.sync-meta-badge', ['meta' => $meta]);
+            });
+        });
+
         Passport::useClientModel(Client::class);
         Passport::personalAccessTokensExpireIn(now()->addMonths(1));
         // Passport::tokensCan([

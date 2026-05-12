@@ -15,37 +15,47 @@ class AcademicProgramInfolist
                 Section::make('Program Identification')
                     ->schema([
                         TextEntry::make('oaa_program_id')
-                            ->label('OAA Program ID'),
+                            ->label('OAA Program ID')
+                            ->withSyncMeta(),
                         TextEntry::make('ops_no')
-                            ->label('OPS No.'),
+                            ->label('OPS No.')
+                            ->withSyncMeta(),
                     ])->columns(2),
 
                 Section::make('Program Names')
                     ->schema([
                         TextEntry::make('program_name_th')
-                            ->label('Program Name (Thai)'),
+                            ->label('Program Name (Thai)')
+                            ->withSyncMeta(),
                         TextEntry::make('program_name_en')
-                            ->label('Program Name (English)'),
+                            ->label('Program Name (English)')
+                            ->withSyncMeta(),
                     ])->columns(2),
 
                 Section::make('Degree Information')
                     ->schema([
                         TextEntry::make('title_degree_th')
-                            ->label('Degree Title (Thai)'),
+                            ->label('Degree Title (Thai)')
+                            ->withSyncMeta(),
                         TextEntry::make('title_degree_en')
-                            ->label('Degree Title (English)'),
+                            ->label('Degree Title (English)')
+                            ->withSyncMeta(),
                         TextEntry::make('degree_name_th')
-                            ->label('Degree Name (Thai)'),
+                            ->label('Degree Name (Thai)')
+                            ->withSyncMeta(),
                         TextEntry::make('degree_name_en')
-                            ->label('Degree Name (English)'),
+                            ->label('Degree Name (English)')
+                            ->withSyncMeta(),
                     ])->columns(2),
 
                 Section::make('Additional Information')
                     ->schema([
                         TextEntry::make('faculty_code')
-                            ->label('Faculty Code'),
+                            ->label('Faculty Code')
+                            ->withSyncMeta(),
                         TextEntry::make('level_code')
-                            ->label('Level Code'),
+                            ->label('Level Code')
+                            ->withSyncMeta(),
                     ])->columns(2),
             ]);
     }

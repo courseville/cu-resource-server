@@ -15,49 +15,64 @@ class CourseInfolist
                 Section::make('Course Identification')
                     ->schema([
                         TextEntry::make('course_id')
-                            ->label('Course ID'),
+                            ->label('Course ID')
+                            ->withSyncMeta(),
                         TextEntry::make('course_no')
-                            ->label('Course No.'),
+                            ->label('Course No.')
+                            ->withSyncMeta(),
                         TextEntry::make('program_id')
-                            ->label('Program ID'),
+                            ->label('Program ID')
+                            ->withSyncMeta(),
                         TextEntry::make('revision_year')
-                            ->label('Revision Year'),
+                            ->label('Revision Year')
+                            ->withSyncMeta(),
                     ])->columns(2),
 
                 Section::make('Course Names')
                     ->schema([
                         TextEntry::make('name_th')
-                            ->label('Course Name (Thai)'),
+                            ->label('Course Name (Thai)')
+                            ->withSyncMeta(),
                         TextEntry::make('name_en')
-                            ->label('Course Name (English)'),
+                            ->label('Course Name (English)')
+                            ->withSyncMeta(),
                         TextEntry::make('name_abbr')
-                            ->label('Abbreviated Name'),
+                            ->label('Abbreviated Name')
+                            ->withSyncMeta(),
                     ])->columns(2),
 
                 Section::make('Credits & Hours')
                     ->schema([
                         TextEntry::make('credits')
-                            ->label('Total Credits'),
+                            ->label('Total Credits')
+                            ->withSyncMeta(),
                         TextEntry::make('l_credit')
-                            ->label('Lecture Support Credits'),
+                            ->label('Lecture Support Credits')
+                            ->withSyncMeta(),
                         TextEntry::make('nl_credit')
-                            ->label('Non-Lecture Support Credits'),
+                            ->label('Non-Lecture Support Credits')
+                            ->withSyncMeta(),
                         TextEntry::make('l_hour')
-                            ->label('Lecture Hours'),
+                            ->label('Lecture Hours')
+                            ->withSyncMeta(),
                         TextEntry::make('nl_hour')
-                            ->label('Non-Lecture Hours'),
+                            ->label('Non-Lecture Hours')
+                            ->withSyncMeta(),
                         TextEntry::make('s_hour')
-                            ->label('Self-Study Hours'),
+                            ->label('Self-Study Hours')
+                            ->withSyncMeta(),
                     ])->columns(3),
 
                 Section::make('Descriptions')
                     ->schema([
                         TextEntry::make('description_th')
                             ->label('Description (Thai)')
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+                            ->withSyncMeta(),
                         TextEntry::make('description_en')
                             ->label('Description (English)')
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+                            ->withSyncMeta(),
                     ]),
             ]);
     }

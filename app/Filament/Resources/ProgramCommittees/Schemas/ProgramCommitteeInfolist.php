@@ -15,20 +15,25 @@ class ProgramCommitteeInfolist
                 Section::make('Committee Identification')
                     ->schema([
                         TextEntry::make('program_no')
-                            ->label('Program No.'),
+                            ->label('Program No.')
+                            ->withSyncMeta(),
                         TextEntry::make('active_year')
-                            ->label('Active Year'),
+                            ->label('Active Year')
+                            ->withSyncMeta(),
                     ])->columns(2),
 
                 Section::make('Committee Details')
                     ->schema([
                         TextEntry::make('committee_tag')
-                            ->label('Committee Tag'),
+                            ->label('Committee Tag')
+                            ->withSyncMeta(),
                         TextEntry::make('effective_date')
                             ->label('Effective Date')
-                            ->date(),
+                            ->date()
+                            ->withSyncMeta(),
                         TextEntry::make('personal_id')
-                            ->label('Personal ID'),
+                            ->label('Personal ID')
+                            ->withSyncMeta(),
                     ])->columns(2),
             ]);
     }

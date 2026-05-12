@@ -15,29 +15,39 @@ class StudentInfolist
                 Section::make('Personal Information')
                     ->schema([
                         TextEntry::make('student_id')
-                            ->label('Student ID'),
+                            ->label('Student ID')
+                            ->withSyncMeta(),
                         TextEntry::make('full_name_th')
-                            ->label('Full Name (Thai)'),
+                            ->label('Full Name (Thai)')
+                            ->withSyncMeta(),
                         TextEntry::make('full_name_en')
-                            ->label('Full Name (English)'),
+                            ->label('Full Name (English)')
+                            ->withSyncMeta(),
                         TextEntry::make('citizen_id')
-                            ->label('Citizen ID'),
+                            ->label('Citizen ID')
+                            ->withSyncMeta(),
                         TextEntry::make('birth')
-                            ->date(),
+                            ->date()
+                            ->withSyncMeta(),
                     ])->columns(2),
 
                 Section::make('Enrollment & Academic Information')
                     ->schema([
                         TextEntry::make('fac_name')
-                            ->label('Faculty'),
+                            ->label('Faculty')
+                            ->withSyncMeta(),
                         TextEntry::make('dep_name')
-                            ->label('Department'),
+                            ->label('Department')
+                            ->withSyncMeta(),
                         TextEntry::make('major_name')
-                            ->label('Major'),
+                            ->label('Major')
+                            ->withSyncMeta(),
                         TextEntry::make('start_acad_year')
-                            ->label('Start Year'),
+                            ->label('Start Year')
+                            ->withSyncMeta(),
                         TextEntry::make('credit_tot')
-                            ->label('Total Credits'),
+                            ->label('Total Credits')
+                            ->withSyncMeta(),
                     ])->columns(2),
             ]);
     }

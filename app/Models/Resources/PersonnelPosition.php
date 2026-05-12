@@ -8,6 +8,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 class PersonnelPosition extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
+    use \App\Traits\HasSyncMeta;
 
     protected $casts = [
         'sync_meta' => 'json',

@@ -15,39 +15,50 @@ class CourseScheduleInfolist
                 Section::make('Schedule Identification')
                     ->schema([
                         TextEntry::make('year')
-                            ->label('Year'),
+                            ->label('Year')
+                            ->withSyncMeta(),
                         TextEntry::make('semester')
-                            ->label('Semester'),
+                            ->label('Semester')
+                            ->withSyncMeta(),
                         TextEntry::make('course_code')
-                            ->label('Course Code'),
+                            ->label('Course Code')
+                            ->withSyncMeta(),
                         TextEntry::make('course_name')
-                            ->label('Course Name'),
+                            ->label('Course Name')
+                            ->withSyncMeta(),
                     ])->columns(2),
 
                 Section::make('Section Details')
                     ->schema([
                         TextEntry::make('section')
-                            ->label('Section'),
+                            ->label('Section')
+                            ->withSyncMeta(),
                         TextEntry::make('row_seq')
-                            ->label('Row Seq'),
+                            ->label('Row Seq')
+                            ->withSyncMeta(),
                         TextEntry::make('teach_type')
-                            ->label('Teach Type'),
+                            ->label('Teach Type')
+                            ->withSyncMeta(),
                     ])->columns(3),
 
                 Section::make('Time & Day')
                     ->schema([
                         TextEntry::make('daycode')
-                            ->label('Day Code'),
+                            ->label('Day Code')
+                            ->withSyncMeta(),
                         TextEntry::make('teach_time_from')
-                            ->label('Time From'),
+                            ->label('Time From')
+                            ->withSyncMeta(),
                         TextEntry::make('teach_time_to')
-                            ->label('Time To'),
+                            ->label('Time To')
+                            ->withSyncMeta(),
                     ])->columns(3),
 
                 Section::make('Institutional Hierarchy')
                     ->schema([
                         TextEntry::make('faccode')
-                            ->label('Faculty Code'),
+                            ->label('Faculty Code')
+                            ->withSyncMeta(),
                     ])->columns(2),
             ]);
     }

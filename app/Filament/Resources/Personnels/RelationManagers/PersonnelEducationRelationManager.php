@@ -7,8 +7,10 @@ use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
@@ -34,6 +36,32 @@ class PersonnelEducationRelationManager extends RelationManager
                     ->label('สถาบันการศึกษา'),
                 TextInput::make('nation_name_th')
                     ->label('ประเทศ'),
+            ]);
+    }
+
+    public function infolist(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                TextEntry::make('graduate_date')
+                    ->label('วันที่สำเร็จการศึกษา')
+                    ->date()
+                    ->withSyncMeta(),
+                TextEntry::make('education_level_name')
+                    ->label('ระดับการศึกษา')
+                    ->withSyncMeta(),
+                TextEntry::make('degree_name')
+                    ->label('วุฒิการศึกษา')
+                    ->withSyncMeta(),
+                TextEntry::make('major_name')
+                    ->label('สาขาวิชา')
+                    ->withSyncMeta(),
+                TextEntry::make('institution_name')
+                    ->label('สถาบันการศึกษา')
+                    ->withSyncMeta(),
+                TextEntry::make('nation_name_th')
+                    ->label('ประเทศ')
+                    ->withSyncMeta(),
             ]);
     }
 
@@ -75,6 +103,7 @@ class PersonnelEducationRelationManager extends RelationManager
                 CreateAction::make(),
             ])
             ->recordActions([
+                ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),
             ])

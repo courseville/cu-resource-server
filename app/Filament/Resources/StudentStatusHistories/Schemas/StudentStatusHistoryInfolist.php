@@ -15,50 +15,64 @@ class StudentStatusHistoryInfolist
                 Section::make('Student Identification')
                     ->schema([
                         TextEntry::make('student_code')
-                            ->label('Student Code'),
+                            ->label('Student Code')
+                            ->withSyncMeta(),
                         TextEntry::make('name_thai')
-                            ->label('Name (Thai)'),
+                            ->label('Name (Thai)')
+                            ->withSyncMeta(),
                         TextEntry::make('name_english')
-                            ->label('Name (English)'),
+                            ->label('Name (English)')
+                            ->withSyncMeta(),
                     ])->columns(2),
 
                 Section::make('Status Details')
                     ->schema([
                         TextEntry::make('status')
-                            ->label('Status'),
+                            ->label('Status')
+                            ->withSyncMeta(),
                         TextEntry::make('effect_date')
                             ->label('Effect Date')
-                            ->date(),
+                            ->date()
+                            ->withSyncMeta(),
                     ])->columns(2),
 
                 Section::make('Academic Period')
                     ->schema([
                         TextEntry::make('from_acad_year')
-                            ->label('From Academic Year'),
+                            ->label('From Academic Year')
+                            ->withSyncMeta(),
                         TextEntry::make('from_semester')
-                            ->label('From Semester'),
+                            ->label('From Semester')
+                            ->withSyncMeta(),
                         TextEntry::make('to_acad_year')
-                            ->label('To Academic Year'),
+                            ->label('To Academic Year')
+                            ->withSyncMeta(),
                         TextEntry::make('to_semester')
-                            ->label('To Semester'),
+                            ->label('To Semester')
+                            ->withSyncMeta(),
                     ])->columns(2),
 
                 Section::make('Documents')
                     ->schema([
                         TextEntry::make('instruction_no')
-                            ->label('Instruction No.'),
+                            ->label('Instruction No.')
+                            ->withSyncMeta(),
                         TextEntry::make('announcement')
-                            ->label('Announcement'),
+                            ->label('Announcement')
+                            ->withSyncMeta(),
                     ])->columns(2),
 
                 Section::make('Institutional Hierarchy')
                     ->schema([
                         TextEntry::make('faccode')
-                            ->label('Faculty Code'),
+                            ->label('Faculty Code')
+                            ->withSyncMeta(),
                         TextEntry::make('depcode')
-                            ->label('Department Code'),
+                            ->label('Department Code')
+                            ->withSyncMeta(),
                         TextEntry::make('majorcode')
-                            ->label('Major Code'),
+                            ->label('Major Code')
+                            ->withSyncMeta(),
                     ])->columns(3),
             ]);
     }

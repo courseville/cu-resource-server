@@ -15,47 +15,60 @@ class CurriculumInfolist
                 Section::make('Curriculum Identification')
                     ->schema([
                         TextEntry::make('course_code_no')
-                            ->label('Course Code No.'),
+                            ->label('Course Code No.')
+                            ->withSyncMeta(),
                         TextEntry::make('major_code')
-                            ->label('Major Code'),
+                            ->label('Major Code')
+                            ->withSyncMeta(),
                     ])->columns(2),
 
                 Section::make('Curriculum Details')
                     ->schema([
                         TextEntry::make('degree')
-                            ->label('Degree'),
+                            ->label('Degree')
+                            ->withSyncMeta(),
                         TextEntry::make('major')
-                            ->label('Major'),
+                            ->label('Major')
+                            ->withSyncMeta(),
                         TextEntry::make('no_year_study')
-                            ->label('Years of Study'),
+                            ->label('Years of Study')
+                            ->withSyncMeta(),
                     ])->columns(2),
 
                 Section::make('Program Settings')
                     ->schema([
                         TextEntry::make('plan1')
-                            ->label('Plan 1'),
+                            ->label('Plan 1')
+                            ->withSyncMeta(),
                         TextEntry::make('language1')
-                            ->label('Language 1'),
+                            ->label('Language 1')
+                            ->withSyncMeta(),
                         TextEntry::make('program_system')
-                            ->label('Program System'),
+                            ->label('Program System')
+                            ->withSyncMeta(),
                         TextEntry::make('calendar')
-                            ->label('Calendar'),
+                            ->label('Calendar')
+                            ->withSyncMeta(),
                     ])->columns(2),
 
                 Section::make('Academic Start')
                     ->schema([
                         TextEntry::make('begin_year')
-                            ->label('Begin Year'),
+                            ->label('Begin Year')
+                            ->withSyncMeta(),
                         TextEntry::make('begin_semester')
-                            ->label('Begin Semester'),
+                            ->label('Begin Semester')
+                            ->withSyncMeta(),
                     ])->columns(2),
 
                 Section::make('Institutional Hierarchy')
                     ->schema([
                         TextEntry::make('faccode')
-                            ->label('Faculty Code'),
+                            ->label('Faculty Code')
+                            ->withSyncMeta(),
                         TextEntry::make('depcode')
-                            ->label('Department Code'),
+                            ->label('Department Code')
+                            ->withSyncMeta(),
                     ])->columns(2),
             ]);
     }
