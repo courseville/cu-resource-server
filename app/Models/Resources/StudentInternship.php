@@ -12,6 +12,7 @@ class StudentInternship extends Model implements Auditable
     protected $fillable = [
         'sync_meta',
         'student_id',
+        'company_id',
         'intern_year',
         'process_step',
         'status',
@@ -105,5 +106,10 @@ class StudentInternship extends Model implements Auditable
     public function student()
     {
         return $this->belongsTo(Student::class, 'student_id', 'student_id');
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 }

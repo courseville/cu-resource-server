@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\DataConflict;
 use App\Models\DataSource;
 use App\Models\FailedImportRow;
 use App\Models\Import;
@@ -341,6 +342,40 @@ class SyncData extends Command
                     throw new \Exception("Missing primary key '{$pk}' for model {$model}.");
                 }
                 $search[$pk] = $transformedItem[$pk];
+            }
+
+            $existing = $model::where($search)->first();
+
+            if ($existing) {
+                $diff = [];
+                foreach ($transformedItem as $key => $value) {
+                    if ($key === 'sync_meta') {
+                        continue;
+                    }
+                    if ($existing->{$key} != $value) {
+                        $diff[$key] = [
+                            'old' => $existing->{$key},
+                            'new' => $value,
+                        ];
+                    }
+                }
+
+                if (! empty($diff)) {
+                    DataConflict::updateOrCreate(
+                        [
+                            'model_class' => $model,
+                            'model_pk_value' => implode('|', array_values($search)),
+                            'status' => 'pending',
+                        ],
+                        [
+                            'data_source_id' => $import->data_source_id,
+                            'incoming_data' => $transformedItem,
+                            'current_data' => $existing->toArray(),
+                        ]
+                    );
+
+                    return true;
+                }
             }
 
             $model::updateOrCreate($search, $transformedItem);

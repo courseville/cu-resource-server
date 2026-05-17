@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AcademicProgramController;
 use App\Http\Controllers\Api\AdmissionApplicationController;
+use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\ContractPersonnelController;
 use App\Http\Controllers\Api\CourseInstructorController;
 use App\Http\Controllers\Api\CourseScheduleController;
@@ -22,9 +23,11 @@ use App\Http\Controllers\Api\ScholarshipController;
 use App\Http\Controllers\Api\StructureController;
 use App\Http\Controllers\Api\StructureProfileController;
 use App\Http\Controllers\Api\StudentAdmissionController;
+use App\Http\Controllers\Api\StudentAdvisorController;
 use App\Http\Controllers\Api\StudentApplicationController;
 use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\Api\StudentCurriculumController;
+use App\Http\Controllers\Api\StudentGradeController;
 use App\Http\Controllers\Api\StudentGraduationController;
 use App\Http\Controllers\Api\StudentInternshipController;
 use App\Http\Controllers\Api\StudentStatusHistoryController;
@@ -126,6 +129,10 @@ Route::prefix('v1')->middleware('clients')->group(function () {
     Route::get('/personnel', [PersonnelController::class, 'index'])->name('personnel.index');
     Route::get('/personnel/export', [PersonnelController::class, 'export'])->name('personnel.export');
     Route::get('/personnel/{personnel:personnel_id}', [PersonnelController::class, 'show'])->name('personnel.show');
+
+    Route::get('/companies', [CompanyController::class, 'index'])->name('companies.index');
+    Route::get('/companies/export', [CompanyController::class, 'export'])->name('companies.export');
+    Route::get('/companies/{company}', [CompanyController::class, 'show'])->name('companies.show');
     // Route::get('/structures', [StructureController::class, 'index'])->name('structures.index');
     // Route::get('/structures/{structure:structure_id}', [StructureController::class, 'show'])->name('structures.show');
 
@@ -135,6 +142,14 @@ Route::prefix('v1')->middleware('clients')->group(function () {
     Route::get('/student-curriculums', [StudentCurriculumController::class, 'index'])->name('student-curriculums.index');
     Route::get('/student-curriculums/export', [StudentCurriculumController::class, 'export'])->name('student-curriculums.export');
     Route::get('/student-curriculums/{studentCurriculum}', [StudentCurriculumController::class, 'show'])->name('student-curriculums.show');
+
+    Route::get('/student-grades', [StudentGradeController::class, 'index'])->name('student-grades.index');
+    Route::get('/student-grades/export', [StudentGradeController::class, 'export'])->name('student-grades.export');
+    Route::get('/student-grades/{studentGrade}', [StudentGradeController::class, 'show'])->name('student-grades.show');
+
+    Route::get('/student-advisors', [StudentAdvisorController::class, 'index'])->name('student-advisors.index');
+    Route::get('/student-advisors/export', [StudentAdvisorController::class, 'export'])->name('student-advisors.export');
+    Route::get('/student-advisors/{studentAdvisor}', [StudentAdvisorController::class, 'show'])->name('student-advisors.show');
 
     // Resource Endpoints
     Route::get('/academic-programs', [AcademicProgramController::class, 'index'])->name('academic-programs.index');

@@ -95,11 +95,29 @@ class StudentInternshipImporter extends Importer
 
     public function resolveRecord(): ?StudentInternship
     {
-        return StudentInternship::firstOrNew([
+        $companyName = $this->data['company'] ?? null;
+        $companyId = null;
+
+        if ($companyName) {
+            $company = \App\Models\Resources\Company::firstOrCreate(
+                ['name' => $companyName],
+                [
+                    'address' => $this->data['comp_addr'] ?? null,
+                    'admin_name' => $this->data['comp_admin'] ?? null,
+                    'admin_title' => $this->data['comp_title'] ?? null,
+                    'tel' => $this->data['comp_tel'] ?? null,
+                ]
+            );
+            $companyId = $company->id;
+        }
+
+        $internship = StudentInternship::firstOrNew([
             'student_id' => $this->data['student_id'],
-            'company' => $this->data['company'],
-            'start_date' => $this->data['start_date'],
+            'company_id' => $companyId,
+            'start_date' => $this->data['start_date'] ?? null,
         ]);
+
+        return $internship;
     }
 
     public static function getCompletedNotificationBody(Import $import): string

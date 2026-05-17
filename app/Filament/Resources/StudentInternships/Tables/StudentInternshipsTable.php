@@ -24,7 +24,7 @@ class StudentInternshipsTable
                 TextColumn::make('intern_year')
                     ->label('Year')
                     ->sortable(),
-                TextColumn::make('company')
+                TextColumn::make('company.name')
                     ->label('Company')
                     ->sortable()
                     ->searchable(),

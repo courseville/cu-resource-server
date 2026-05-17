@@ -36,21 +36,22 @@ class StudentInternshipForm
                 Section::make('Company')
                     ->columnSpanFull()
                     ->schema([
-                        TextInput::make('company')
-                            ->label('Company Name')
-                            ->maxLength(255),
-                        TextInput::make('comp_addr')
-                            ->label('Company Address')
-                            ->maxLength(255),
-                        TextInput::make('comp_admin')
-                            ->label('Company Admin')
-                            ->maxLength(255),
-                        TextInput::make('comp_title')
-                            ->label('Admin Title')
-                            ->maxLength(255),
-                        TextInput::make('comp_tel')
-                            ->label('Company Tel')
-                            ->maxLength(255),
+                        Select::make('company_id')
+                            ->label('Company')
+                            ->relationship('company', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->createOptionForm([
+                                TextInput::make('name')
+                                    ->required()
+                                    ->maxLength(255),
+                                Textarea::make('address')
+                                    ->maxLength(255),
+                                TextInput::make('admin_name')
+                                    ->maxLength(255),
+                                TextInput::make('tel')
+                                    ->maxLength(255),
+                            ]),
                         Select::make('flag_comp_status')
                             ->label('Company Status')
                             ->options([
@@ -66,6 +67,28 @@ class StudentInternshipForm
                             DateTimePicker::make('date_comp_book_rec')->label('Booking Received Date'),
                             DateTimePicker::make('date_comp_accept')->label('Company Accept Date'),
                         ]),
+                    ])->columns(2),
+
+                Section::make('Legacy Company Data')
+                    ->description('Old flattened company data (Read-only)')
+                    ->columnSpanFull()
+                    ->collapsed()
+                    ->schema([
+                        TextInput::make('company')
+                            ->label('Old Company Name')
+                            ->disabled(),
+                        TextInput::make('comp_addr')
+                            ->label('Old Company Address')
+                            ->disabled(),
+                        TextInput::make('comp_admin')
+                            ->label('Old Company Admin')
+                            ->disabled(),
+                        TextInput::make('comp_title')
+                            ->label('Old Admin Title')
+                            ->disabled(),
+                        TextInput::make('comp_tel')
+                            ->label('Old Company Tel')
+                            ->disabled(),
                     ])->columns(2),
 
                 Section::make('Practice Details')
