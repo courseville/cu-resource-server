@@ -22,7 +22,7 @@ class CompanyResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBriefcase;
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Internship';
+    protected static string|\UnitEnum|null $navigationGroup = 'Reference Data';
 
     protected static ?string $navigationLabel = 'Companies';
 
