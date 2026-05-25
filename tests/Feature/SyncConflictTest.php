@@ -9,6 +9,7 @@ use App\Models\PkModel;
 use App\Models\Resources\Student;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class SyncConflictTest extends TestCase
@@ -36,6 +37,42 @@ class SyncConflictTest extends TestCase
             'name' => 'Test Source',
             'type' => 'file',
             'url' => 'test.csv',
+        ]);
+
+        // Setup transformer mappings for the mapped fields
+        DB::table('transformer_mappings')->insert([
+            [
+                'data_source_id' => $source->id,
+                'model' => Student::class,
+                'field' => 'student_id',
+                'mapping' => 'student_id',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'data_source_id' => $source->id,
+                'model' => Student::class,
+                'field' => 'first_name_th',
+                'mapping' => 'first_name_th',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'data_source_id' => $source->id,
+                'model' => Student::class,
+                'field' => 'last_name_th',
+                'mapping' => 'last_name_th',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'data_source_id' => $source->id,
+                'model' => Student::class,
+                'field' => 'faccode',
+                'mapping' => 'faccode',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
 
         $user = \App\Models\User::factory()->create();
@@ -82,5 +119,99 @@ class SyncConflictTest extends TestCase
         // 6. Verify original record was NOT updated
         $student->refresh();
         $this->assertEquals('Old Name', $student->first_name_th);
+    }
+
+    public function test_sync_ignores_conflict_if_only_unmapped_field_differs()
+    {
+        // 1. Setup existing data
+        $student = Student::create([
+            'student_id' => 'S001',
+            'first_name_th' => 'Old Name',
+            'last_name_th' => 'Old Surname',
+            'faccode' => '21',
+        ]);
+
+        // 2. Setup PK mapping
+        PkModel::create([
+            'model' => Student::class,
+            'primary_key' => 'student_id',
+        ]);
+
+        // 3. Setup data source and import
+        $source = DataSource::create([
+            'name' => 'Test Source',
+            'type' => 'file',
+            'url' => 'test.csv',
+        ]);
+
+        // Setup transformer mappings - ONLY mapping student_id, first_name_th, last_name_th. NOT faccode!
+        DB::table('transformer_mappings')->insert([
+            [
+                'data_source_id' => $source->id,
+                'model' => Student::class,
+                'field' => 'student_id',
+                'mapping' => 'student_id',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'data_source_id' => $source->id,
+                'model' => Student::class,
+                'field' => 'first_name_th',
+                'mapping' => 'first_name_th',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'data_source_id' => $source->id,
+                'model' => Student::class,
+                'field' => 'last_name_th',
+                'mapping' => 'last_name_th',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
+
+        $user = \App\Models\User::factory()->create();
+
+        $import = Import::create([
+            'data_source_id' => $source->id,
+            'file_name' => 'test.csv',
+            'file_path' => 'test.csv',
+            'importer' => 'Test',
+            'total_rows' => 1,
+            'user_id' => $user->id,
+        ]);
+
+        // 4. Manually trigger sync logic
+        $command = new \App\Console\Commands\SyncData();
+        
+        // faccode is different ('99' vs '21'), but since it is NOT in the mappings,
+        // it shouldn't trigger a conflict.
+        $transformedItem = [
+            'student_id' => 'S001',
+            'first_name_th' => 'Old Name',
+            'last_name_th' => 'Old Surname',
+            'faccode' => '99',
+        ];
+
+        // Access protected method for testing
+        $reflection = new \ReflectionClass($command);
+        $method = $reflection->getMethod('syncModelItem');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($command, Student::class, $transformedItem, [], $import);
+
+        $this->assertTrue($result);
+
+        // 5. Verify no conflict was created
+        $this->assertDatabaseMissing('data_conflicts', [
+            'model_class' => Student::class,
+            'model_pk_value' => 'S001',
+        ]);
+
+        // 6. Verify original record WAS updated/written
+        $student->refresh();
+        $this->assertEquals('99', $student->faccode);
     }
 }

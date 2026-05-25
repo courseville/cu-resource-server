@@ -347,9 +347,16 @@ class SyncData extends Command
             $existing = $model::where($search)->first();
 
             if ($existing) {
+                $mappings = DataTransformer::getMappings($import->data_source_id);
+                $modelMappings = $mappings[$model] ?? [];
+                $mappedFields = array_keys($modelMappings);
+
                 $diff = [];
                 foreach ($transformedItem as $key => $value) {
                     if ($key === 'sync_meta') {
+                        continue;
+                    }
+                    if (! in_array($key, $mappedFields)) {
                         continue;
                     }
                     if ($existing->{$key} != $value) {
