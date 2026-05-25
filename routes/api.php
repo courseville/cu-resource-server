@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\ContractPersonnelController;
 use App\Http\Controllers\Api\CourseInstructorController;
 use App\Http\Controllers\Api\CourseScheduleController;
+use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\CurriculumController;
 use App\Http\Controllers\Api\FulltimePersonnelController;
 use App\Http\Controllers\Api\GrantDetailController;
@@ -159,6 +160,9 @@ Route::prefix('v1')->middleware('clients')->group(function () {
     // Route::get('/admission-applications/{admission_application}', [AdmissionApplicationController::class, 'show'])->name('admission-applications.show');
     // Route::get('/contract-personnels', [ContractPersonnelController::class, 'index'])->name('contract-personnels.index');
     // Route::get('/contract-personnels/{contract_personnel}', [ContractPersonnelController::class, 'show'])->name('contract-personnels.show');
+    Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
+    Route::get('/courses/export', [CourseController::class, 'export'])->name('courses.export');
+    Route::get('/courses/{course}', [CourseController::class, 'show'])->name('courses.show');
     Route::get('/course-instructors', [CourseInstructorController::class, 'index'])->name('course-instructors.index');
     Route::get('/course-instructors/export', [CourseInstructorController::class, 'export'])->name('course-instructors.export');
     Route::get('/course-instructors/{course_instructor}', [CourseInstructorController::class, 'show'])->name('course-instructors.show');

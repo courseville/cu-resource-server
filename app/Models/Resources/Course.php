@@ -4,12 +4,13 @@ namespace App\Models\Resources;
 
 use App\Traits\HasDomainScope;
 use App\Traits\HasSyncMeta;
+use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Course extends Model implements Auditable
 {
-    use HasDomainScope, HasSyncMeta, \OwenIt\Auditing\Auditable;
+    use HasDomainScope, HasSyncMeta, Searchable, \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
         'name',
@@ -41,6 +42,18 @@ class Course extends Model implements Auditable
     protected $casts = [
         'sync_meta' => 'json',
     ];
+
+    protected $searchable = [
+        'code',
+        'name',
+        'name_th',
+        'name_en',
+    ];
+
+    public function getSearchable(): array
+    {
+        return $this->searchable ?? [];
+    }
 
     protected static function boot()
     {

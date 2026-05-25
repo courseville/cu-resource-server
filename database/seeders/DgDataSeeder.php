@@ -544,7 +544,7 @@ class DgDataSeeder extends Seeder
                     'effective_date' => 'EFFECTIVEDATE',
                     'personal_id' => 'PERSONALID',
                 ],
-                'pks' => 'program_no,active_year,personal_id',
+                'pks' => 'program_no,active_year',
             ],
             'DG0403' => [
                 'model' => \App\Models\Resources\Course::class,
