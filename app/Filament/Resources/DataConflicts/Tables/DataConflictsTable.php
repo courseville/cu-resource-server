@@ -35,6 +35,15 @@ class DataConflictsTable
                         default => 'gray',
                     })
                     ->sortable(),
+                TextColumn::make('resolvedBy.name')
+                    ->label('Resolved By')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('resolved_at')
+                    ->label('Resolved At')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable(),

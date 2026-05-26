@@ -352,18 +352,43 @@ class SyncData extends Command
                 $mappedFields = array_keys($modelMappings);
 
                 $diff = [];
+                $updates = [];
                 foreach ($transformedItem as $key => $value) {
                     if ($key === 'sync_meta') {
                         continue;
                     }
+                    
                     if (! in_array($key, $mappedFields)) {
+                        // Unmapped fields (like data_source_id, or custom test inputs)
+                        if ($existing->{$key} != $value) {
+                            $updates[$key] = $value;
+                        }
                         continue;
                     }
+                    
+                    // Check if the field was actually present in the incoming data
+                    $mapping = $modelMappings[$key]['mapping'] ?? null;
+                    $isPresent = false;
+                    
+                    if (empty($originalItem) || $originalItem === $transformedItem) {
+                        $isPresent = true;
+                    } elseif (is_string($mapping) && array_key_exists($mapping, $originalItem)) {
+                        $isPresent = true;
+                    }
+                    
+                    if (! $isPresent) {
+                        continue;
+                    }
+
+                    // Field is mapped and present. Let's check for differences.
                     if ($existing->{$key} != $value) {
                         $diff[$key] = [
                             'old' => $existing->{$key},
                             'new' => $value,
                         ];
+                    } else {
+                        // If they are equal, we can still include it in updates to keep DB in sync
+                        $updates[$key] = $value;
                     }
                 }
 
@@ -383,9 +408,15 @@ class SyncData extends Command
 
                     return true;
                 }
+
+                if (! empty($updates)) {
+                    $existing->update($updates);
+                }
+
+                return true;
             }
 
-            $model::updateOrCreate($search, $transformedItem);
+            $model::create($transformedItem);
             // $this->info("Synced {$model} item: ".implode(', ', $search));
             // $this->info('Transformed item: '.implode(', ', $transformedItem));
 

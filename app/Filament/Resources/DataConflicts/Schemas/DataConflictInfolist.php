@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\DataConflicts\Schemas;
 
+use App\Livewire\DataConflictComparisonTable;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Livewire;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
@@ -28,19 +30,21 @@ class DataConflictInfolist
                                 'resolved_current' => 'gray',
                                 default => 'gray',
                             }),
-                    ])->columns(2),
+                        TextEntry::make('resolvedBy.name')
+                            ->label('Resolved By')
+                            ->visible(fn ($record) => $record && $record->resolved_by !== null),
+                        TextEntry::make('resolved_at')
+                            ->label('Resolved At')
+                            ->dateTime()
+                            ->visible(fn ($record) => $record && $record->resolved_at !== null),
+                    ])->columns(2)
+                    ->columnSpanFull(),
 
                 Section::make('Data Comparison')
                     ->schema([
-                        TextEntry::make('current_data')
-                            ->label('Current Data')
-                            ->formatStateUsing(fn ($state) => json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE))
-                            ->columnSpan(1),
-                        TextEntry::make('incoming_data')
-                            ->label('Incoming Data')
-                            ->formatStateUsing(fn ($state) => json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE))
-                            ->columnSpan(1),
-                    ])->columns(2),
+                        Livewire::make(DataConflictComparisonTable::class)
+                            ->columnSpanFull(),
+                    ])->columnSpanFull(),
             ]);
     }
 }
