@@ -15,6 +15,8 @@ class DataConflictForm
                 Section::make('Conflict Details')
                     ->schema([
                         TextInput::make('model_class')
+                            ->label('Resource')
+                            ->formatStateUsing(fn (string $state): string => str(class_basename($state))->headline())
                             ->disabled(),
                         TextInput::make('model_pk_value')
                             ->label('Primary Key Value')

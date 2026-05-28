@@ -152,7 +152,7 @@ class DgDataSeeder extends Seeder
                     'remark3' => 'REMARK3',
                     'faccode' => 'FACCODE',
                 ],
-                'pks' => 'year,semester,course_code,section,row_seq',
+                'pks' => 'year,semester,course_code,section,row_seq,study_program_system',
             ],
             'DG0207' => [
                 'model' => \App\Models\Resources\Curriculum::class,
@@ -195,7 +195,7 @@ class DgDataSeeder extends Seeder
                     'faccode' => 'FACCODE',
                     'depcode' => 'DEPCODE',
                 ],
-                'pks' => 'acad_year,semester,course_code,section,instructor_no',
+                'pks' => 'acad_year,semester,course_code,section,instructor_no,row_seq',
             ],
             'DG0204' => [
                 'model' => \App\Models\Resources\StudentGrade::class,
@@ -544,7 +544,7 @@ class DgDataSeeder extends Seeder
                     'effective_date' => 'EFFECTIVEDATE',
                     'personal_id' => 'PERSONALID',
                 ],
-                'pks' => 'program_no,active_year',
+                'pks' => 'program_no,active_year,effective_date,personal_id',
             ],
             'DG0403' => [
                 'model' => \App\Models\Resources\Course::class,
@@ -569,6 +569,7 @@ class DgDataSeeder extends Seeder
                     'description_th' => 'COURSEDESCRIPTION_TH',
                     'description_en' => 'COURSEDESCRIPTION_EN',
                 ],
+                'pks' => 'course_id,program_id',
             ],
         ];
 

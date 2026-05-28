@@ -20,10 +20,10 @@ class CoursesTable
     {
         return $table
             ->columns([
-                // TextColumn::make('course_id')
-                //     ->label('Course ID')
-                //     ->sortable()
-                //     ->searchable(),
+                TextColumn::make('course_id')
+                    ->label('Course ID')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('code')
                     ->label('Course Code')
                     ->sortable()

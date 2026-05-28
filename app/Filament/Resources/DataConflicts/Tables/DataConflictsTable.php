@@ -17,7 +17,8 @@ class DataConflictsTable
         return $table
             ->columns([
                 TextColumn::make('model_class')
-                    ->label('Model')
+                    ->label('Resource')
+                    ->formatStateUsing(fn (string $state): string => str(class_basename($state))->headline())
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('model_pk_value')
@@ -53,44 +54,44 @@ class DataConflictsTable
             ])
             ->recordActions([
                 ViewAction::make(),
-                Action::make('accept_incoming')
-                    ->label('Accept Incoming')
-                    ->color('success')
-                    ->icon('heroicon-o-check')
-                    ->visible(fn (DataConflict $record) => $record->status === 'pending')
-                    ->action(function (DataConflict $record) {
-                        $modelClass = $record->model_class;
-                        $pkValue = $record->model_pk_value;
-                        $incomingData = $record->incoming_data;
+                // Action::make('accept_incoming')
+                //     ->label('Accept Incoming')
+                //     ->color('success')
+                //     ->icon('heroicon-o-check')
+                //     ->visible(fn (DataConflict $record) => $record->status === 'pending')
+                //     ->action(function (DataConflict $record) {
+                //         $modelClass = $record->model_class;
+                //         $pkValue = $record->model_pk_value;
+                //         $incomingData = $record->incoming_data;
 
-                        $pkModel = PkModel::where('model', $modelClass)->first();
-                        $pkColumns = explode(',', $pkModel ? $pkModel->primary_key : 'id');
-                        $pkValues = explode('|', $pkValue);
+                //         $pkModel = PkModel::where('model', $modelClass)->first();
+                //         $pkColumns = explode(',', $pkModel ? $pkModel->primary_key : 'id');
+                //         $pkValues = explode('|', $pkValue);
 
-                        $search = array_combine(array_map('trim', $pkColumns), $pkValues);
+                //         $search = array_combine(array_map('trim', $pkColumns), $pkValues);
 
-                        $modelClass::updateOrCreate($search, $incomingData);
+                //         $modelClass::updateOrCreate($search, $incomingData);
 
-                        $record->update([
-                            'status' => 'resolved_incoming',
-                            'resolved_by' => Auth::id(),
-                            'resolved_at' => now(),
-                        ]);
-                    })
-                    ->requiresConfirmation(),
-                Action::make('keep_current')
-                    ->label('Keep Current')
-                    ->color('gray')
-                    ->icon('heroicon-o-x-mark')
-                    ->visible(fn (DataConflict $record) => $record->status === 'pending')
-                    ->action(function (DataConflict $record) {
-                        $record->update([
-                            'status' => 'resolved_current',
-                            'resolved_by' => Auth::id(),
-                            'resolved_at' => now(),
-                        ]);
-                    })
-                    ->requiresConfirmation(),
+                //         $record->update([
+                //             'status' => 'resolved_incoming',
+                //             'resolved_by' => Auth::id(),
+                //             'resolved_at' => now(),
+                //         ]);
+                //     })
+                //     ->requiresConfirmation(),
+                // Action::make('keep_current')
+                //     ->label('Keep Current')
+                //     ->color('gray')
+                //     ->icon('heroicon-o-x-mark')
+                //     ->visible(fn (DataConflict $record) => $record->status === 'pending')
+                //     ->action(function (DataConflict $record) {
+                //         $record->update([
+                //             'status' => 'resolved_current',
+                //             'resolved_by' => Auth::id(),
+                //             'resolved_at' => now(),
+                //         ]);
+                //     })
+                //     ->requiresConfirmation(),
             ]);
     }
 }

@@ -17,7 +17,8 @@ class DataConflictInfolist
                 Section::make('Conflict Overview')
                     ->schema([
                         TextEntry::make('model_class')
-                            ->label('Model'),
+                            ->label('Resource')
+                            ->formatStateUsing(fn (string $state): string => str(class_basename($state))->headline()),
                         TextEntry::make('model_pk_value')
                             ->label('Primary Key'),
                         TextEntry::make('dataSource.name')

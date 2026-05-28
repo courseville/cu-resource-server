@@ -26,7 +26,8 @@ class CourseInfolist
                         TextEntry::make('revision_year')
                             ->label('Revision Year')
                             ->withSyncMeta(),
-                    ])->columns(2),
+                    ])->columns(2)
+                    ->columnSpanFull(),
 
                 Section::make('Course Names')
                     ->schema([
@@ -39,7 +40,8 @@ class CourseInfolist
                         TextEntry::make('name_abbr')
                             ->label('Abbreviated Name')
                             ->withSyncMeta(),
-                    ])->columns(2),
+                    ])->columns(2)
+                    ->columnSpanFull(),
 
                 Section::make('Credits & Hours')
                     ->schema([
@@ -61,7 +63,8 @@ class CourseInfolist
                         TextEntry::make('s_hour')
                             ->label('Self-Study Hours')
                             ->withSyncMeta(),
-                    ])->columns(3),
+                    ])->columns(3)
+                    ->columnSpanFull(),
 
                 Section::make('Descriptions')
                     ->schema([
@@ -73,7 +76,7 @@ class CourseInfolist
                             ->label('Description (English)')
                             ->columnSpanFull()
                             ->withSyncMeta(),
-                    ]),
+                    ])->columnSpanFull(),
             ]);
     }
 }
