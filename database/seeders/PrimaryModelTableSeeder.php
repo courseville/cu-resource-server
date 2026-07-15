@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\TestNisit;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -13,7 +14,7 @@ class PrimaryModelTableSeeder extends Seeder
     public function run(): void
     {
         DB::table('pk_model_fields')->insert([
-            ['model' => 'App\Models\TestNisit', 'primary_key' => 'student_id'],
+            ['model' => TestNisit::class, 'primary_key' => 'student_id'],
         ]);
     }
 }

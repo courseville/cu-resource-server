@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Resources\Course;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -37,12 +39,12 @@ class RolePermissionSeeder extends Seeder
         // Preset permissions for User-related actions
         $permissions = [
             ['name' => 'access_admin_panel', 'action' => 'view', 'model' => null, 'columns' => null],
-            ['name' => 'view_users', 'action' => 'view', 'model' => 'App\Models\User', 'columns' => ['id', 'name', 'email']],
-            ['name' => 'view_user_name', 'action' => 'view', 'model' => 'App\Models\User', 'columns' => ['name']],
-            ['name' => 'edit_users', 'action' => 'edit', 'model' => 'App\Models\User', 'columns' => ['name', 'email']],
-            ['name' => 'delete_users', 'action' => 'delete', 'model' => 'App\Models\User', 'columns' => ['id']],
-            ['name' => 'view_courses', 'action' => 'view', 'model' => 'App\Models\Course', 'columns' => ['id', 'name']],
-            ['name' => 'edit_courses', 'action' => 'edit', 'model' => 'App\Models\Course', 'columns' => ['name']],
+            ['name' => 'view_users', 'action' => 'view', 'model' => User::class, 'columns' => ['id', 'name', 'email']],
+            ['name' => 'view_user_name', 'action' => 'view', 'model' => User::class, 'columns' => ['name']],
+            ['name' => 'edit_users', 'action' => 'edit', 'model' => User::class, 'columns' => ['name', 'email']],
+            ['name' => 'delete_users', 'action' => 'delete', 'model' => User::class, 'columns' => ['id']],
+            ['name' => 'view_courses', 'action' => 'view', 'model' => Course::class, 'columns' => ['id', 'name']],
+            ['name' => 'edit_courses', 'action' => 'edit', 'model' => Course::class, 'columns' => ['name']],
         ];
 
         // Insert permissions
