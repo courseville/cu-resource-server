@@ -107,4 +107,26 @@ class Student extends Model implements Auditable
     {
         return $this->hasMany(StudentAdvisor::class, 'student_id', 'student_id');
     }
+
+    protected static function booted(): void
+    {
+        static::saving(function (Student $student) {
+            if (blank($student->full_name_th)) {
+                $student->full_name_th = trim(
+                    ($student->title_th ?? '') .
+                        ($student->first_name_th ?? '') .
+                        ' ' .
+                        ($student->last_name_th ?? '')
+                );
+            }
+
+            if (blank($student->full_name_en)) {
+                $student->full_name_en = trim(implode(' ', array_filter([
+                    $student->title_en,
+                    $student->first_name_en,
+                    $student->last_name_en,
+                ])));
+            }
+        });
+    }
 }
