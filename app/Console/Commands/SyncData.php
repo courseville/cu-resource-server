@@ -8,6 +8,7 @@ use App\Models\FailedImportRow;
 use App\Models\Import;
 use App\Models\PkModel;
 use App\Sync\SyncContext;
+use App\Sync\Handler\ApiSourceHandlerResolver;
 use App\Transformers\DataTransformer;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Auth;
@@ -56,6 +57,10 @@ class SyncData extends Command
 
                 case 'mysql':
                     $this->processMysqlSource($source);
+                    break;
+
+                case 'api':
+                    $this->processApiSource($source);
                     break;
 
                 default:
@@ -357,7 +362,7 @@ class SyncData extends Command
                     if ($key === 'sync_meta') {
                         continue;
                     }
-                    
+
                     if (! in_array($key, $mappedFields)) {
                         // Unmapped fields (like data_source_id, or custom test inputs)
                         if ($existing->{$key} != $value) {
@@ -365,17 +370,17 @@ class SyncData extends Command
                         }
                         continue;
                     }
-                    
+
                     // Check if the field was actually present in the incoming data
                     $mapping = $modelMappings[$key]['mapping'] ?? null;
                     $isPresent = false;
-                    
+
                     if (empty($originalItem) || $originalItem === $transformedItem) {
                         $isPresent = true;
                     } elseif (is_string($mapping) && array_key_exists($mapping, $originalItem)) {
                         $isPresent = true;
                     }
-                    
+
                     if (! $isPresent) {
                         continue;
                     }
@@ -431,6 +436,78 @@ class SyncData extends Command
             ]);
 
             return false;
+        }
+    }
+
+    /**
+     * Process API data source (fetch data, parse, and sync).
+     * provider_name:endpoint?parameter:last_synced_at
+     */
+    protected function processApiSource(DataSource $source)
+    {
+        $startSyncTime = now();
+        $parts = explode(':', $source->url, 3);
+
+        if (count($parts) < 2) {
+            $this->error("Invalid API URL format for source: {$source->name}. Expected: provider_name:endpoint[:parameter:last_sync_at]");
+            return;
+        }
+
+        $providerName = $parts[0];
+        $endpoint = $parts[1];
+
+        try {
+            $this->info("Connecting to API (Provider: {$providerName}, Endpoint: {$endpoint})");
+            // Use the ApiSourceHandler to fetch data (return as .json)
+            $handler = app(ApiSourceHandlerResolver::class)->resolve($providerName);
+
+            $result = $handler->fetchData($source);
+
+            $rawData = $result['data'];
+            $type = $result['type'];
+
+            if (! $rawData) {
+                $this->warn("No data found or failed to fetch from: {$source->url}");
+
+                return;
+            }
+
+            $dataArray = $this->parseData(
+                $rawData,
+                "response.{$type}"
+            );
+
+            if (empty($dataArray)) {
+                $this->warn("Data is empty after parsing for source: {$source->name}");
+
+                return;
+            }
+
+            // Start auditing
+            $import = Import::create([
+                'data_source_id' => $source->id,
+                'file_name' => basename($source->url),
+                'file_path' => $source->url,
+                'importer' => static::class,
+                'total_rows' => count($dataArray),
+                'user_id' => optional(Auth::user())->id, // Null if not logged in
+            ]);
+
+            $transformedData = DataTransformer::transformFromSource($source->id, $dataArray);
+
+            $successfulRows = $this->insertAndSync($transformedData, $import);
+
+            $import->update([
+                'processed_rows' => count($dataArray),
+                'successful_rows' => $successfulRows,
+                'completed_at' => now(),
+            ]);
+
+            $source->update(['last_synced_at' => $startSyncTime]);
+        } catch (\Exception $e) {
+            $this->error("Failed to connect to API source '{$source->name}': " . $e->getMessage());
+
+            return;
         }
     }
 }
