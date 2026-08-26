@@ -466,7 +466,7 @@ class SyncData extends Command
             $rawData = $result['data'];
             $type = $result['type'];
 
-            if (! $rawData) {
+            if ($rawData === '') {
                 $this->warn("No data found or failed to fetch from: {$source->url}");
 
                 return;

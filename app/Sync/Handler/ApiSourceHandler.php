@@ -10,62 +10,49 @@ use RuntimeException;
 
 class ApiSourceHandler
 {
+    private const MAX_PAGES = 1000;
+
     public function fetchData(DataSource $source): ?array
     {
-        $config = $this->parseSourceUrl($source);
+        $sourceConfig = $this->parseSourceUrl($source);
 
-        $provider = $config['provider'];
-        $endpoint = $config['endpoint'];
-        $query = $config['query'];
-        $lastSyncParameter = $config['last_sync_parameter'];
+        $provider = $sourceConfig['provider'];
+        $endpoint = $sourceConfig['endpoint'];
+        $query = $sourceConfig['query'];
+        $lastSyncParameter = $sourceConfig['last_sync_parameter'];
 
-        $apiConfig = config("apisource.{$provider}");
+        $apiConfig = $this->getApiConfig($provider);
 
-        if (! $apiConfig) {
-            throw new RuntimeException(
-                "API provider '{$provider}' is not configured."
-            );
-        }
-
-        $baseUrl = $apiConfig['base_url'] ?? null;
-
-        if (! $baseUrl) {
-            throw new RuntimeException(
-                "Base URL is not configured for '{$provider}'."
-            );
-        }
-
-        /*
-         * Add DataSource last_synced_at.
-         *
-         * a:user?id=1:update
-         *
-         * becomes:
-         *
-         * ?id=1&update={last_synced_at}
-         */
         if (
-            $lastSyncParameter &&
+            ! empty($lastSyncParameter) &&
             $source->last_synced_at
         ) {
-            parse_str("{$lastSyncParameter}={$source->last_synced_at}", $lastSyncQuery);
-            $query = array_merge($query, $lastSyncQuery);
+            $query[$lastSyncParameter] = $source->last_synced_at->toIso8601String();
         }
 
-
-        $url = $this->buildUrl(
-            $baseUrl,
-            $endpoint
-        );
+        $url = rtrim($apiConfig['base_url'], '/')
+            . '/'
+            . ltrim($endpoint, '/');
 
         $request = $this->buildRequest(
-            $apiConfig,
+            $apiConfig
         );
 
-        $response = $this->sendRequest(
-            $request,
+        if ($apiConfig['pagination']['enabled']) {
+            return [
+                'data' => json_encode($this->fetchPaginatedData(
+                    $request,
+                    $url,
+                    $query,
+                    $apiConfig['pagination']
+                ), JSON_THROW_ON_ERROR),
+                'type' => 'json',
+            ];
+        }
+
+        $response = $request->get(
             $url,
-            $query,
+            $query
         );
 
         if ($response->failed()) {
@@ -74,31 +61,343 @@ class ApiSourceHandler
                     "Status: {$response->status()}: {$response->body()}"
             );
         }
-        $type = $this->getResponseType($response);
 
-        return $this->processResponse(
-            $response->body(),
-            $type
+        return [
+            'data' => $response->body(),
+            'type' => $this->getResponseType($response),
+        ];
+    }
+
+    protected function getApiConfig(
+        string $provider
+    ): array {
+        $config = config(
+            "apisource.{$provider}"
+        );
+
+        if (! $config) {
+            throw new RuntimeException(
+                "API provider '{$provider}' is not configured."
+            );
+        }
+
+        if (empty($config['base_url'])) {
+            throw new RuntimeException(
+                "Base URL is not configured for '{$provider}'."
+            );
+        }
+
+        $defaultPagination = [
+            'enabled' => false,
+            'type' => 'page',
+
+            // request params
+            'page_param' => 'page',
+            'per_page_param' => 'per_page',
+
+            'offset_param' => 'offset',
+            'limit_param' => 'limit',
+
+            'cursor_param' => 'cursor',
+
+            // response paths
+            'data_path' => 'data',
+            'total_pages_path' => null,
+            'total_path' => null,
+            'next_cursor_path' => 'meta.next_cursor',
+            'next_url_path' => 'links.next',
+
+            // page sizes
+            'per_page' => 100,
+            'limit' => 100,
+        ];
+
+        $config['pagination'] = array_merge(
+            $defaultPagination,
+            $config['pagination'] ?? []
+        );
+
+        return $config;
+    }
+
+    protected function fetchResponseData(
+        PendingRequest $request,
+        string $url,
+        array $query,
+        array $pagination
+    ): array {
+        $response = $request->get(
+            $url,
+            $query
+        );
+
+        $response->throw();
+
+        $json = $response->json();
+
+        return [
+            'json' => $json,
+            'data' => $this->normalizeData(
+                data_get(
+                    $json,
+                    $pagination['data_path']
+                )
+            ),
+        ];
+    }
+
+    protected function fetchPaginatedData(
+        PendingRequest $request,
+        string $url,
+        array $query,
+        array $pagination
+    ): array {
+        $handlers = [
+            'page' => 'fetchPagePagination',
+            'offset' => 'fetchOffsetPagination',
+            'cursor' => 'fetchCursorPagination',
+            'link' => 'fetchLinkPagination',
+        ];
+
+        $method = $handlers[$pagination['type']] ?? null;
+
+        if (! $method) {
+            throw new RuntimeException(
+                "Unsupported pagination type: {$pagination['type']}"
+            );
+        }
+
+        return $this->{$method}(
+            $request,
+            $url,
+            $query,
+            $pagination
         );
     }
 
-    protected function parseSourceUrl(DataSource $source): array
-    {
-        // provider:endpoint
-        $parts = explode(':', $source->url, 2);
+    protected function fetchPagePagination(
+        PendingRequest $request,
+        string $url,
+        array $query,
+        array $pagination
+    ): array {
+        $allData = [];
+
+        $page = 1;
+        $per_page = max(1, (int) ($pagination['per_page'] ?? 100));
+
+        while ($page <= self::MAX_PAGES) {
+            $result = $this->fetchResponseData(
+                $request,
+                $url,
+                array_merge(
+                    $query,
+                    [
+                        $pagination['page_param'] => $page,
+                        $pagination['per_page_param'] => $per_page,
+                    ]
+                ),
+                $pagination
+            );
+
+            $json = $result['json'];
+            $data = $result['data'];
+
+            $allData = array_merge(
+                $allData,
+                $data
+            );
+
+            if ($pagination['total_pages_path']) {
+                $totalPages = (int) data_get(
+                    $json,
+                    $pagination['total_pages_path']
+                );
+
+                if ($page >= $totalPages) {
+                    break;
+                }
+            } elseif (
+                count($data) < $pagination['per_page']
+            ) {
+                break;
+            }
+
+            $page++;
+        }
+
+        return $allData;
+    }
+
+    protected function fetchOffsetPagination(
+        PendingRequest $request,
+        string $url,
+        array $query,
+        array $pagination
+    ): array {
+        $allData = [];
+
+        $offset = 0;
+        $limit = max(1, (int) ($pagination['limit'] ?? 0));
+
+        for ($page = 0; $page < self::MAX_PAGES; $page++) {
+            $result = $this->fetchResponseData(
+                $request,
+                $url,
+                array_merge(
+                    $query,
+                    [
+                        $pagination['offset_param'] => $offset,
+                        $pagination['limit_param'] => $limit,
+                    ]
+                ),
+                $pagination
+            );
+
+            $json = $result['json'];
+            $data = $result['data'];
+
+            $allData = array_merge(
+                $allData,
+                $data
+            );
+
+            $total = $pagination['total_path']
+                ? data_get(
+                    $json,
+                    $pagination['total_path']
+                )
+                : null;
+
+            if (
+                ! empty($total) &&
+                ($offset + count($data)) >= (int) $total
+            ) {
+                break;
+            }
+
+            if (count($data) < $limit) {
+                break;
+            }
+
+            $offset += $limit;
+        }
+
+        return $allData;
+    }
+
+    protected function fetchCursorPagination(
+        PendingRequest $request,
+        string $url,
+        array $query,
+        array $pagination
+    ): array {
+        $allData = [];
+
+        $cursor = null;
+
+        for ($i = 0; $i < self::MAX_PAGES; $i++) {
+            $requestQuery = $query;
+
+            if (! empty($cursor)) {
+                $requestQuery[$pagination['cursor_param']] = $cursor;
+            }
+
+            $result = $this->fetchResponseData(
+                $request,
+                $url,
+                $requestQuery,
+                $pagination
+            );
+
+            $json = $result['json'];
+            $data = $result['data'];
+
+            $allData = array_merge(
+                $allData,
+                $data
+            );
+
+            $nextCursor = data_get(
+                $json,
+                $pagination['next_cursor_path']
+            );
+
+            if ($nextCursor === $cursor || empty($nextCursor)) {
+                break;
+            }
+
+            $cursor = $nextCursor;
+        }
+
+        return $allData;
+    }
+
+    protected function fetchLinkPagination(
+        PendingRequest $request,
+        string $url,
+        array $query,
+        array $pagination
+    ): array {
+        $allData = [];
+
+        $linkUrl = $url;
+
+        for ($i = 0; $i < self::MAX_PAGES; $i++) {
+            $result = $this->fetchResponseData(
+                $request,
+                $linkUrl,
+                $query,
+                $pagination
+            );
+
+            $json = $result['json'];
+            $data = $result['data'];
+
+            $allData = array_merge(
+                $allData,
+                $data
+            );
+
+            $nextUrl = data_get(
+                $json,
+                $pagination['next_url_path']
+            );
+
+            if ($linkUrl === $nextUrl || empty($nextUrl)) {
+                break;
+            }
+
+            $linkUrl = $nextUrl;
+            $query = [];
+        }
+
+        return $allData;
+    }
+
+    protected function parseSourceUrl(
+        DataSource $source
+    ): array {
+        $parts = explode(
+            ':',
+            $source->url,
+            2
+        );
 
         if (count($parts) !== 2) {
             throw new RuntimeException(
-                "Invalid API source format: {$source->url}. " .
-                    "Expected: provider:endpoint?parameters[:last_sync_parameter]"
+                "Invalid API source format: {$source->url}"
             );
         }
 
         $provider = $parts[0];
         $endpointAndQuery = $parts[1];
 
-        // endpoint?parameters
-        $parts = explode('?', $endpointAndQuery, 2);
+        $parts = explode(
+            '?',
+            $endpointAndQuery,
+            2
+        );
 
         $endpoint = $parts[0];
         $queryAndLastSync = $parts[1] ?? null;
@@ -106,16 +405,21 @@ class ApiSourceHandler
         $query = [];
         $lastSyncParameter = null;
 
-        if ($queryAndLastSync !== null) {
-            // id=1&u=2:update
-            $parts = explode(':', $queryAndLastSync, 2);
+        if (! empty($queryAndLastSync)) {
+            $parts = explode(
+                ':',
+                $queryAndLastSync,
+                2
+            );
 
             $queryString = $parts[0];
             $lastSyncParameter = $parts[1] ?? null;
 
             if ($queryString !== '') {
-                parse_str($queryString, $query);
-                
+                parse_str(
+                    $queryString,
+                    $query
+                );
             }
         }
 
@@ -127,19 +431,15 @@ class ApiSourceHandler
         ];
     }
 
-    protected function buildUrl(
-        string $baseUrl,
-        string $endpoint
-    ): string {
-        return rtrim($baseUrl, '/') .
-            '/' .
-            ltrim($endpoint, '/');
-    }
-
     protected function buildRequest(
-        array $config,
+        array $config
     ): PendingRequest {
-        $request = Http::acceptJson();
+        $request = Http::acceptJson()
+            ->retry(2, 500);
+
+        if (! empty($config['timeout'])) {
+            $request = $request->timeout((int) $config['timeout']);
+        }
 
         $apiKey = $config['api_key'] ?? null;
         $authType = $config['auth_type'] ?? 'bearer';
@@ -147,20 +447,18 @@ class ApiSourceHandler
         switch ($authType) {
             case 'bearer':
                 if ($apiKey) {
-                    $request = $request->withToken($apiKey);
+                    $request = $request->withToken(
+                        $apiKey
+                    );
                 }
-
                 break;
 
             case 'header':
                 if ($apiKey) {
-                    $headerName = $config['auth_header'] ?? 'X-API-Key';
-
                     $request = $request->withHeaders([
-                        $headerName => $apiKey,
+                        $config['auth_header'] ?? 'X-API-Key' => $apiKey,
                     ]);
                 }
-
                 break;
 
             case 'basic':
@@ -168,7 +466,6 @@ class ApiSourceHandler
                     $config['username'] ?? '',
                     $config['password'] ?? ''
                 );
-
                 break;
 
             case 'none':
@@ -189,53 +486,54 @@ class ApiSourceHandler
         return $request;
     }
 
-    protected function sendRequest(
-        PendingRequest $request,
-        string $url,
-        array $query,
-    ): Response {
-        return $request->get($url, $query);
-    }
-
-    protected function processResponse(
-        string $body,
-        string $type,
-    ): array {
-        return [
-            'data' => $body,
-            'type' => $type,
-        ];
-    }
-
-    protected function getResponseType(Response $response): string
-    {
+    protected function getResponseType(
+        Response $response
+    ): string {
         $contentType = strtolower(
             $response->header('Content-Type') ?? ''
         );
 
-        switch (true) {
-            case str_contains($contentType, 'json'):
-                return 'json';
-
-            case str_contains($contentType, 'csv'):
-                return 'csv';
-
-            // case str_contains($contentType, 'xml'):
-            //     return 'xml';
+        if (str_contains($contentType, 'json')) {
+            return 'json';
         }
 
-        // Fallback: detect JSON from response body
-        $body = trim($response->body());
+        if (str_contains($contentType, 'csv')) {
+            return 'csv';
+        }
 
+        $body = trim(
+            $response->body()
+        );
 
         if ($body !== '') {
-            json_decode($body);
+            try {
+                json_decode(
+                    $body,
+                    true,
+                    512,
+                    JSON_THROW_ON_ERROR
+                );
 
-            if (json_last_error() === JSON_ERROR_NONE) {
                 return 'json';
+            } catch (\JsonException) {
+                // Not JSON
             }
         }
 
         return 'unknown';
+    }
+
+    protected function normalizeData(
+        mixed $data
+    ): array {
+        if (empty($data)) {
+            return [];
+        }
+
+        if (! is_array($data)) {
+            return [$data];
+        }
+
+        return $data;
     }
 }
