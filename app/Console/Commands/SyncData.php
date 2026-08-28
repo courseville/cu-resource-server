@@ -458,27 +458,14 @@ class SyncData extends Command
 
         try {
             $this->info("Connecting to API (Provider: {$providerName}, Endpoint: {$endpoint})");
-            // Use the ApiSourceHandler to fetch data (return as .json)
+
+            // Handlers return normalized rows directly
             $handler = app(ApiSourceHandlerResolver::class)->resolve($providerName);
 
-            $result = $handler->fetchData($source);
-
-            $rawData = $result['data'];
-            $type = $result['type'];
-
-            if ($rawData === '') {
-                $this->warn("No data found or failed to fetch from: {$source->url}");
-
-                return;
-            }
-
-            $dataArray = $this->parseData(
-                $rawData,
-                "response.{$type}"
-            );
+            $dataArray = $handler->fetchData($source);
 
             if (empty($dataArray)) {
-                $this->warn("Data is empty after parsing for source: {$source->name}");
+                $this->warn("No data found or failed to fetch from: {$source->url}");
 
                 return;
             }

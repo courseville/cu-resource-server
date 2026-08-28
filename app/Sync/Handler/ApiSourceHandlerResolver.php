@@ -7,8 +7,9 @@ class ApiSourceHandlerResolver
     public function resolve(string $provider): ApiSourceHandler
     {
         return match ($provider) {
-            // 'special' => app(SpecialApiSourceHandler::class),
-            default => app(ApiSourceHandler::class),
+            'firstclass' => app(FirstclassApiSourceHandler::class),
+
+            default => app(GenericApiSourceHandler::class),
         };
     }
 }
