@@ -12,8 +12,6 @@ use RuntimeException;
  */
 class FirstclassApiSourceHandler extends BaseApiSourceHandler
 {
-    private const ENDPOINT_PREFIX = 'central/';
-
     private const PAGE_PARAM = 'page';
 
     private const PER_PAGE_PARAM = 'per_page';
@@ -51,7 +49,7 @@ class FirstclassApiSourceHandler extends BaseApiSourceHandler
     {
         $config = $this->providerConfig();
         $request = $this->buildRequest($config);
-        $url = $this->buildUrl($config['base_url'], self::ENDPOINT_PREFIX . $endpoint);
+        $url = $this->buildUrl($config['base_url'], $endpoint);
 
         return $this->fetchSingle($request, $url, $query, $config['data_path'] ?? null);
     }
@@ -60,7 +58,7 @@ class FirstclassApiSourceHandler extends BaseApiSourceHandler
     {
         $config = $this->providerConfig();
         $request = $this->buildRequest($config);
-        $url = $this->buildUrl($config['base_url'], self::ENDPOINT_PREFIX . $endpoint);
+        $url = $this->buildUrl($config['base_url'], $endpoint);
 
         return $this->fetchAll($request, $url, $query, self::TOTAL_PAGES_PATH, [
             'page_param' => self::PAGE_PARAM,
