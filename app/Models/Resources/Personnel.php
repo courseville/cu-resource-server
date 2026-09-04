@@ -50,7 +50,7 @@ class Personnel extends Model implements Auditable
         'full_title',
         'faccode',
         'depcode',
-        'academic_position',
+        // 'academic_position',
         'citizen_id',
         'birth_date',
         'marital_status',
