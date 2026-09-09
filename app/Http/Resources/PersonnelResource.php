@@ -52,7 +52,7 @@ class PersonnelResource extends JsonResource
             'full_title' => $this->full_title,
             'faccode' => $this->faccode,
             'depcode' => $this->depcode,
-            'academic_position' => $this->academic_position,
+            // 'academic_position' => $this->academic_position,
             'citizen_id' => $this->citizen_id,
             'birth_date' => $this->birth_date?->toDateString(),
             'marital_status' => $this->marital_status,

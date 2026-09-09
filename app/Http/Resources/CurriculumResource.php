@@ -18,17 +18,21 @@ class CurriculumResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'curriculum_code' => $this->curriculum_code,
-            'curriculum_name' => $this->curriculum_name,
-            'curriculum_name_en' => $this->curriculum_name_en,
-            'department_id' => $this->department_id,
-            'department_name' => $this->department_name,
-            'faculty_id' => $this->faculty_id,
-            'faculty_name' => $this->faculty_name,
-            'degree_level' => $this->degree_level,
-            'degree_level_name' => $this->degree_level_name,
-            'degree_name' => $this->degree_name,
-            'year' => $this->year,
+            'curriculum_code' => $this->course_code_no,
+            'curriculum_name' => implode(' ', array_filter([
+                trim($this->degree ?? ''),
+                trim($this->major ?? ''),
+                trim($this->calendar ?? ''),
+            ], static fn (string $part): bool => $part !== '')),
+            // 'curriculum_name_en' => $this->curriculum_name_en,
+            'department_id' => $this->depcode,
+            // 'department_name' => $this->department_name,
+            'faculty_id' => $this->faccode,
+            // 'faculty_name' => $this->faculty_name,
+            'degree_level' => $this->plan1,
+            // 'degree_level_name' => $this->degree_level_name,
+            'degree_name' => $this->degree,
+            'year' => $this->begin_year,
         ];
     }
 }
