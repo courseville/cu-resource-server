@@ -19,7 +19,11 @@ class CurriculumResource extends JsonResource
     {
         return [
             'curriculum_code' => $this->course_code_no,
-            'curriculum_name' => trim($this->degree) . ' ' . trim($this->major) . ' ' . trim($this->calendar),
+            'curriculum_name' => implode(' ', array_filter([
+                trim($this->degree ?? ''),
+                trim($this->major ?? ''),
+                trim($this->calendar ?? ''),
+            ], static fn (string $part): bool => $part !== '')),
             // 'curriculum_name_en' => $this->curriculum_name_en,
             'department_id' => $this->depcode,
             // 'department_name' => $this->department_name,
