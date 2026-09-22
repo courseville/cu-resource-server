@@ -177,7 +177,10 @@ class ApiSourceHandlerTest extends TestCase
         ]);
 
         // 8. Verify both HTTP calls were made (page 1 and page 2)
-        Http::assertSentCount(2);
+        Http::assertSentInOrder([
+            fn ($request) => $request->url() === 'https://api.firstclass.local/checkins?page=1&per_page=500',
+            fn ($request) => $request->url() === 'https://api.firstclass.local/checkins?page=2&per_page=500',
+        ]);
     }
 
     public function test_api_source_with_invalid_url_format_is_skipped()
